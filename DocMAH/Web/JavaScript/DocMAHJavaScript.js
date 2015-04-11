@@ -991,7 +991,7 @@ DMH.FirstTimeEdit = function () {
 	function CreateHelpButton_Click() {
 		// If there isn't a page, don't extend the empty object, otherwise...
 		// Deep copy current page model to place holder so that edits may be canceled.
-		if (_originalPage)
+		if (_currentPage)
 			_originalPage = $.extend(true, {}, _currentPage);
 
 		if (_currentPage) {
