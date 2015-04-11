@@ -1,0 +1,21 @@
+﻿<script src="/help.axd?m=JavaScript" type="application/javascript"></script>
+<script type="application/javascript">
+	var applicationSettings = [APPLICATIONSETTINGSJSON];
+	var page = [PAGEJSON];
+	var userPageSettings = [USERPAGESETTINGSJSON];
+	$(function () {
+		var popupEdit;
+		if (applicationSettings && applicationSettings.CanEdit) {
+			var popupEdit = new SH.PopupEdit();
+			popupEdit.Initialize(applicationSettings, page);
+		}
+
+		var helpButton = new SH.HelpButton();
+		helpButton.Initialize(popupEdit, page);
+
+		var popupView;
+		popupView = new SH.PopupView();
+		popupView.Initialize(applicationSettings, popupEdit, helpButton);
+		popupView.ShowPageFirstTime(page, userPageSettings);
+	});
+</script>

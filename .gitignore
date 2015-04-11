@@ -1,0 +1,8 @@
+*/App_Data/
+*/bin/
+*/obj/
+*.coverage
+*.csproj.user
+*.suo
+Solutions/packages/
+Solutions/TestResults/Coverage/DocMAHCoverage/

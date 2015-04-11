@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\_SOURCECODE\DocMAH\DocMAH.UnitTests\bin\Debug\DocMAH.UnitTests.dll" total="22" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2015-04-11" time="01:33:37">
+  <environment nunit-version="2.6.4.14350" clr-version="2.0.50727.8009" os-version="Microsoft Windows NT 6.2.9200.0" platform="Win32NT" cwd="C:\_SOURCECODE\DocMAH\Solutions\Scripts" machine-name="V-CFKARCDEV" user="chuck" user-domain="MILYLI" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="C:\_SOURCECODE\DocMAH\DocMAH.UnitTests\bin\Debug\DocMAH.UnitTests.dll" executed="True" result="Success" success="True" time="7.024" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="DocMAH" executed="True" result="Success" success="True" time="7.001" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="UnitTests" executed="True" result="Success" success="True" time="6.992" asserts="0">
+            <results>
+              <test-suite type="Namespace" name="Data" executed="True" result="Success" success="True" time="6.938" asserts="0">
+                <results>
+                  <test-suite type="TestFixture" name="DatabaseConfigurationUnitTests" executed="True" result="Success" success="True" time="1.483" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseConfigurationUnitTests.DatabaseHelpVersion_Read" description="Reads database help version number" executed="True" result="Success" success="True" time="1.439" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseConfigurationUnitTests.DatabaseHelpVersion_Update" description="Persist database help version number." executed="True" result="Success" success="True" time="0.010" asserts="0" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseConfigurationUnitTests.DatabaseSchemaVersion_Read" description="Read database schema version number." executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseConfigurationUnitTests.DatabaseSchemaVersion_Update" description="updates database schema version number." executed="True" result="Success" success="True" time="0.002" asserts="0" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="DatabaseUpdaterUnitTests" executed="True" result="Success" success="True" time="0.573" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseUpdaterUnitTests.Update_FirstTime" description="Tests that the help content is updated the first time update is called." executed="True" result="Success" success="True" time="0.501" asserts="0" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseUpdaterUnitTests.Update_HelpUpdateOnly" description="Tests that the schema update is not run if on most recent version." executed="True" result="Success" success="True" time="0.010" asserts="0" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseUpdaterUnitTests.Update_Initialized" description="Do not run if already initialized." executed="True" result="Success" success="True" time="0.003" asserts="0" />
+                      <test-case name="DocMAH.UnitTests.Data.DatabaseUpdaterUnitTests.Update_SchemaOnly" description="Tests that the help update is not run if update file is not present." executed="True" result="Success" success="True" time="0.042" asserts="0" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="SqlDatabaseAccessUnitTests" executed="True" result="Success" success="True" time="4.872" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Bullet_Crud" description="Tests bullet create, read, update and delete methods." executed="True" result="Success" success="True" time="0.285" asserts="8" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Bullet_CrudByPage" description="Tests reading and deleting bullets by page id." executed="True" result="Success" success="True" time="0.044" asserts="6" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Page_Crud" description="Tests page create, read, update and delete methods." executed="True" result="Success" success="True" time="0.045" asserts="8" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Page_ReadByParentId" description="Reads pages by parent id." executed="True" result="Success" success="True" time="0.057" asserts="3" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Page_ReadByUrl" description="Reads pages by URLs." executed="True" result="Success" success="True" time="0.060" asserts="6" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Page_ReadTableOfContents_All" description="Reads all table of contents as page models." executed="True" result="Success" success="True" time="0.079" asserts="8" />
+                      <test-case name="DocMAH.UnitTests.Data.SqlDatabaseAccessUnitTests.Page_ReadTableOfContents_Visible" description="Reads only visible table of contents page models." executed="True" result="Success" success="True" time="0.027" asserts="2" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+              <test-suite type="Namespace" name="Extensions" executed="True" result="Success" success="True" time="0.041" asserts="0">
+                <results>
+                  <test-suite type="TestFixture" name="Int32ExtensionsUnitTests" executed="True" result="Success" success="True" time="0.006" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Extensions.Int32ExtensionsUnitTests.ToNullableSqlValue_NotNull" description="Returns the SQL string value for a non-null int?." executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Extensions.Int32ExtensionsUnitTests.ToNullableSqlValue_Null" description="Returns the null SQL string value for a null int?" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="ListExtensionsUnitTests" executed="True" result="Success" success="True" time="0.008" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Extensions.ListExtensionsUnitTests.ToCsv_Success" description="Creates a CSV from a generic list of ints." executed="True" result="Success" success="True" time="0.006" asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite type="TestFixture" name="StringExtensionUnitTests" executed="True" result="Success" success="True" time="0.016" asserts="0">
+                    <results>
+                      <test-case name="DocMAH.UnitTests.Extensions.StringExtensionUnitTests.ToNullableSqlValue_Empty" description="Create a nullable SQL string value for an empty value." executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Extensions.StringExtensionUnitTests.ToNullableSqlValue_NonEmpty" description="Creates a nullable SQL string value for a non-empty value." executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Extensions.StringExtensionUnitTests.ToSqlValue_Empty" description="Creates a SQL string value for an empty value." executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                      <test-case name="DocMAH.UnitTests.Extensions.StringExtensionUnitTests.ToSqlValue_NonEmpty" description="Creates a SQL string value for a non-empty value." executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

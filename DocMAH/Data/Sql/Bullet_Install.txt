@@ -1,0 +1,5 @@
+﻿IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = {0}) = 1)BEGIN
+	UPDATE DocmahBullets SET PageId = {1},Number = {2},Text = {3},VerticalOffset = {4},HorizontalOffset = {5},OffsetElementId = {6},DocVerticalOffset = {7},DocHorizontalOffset = {8} WHERE Id = {0}
+END ELSE BEGIN
+	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES ({0},{1},{2},{3},{4},{5},{6},{7},{8})
+END
