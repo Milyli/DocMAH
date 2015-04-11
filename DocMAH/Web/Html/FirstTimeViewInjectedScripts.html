@@ -1,0 +1,21 @@
+﻿<script src="/help.axd?m=JavaScript" type="application/javascript"></script>
+<script type="application/javascript">
+	var applicationSettings = [APPLICATIONSETTINGSJSON];
+	var page = [PAGEJSON];
+	var userPageSettings = [USERPAGESETTINGSJSON];
+	$(function () {
+		var firstTimeEdit;
+		if (applicationSettings && applicationSettings.CanEdit) {
+			var firstTimeEdit = new DMH.FirstTimeEdit();
+			firstTimeEdit.Initialize(applicationSettings, page);
+		}
+
+		var helpButton = new DMH.HelpButton();
+		helpButton.Initialize(firstTimeEdit, page);
+
+		var firstTimeView;
+		firstTimeView = new DMH.FirstTimeView();
+		firstTimeView.Initialize(applicationSettings, firstTimeEdit, helpButton);
+		firstTimeView.ShowPageFirstTime(page, userPageSettings);
+	});
+</script>

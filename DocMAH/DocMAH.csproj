@@ -91,7 +91,7 @@
     <Compile Include="Web\RequestProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Web\Html\PopupView.html" />
+    <EmbeddedResource Include="Web\Html\FirstTimeView.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web\Css\Mixins.css.map">
@@ -115,9 +115,9 @@
     <Content Include="Web\Css\Images\openBook.png" />
     <Content Include="Web\Css\Images\openBook.svg" />
     <Content Include="Web\Html\CssLink.html" />
-    <Content Include="Web\Html\PopupViewInjectedScripts.html" />
-    <Content Include="Web\Html\PopupViewInjectedScripts.min.html">
-      <DependentUpon>PopupViewInjectedScripts.html</DependentUpon>
+    <Content Include="Web\Html\FirstTimeViewInjectedScripts.html" />
+    <Content Include="Web\Html\FirstTimeViewInjectedScripts.min.html">
+      <DependentUpon>FirstTimeViewInjectedScripts.html</DependentUpon>
     </Content>
     <Content Include="Web\JavaScript\DocMAHJavaScript.js" />
     <Content Include="Data\Sql\Bullet_Install.txt" />
@@ -165,12 +165,12 @@
     <EmbeddedResource Include="Data\Sql\Page_Create.sql" />
     <EmbeddedResource Include="Data\Sql\Database_01.sql" />
     <EmbeddedResource Include="Data\Sql\Configuration_Read.sql" />
-    <EmbeddedResource Include="Web\Html\PopupEdit.html" />
-    <EmbeddedResource Include="Web\Html\PopupEdit.min.html">
-      <DependentUpon>PopupEdit.html</DependentUpon>
+    <EmbeddedResource Include="Web\Html\FirstTimeEdit.html" />
+    <EmbeddedResource Include="Web\Html\FirstTimeEdit.min.html">
+      <DependentUpon>FirstTimeEdit.html</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Web\Html\PopupView.min.html">
-      <DependentUpon>PopupView.html</DependentUpon>
+    <EmbeddedResource Include="Web\Html\FirstTimeView.min.html">
+      <DependentUpon>FirstTimeView.html</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Web\Html\Documentation.html" />
     <EmbeddedResource Include="Web\Html\Documentation.min.html">

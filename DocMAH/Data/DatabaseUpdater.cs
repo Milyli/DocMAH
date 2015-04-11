@@ -44,7 +44,7 @@ namespace DocMAH.Data
 
 		public void Update()
 		{
-			if (!(bool)(_httpContext.Application["SH.Initialized"] ?? false))
+			if (!(bool)(_httpContext.Application["DMH.Initialized"] ?? false))
 			{
 				var databaseVersions = Enum.GetValues(typeof(DatabaseVersions));
 
@@ -100,7 +100,7 @@ namespace DocMAH.Data
 					}
 				}
 
-				_httpContext.Application["SH.Initialized"] = true;
+				_httpContext.Application["DMH.Initialized"] = true;
 			}
 		}
 

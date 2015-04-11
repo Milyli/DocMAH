@@ -139,23 +139,23 @@
   <data name="Html_Documentation_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\web\html\documentation.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="Html_PopupEdit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupedit.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Html_FirstTimeEdit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeedit.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Html_PopupEdit_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupedit.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Html_FirstTimeEdit_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeedit.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="Html_PopupView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupview.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Html_FirstTimeView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeview.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Html_PopupViewInjectedScripts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupviewinjectedscripts.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Html_FirstTimeViewInjectedScripts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeviewinjectedscripts.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Html_PopupViewInjectedScripts_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupviewinjectedscripts.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Html_FirstTimeViewInjectedScripts_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeviewinjectedscripts.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="Html_PopupView_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\web\html\popupview.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Html_FirstTimeView_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\web\html\firsttimeview.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="Sql_Bullet_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data\sql\bullet_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

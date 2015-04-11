@@ -82,7 +82,7 @@ namespace DocMAH.UnitTests.Data
 
 			// Fake the HttpContext to indicate the database needs to be updated.
 			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application["SH.Initialized"]).Returns(false);
+			context.SetupGet(c => c.Application["DMH.Initialized"]).Returns(false);
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 
 			// Update the database.

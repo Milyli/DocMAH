@@ -25,20 +25,20 @@ li.jstree-node.tocHidden a {
   color: #aaaaaa;
 }
 /****** Top CSS Marker Class ******/
-.sh- {
+.dmh- {
   font-size: 14px;
   line-height: 1.4285;
   font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;
 }
 /****** Documentation Page Styles ******/
-html.sh- {
+html.dmh- {
   height: 100%;
 }
-.sh- body {
+.dmh- body {
   margin: 0;
   height: 100%;
 }
-#shDocTitle {
+#dmhDocTitle {
   position: absolute;
   right: 0;
   left: 0;
@@ -47,7 +47,7 @@ html.sh- {
   padding: 15px 0 15px 75px;
   background-color: #3c454f;
 }
-#shDocToolBar {
+#dmhDocToolBar {
   float: left;
   width: 170px;
   padding: 15px;
@@ -57,18 +57,18 @@ html.sh- {
   border: 5px solid #2d9639;
   display: none;
 }
-#shDocToolBar h3 {
+#dmhDocToolBar h3 {
   text-align: center;
   margin: 0;
 }
-#shDocToolBarBreak {
+#dmhDocToolBarBreak {
   margin: 15px 0 15px 0;
   border-top: 1px dashed #3c454f;
 }
-#shStatusBar {
+#dmhStatusBar {
   height: 30px;
 }
-#shStatusMessage {
+#dmhStatusMessage {
   -webkit-border-top-right-radius: 5px;
   -webkit-border-bottom-right-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -88,20 +88,20 @@ html.sh- {
   color: #ffffff;
   text-align: center;
 }
-#shPopupTools,
-#shDocumentationTools,
-#shViewModelButtonBar,
-#shEditModeButtonBar {
+#dmhFirstTimeTools,
+#dmhDocumentationTools,
+#dmhViewModelButtonBar,
+#dmhEditModeButtonBar {
   display: none;
 }
-#shDocContentPanel {
+#dmhDocContentPanel {
   position: absolute;
   top: 54px;
   right: 0;
   bottom: 0;
   left: 0;
 }
-#shTocContainer {
+#dmhTocContainer {
   border-right: 1px solid #3c454f;
   position: absolute;
   top: 0;
@@ -110,7 +110,7 @@ html.sh- {
   width: 299px;
   overflow: auto;
 }
-#shToc .jstree-wholerow-clicked {
+#dmhToc .jstree-wholerow-clicked {
   background-color: #a4edac;
   background: -webkit-gradient(linear, left top, left bottom, from(#a4edac), to(#86e08f));
   background: -webkit-linear-gradient(top, #a4edac, #86e08f);
@@ -118,7 +118,7 @@ html.sh- {
   background: -ms-linear-gradient(top, #a4edac, #86e08f);
   background: -o-linear-gradient(top, #a4edac, #86e08f);
 }
-#shToc .jstree-wholerow-hovered {
+#dmhToc .jstree-wholerow-hovered {
   background-color: #e2f3e4;
   background: -webkit-gradient(linear, left top, left bottom, from(#e2f3e4), to(#d6f2d9));
   background: -webkit-linear-gradient(top, #e2f3e4, #d6f2d9);
@@ -126,7 +126,7 @@ html.sh- {
   background: -ms-linear-gradient(top, #e2f3e4, #d6f2d9);
   background: -o-linear-gradient(top, #e2f3e4, #d6f2d9);
 }
-#shPageContainer {
+#dmhPageContainer {
   position: absolute;
   top: 0;
   right: 0;
@@ -134,43 +134,43 @@ html.sh- {
   left: 300px;
   overflow: auto;
 }
-#shDocumentationView,
-#shDocumentationEditor {
+#dmhDocumentationView,
+#dmhDocumentationEditor {
   display: none;
   padding: 20px;
 }
-#shDocumentationEditorContent {
+#dmhDocumentationEditorContent {
   height: 300px;
 }
-/****** Popup Editor ******/
-#shPopupEdit .shDialogTitle {
+/****** First Time Editor ******/
+#dmhFirstTimeEdit .dmhDialogTitle {
   cursor: move;
 }
-#shCreateHelpButton {
+#dmhCreateHelpButton {
   position: fixed;
   right: 25px;
   bottom: 50px;
 }
-#shBulletButtons {
+#dmhBulletButtons {
   margin-top: 0;
   text-align: left;
 }
-#shBulletEditTemplate {
+#dmhBulletEditTemplate {
   display: none;
 }
-.shBulletEdit {
+.dmhBulletEdit {
   margin-bottom: 5px;
 }
-.shBulletEditTextContainer {
+.dmhBulletEditTextContainer {
   margin: 0 65px 0 30px;
 }
-#shPopupEditBullets .shButtonCancel {
+#dmhFirstTimeEditBullets .dmhButtonCancel {
   float: right;
   position: relative;
   top: 3px;
 }
 /****** Modal Mask ******/
-#shPopupMask {
+#dmhModalMask {
   -webkit-opacity: 0.25;
   -moz-opacity: 0.25;
   opacity: 0.25;
@@ -184,7 +184,7 @@ html.sh- {
   display: none;
 }
 /****** Dialogs ******/
-.shDialog {
+.dmhDialog {
   -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
@@ -201,10 +201,10 @@ html.sh- {
   min-width: 400px;
   max-width: 600px;
 }
-.shDialogContent {
+.dmhDialogContent {
   padding: 15px;
 }
-.shDialogTitle {
+.dmhDialogTitle {
   -webkit-border-top-right-radius: 5px;
   -webkit-border-bottom-right-radius: 0;
   -webkit-border-bottom-left-radius: 0;
@@ -229,36 +229,36 @@ html.sh- {
   font-weight: bold;
 }
 /****** Form Input ******/
-.shFormRow {
+.dmhFormRow {
   margin-bottom: 5px;
 }
-.shFormRow label {
+.dmhFormRow label {
   display: block;
   margin-bottom: 0;
   font-weight: bold;
 }
-.shFormRow input,
-.shFormRow select,
-.shFormRow textarea {
+.dmhFormRow input,
+.dmhFormRow select,
+.dmhFormRow textarea {
   max-width: none;
   width: 100%;
 }
-.shFormRow input[type='checkbox'] {
+.dmhFormRow input[type='checkbox'] {
   width: auto;
 }
-.shFormRow textarea {
+.dmhFormRow textarea {
   height: 70px;
 }
-.shFieldHelp {
+.dmhFieldHelp {
   font-size: x-small;
 }
 /****** Button Styles ******/
-.shButtonBar {
+.dmhButtonBar {
   clear: both;
   margin-top: 15px;
   text-align: center;
 }
-.shButton {
+.dmhButton {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -271,34 +271,34 @@ html.sh- {
   background-color: #3c454f;
   display: inline-block;
 }
-.shButton + .shButton {
+.dmhButton + .dmhButton {
   margin-left: 25px;
 }
-.shButton:hover {
+.dmhButton:hover {
   cursor: pointer;
   background-color: #8a8f95;
 }
-.shButtonSmall {
+.dmhButtonSmall {
   font-size: x-small;
 }
-.shButtonCancel {
+.dmhButtonCancel {
   background-color: #770000;
 }
-.shButtonCancel:hover {
+.dmhButtonCancel:hover {
   background-color: #cc0000;
 }
 /****** Bullet Styles ******/
-#shPopupViewBullets {
+#dmhFirstTimeViewBullets {
   margin-top: 15px;
 }
-#shBulletViewTemplate {
+#dmhBulletViewTemplate {
   display: none;
 }
-.shBulletView {
+.dmhBulletView {
   clear: both;
   margin-bottom: 5px;
 }
-.shBullet {
+.dmhBullet {
   float: left;
   width: 20px;
   height: 20px;
@@ -306,23 +306,23 @@ html.sh- {
   top: 2px;
   font-size: x-small;
 }
-.shBulletImage {
+.dmhBulletImage {
   fill: #2d9639;
 }
-.shBulletNumber {
+.dmhBulletNumber {
   position: relative;
   top: -21px;
   width: 20px;
   text-align: center;
   color: #ffffff;
 }
-.shBulletViewTextContainer {
+.dmhBulletViewTextContainer {
   margin-left: 30px;
 }
-.shBulletViewText {
+.dmhBulletViewText {
   width: 100%;
 }
-.shPlacedBullet {
+.dmhPlacedBullet {
   position: absolute;
   z-index: 5001;
   height: 30px;
@@ -338,17 +338,17 @@ html.sh- {
   -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
-.shPlacedBulletImage {
+.dmhPlacedBulletImage {
   fill: #2d9639;
 }
-.shPlacedBulletNumber {
+.dmhPlacedBulletNumber {
   position: relative;
   top: 3px;
   text-align: center;
   color: #ffffff;
 }
 /****** Draggable Bullet Styles ******/
-.shDraggableBullet {
+.dmhDraggableBullet {
   cursor: move;
   position: absolute;
   z-index: 5001;
@@ -365,23 +365,23 @@ html.sh- {
   -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
-.shDraggableBulletNumber {
+.dmhDraggableBulletNumber {
   position: relative;
   top: 3px;
   text-align: center;
   color: #ffffff;
 }
-#shShowDocumentationButton {
+#dmhShowDocumentationButton {
   fill: #8a8f95;
   float: right;
 }
-#shShowDocumentationButton :hover {
+#dmhShowDocumentationButton :hover {
   fill: #ffffff;
   cursor: pointer;
 }
-#shDocumentationIcon {
+#dmhDocumentationIcon {
   margin: 5px 5px 0 0;
   height: 20px;
   width: 20px;
 }
-/*# sourceMappingURL=SHStyles.css.map */
+/*# sourceMappingURL=DocMAHStyles.css.map */

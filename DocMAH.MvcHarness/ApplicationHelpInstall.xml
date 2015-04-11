@@ -52,9 +52,9 @@ END ELSE BEGIN
 END
 </UpdateScript>
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 7) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 5,SourceUrl = NULL,Title = 'Styling DocMAH',Content = 'Detailed instructions on using optional configuration to override default style for popup help and documentation pages.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 7
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 5,SourceUrl = NULL,Title = 'Styling DocMAH',Content = 'Detailed instructions on using optional configuration to override default style for first time help and documentation pages.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 7
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (7,2,2,5,NULL,'Styling DocMAH','Detailed instructions on using optional configuration to override default style for popup help and documentation pages.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (7,2,2,5,NULL,'Styling DocMAH','Detailed instructions on using optional configuration to override default style for first time help and documentation pages.',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 8) BEGIN 

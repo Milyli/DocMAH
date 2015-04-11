@@ -168,8 +168,8 @@ namespace DocMAH.Web
 
 			documentationHtml = documentationHtml.Replace("[JSTREEURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJsTree));
 
-			documentationHtml = documentationHtml.Replace("[POPUPVIEWHTML]",
-				ResourcesExtensions.Minify(Resources.Html_PopupView, Resources.Html_PopupView_min)
+			documentationHtml = documentationHtml.Replace("[firstTimeViewHTML]",
+				ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min)
 			);
 
 			WriteResponse(context, "text/html", documentationHtml);

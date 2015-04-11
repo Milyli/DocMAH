@@ -2,7 +2,7 @@
 1) This framework uses cookies to remember page preferences. No cookie data is sent to the server.
 
 
-** Popup Help and Creation **
+** First Time Help and Creation **
 
 * Prerequisites
 1) jQuery
@@ -58,7 +58,7 @@
 		<documentation pageTitle="Documentation" 
 		/>
 		
-		<!-- editHelp element - [Optional] Controls the availability of edit mode for popup help and documentation. -->
+		<!-- editHelp element - [Optional] Controls the availability of edit mode for first time help and documentation. -->
 		<!-- requireAuthentication [Optional - Default: true] Require authentication to edit help content. -->
 		<!-- requireLocalConnection [Optional - Default: true] Require a local connection to the server to edit help content. -->
 		<!-- disabled [Optional - Default: false] Disable all help editing for the application. Recommended for production environments. -->
@@ -71,7 +71,7 @@
 </configuration>
 
 
-3) [Optional, but recommended] Add a help button (input, div, image, anchor, any element that supports jQuery click) to your pages or layout with the class .sh-view-button.
+3) [Optional, but recommended] Add a help button (input, div, image, anchor, any element that supports jQuery click) to your pages or layout with the class .dmh-view-button.
 
 This either shows the help for the page or opens the documentation if a page is not available.
 

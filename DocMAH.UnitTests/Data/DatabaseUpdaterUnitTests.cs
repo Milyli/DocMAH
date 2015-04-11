@@ -47,9 +47,9 @@ namespace DocMAH.UnitTests.Data
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["SH.Initialized"]).Returns(null);
+			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["SH.Initialized"] = true);
+			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
 
 			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
@@ -107,9 +107,9 @@ namespace DocMAH.UnitTests.Data
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["SH.Initialized"]).Returns(null);
+			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["SH.Initialized"] = true);
+			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
 
 			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
@@ -143,9 +143,9 @@ namespace DocMAH.UnitTests.Data
 			databaseAccess.Setup(a => a.Database_Update((DatabaseVersions)databaseVersions.GetValue(lastIndex)));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["SH.Initialized"]).Returns(null);
+			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["SH.Initialized"] = true);
+			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
 
 			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
@@ -166,7 +166,7 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["SH.Initialized"]).Returns(true);
+			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(true);
 
 			var updater = new DatabaseUpdater(httpContext.Object, null, null);
 

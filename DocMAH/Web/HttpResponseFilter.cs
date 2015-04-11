@@ -43,7 +43,7 @@ namespace DocMAH.Web
 		/// <returns></returns>
 		private string InsertContent(string content)
 		{
-			// TODO: break out documentation link script and only write popup view script if page is present or user can edit.
+			// TODO: break out documentation link script and only write first time view script if page is present or user can edit.
 			if (!string.IsNullOrEmpty(content))
 			{
 				var access = new Access();
@@ -68,7 +68,7 @@ namespace DocMAH.Web
 					_writer.Write(FormatHtmlViewHelp());
 					if (access.CanEdit)
 					{
-						_writer.Write(ResourcesExtensions.Minify(Resources.Html_PopupEdit, Resources.Html_PopupEdit_min));
+						_writer.Write(ResourcesExtensions.Minify(Resources.Html_FirstTimeEdit, Resources.Html_FirstTimeEdit_min));
 					}
 					content = content.Substring(endBodyIndex);
 				}
@@ -95,31 +95,31 @@ namespace DocMAH.Web
 
 			// The HTML is reused on the documentation page.
 			// When injecting into other requests, the initialization scripts must be included.
-			var popupViewHtml = ResourcesExtensions.Minify(Resources.Html_PopupView, Resources.Html_PopupView_min);
-			popupViewHtml += ResourcesExtensions.Minify(Resources.Html_PopupViewInjectedScripts, Resources.Html_PopupViewInjectedScripts_min);
+			var firstTimeViewHtml = ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
+			firstTimeViewHtml += ResourcesExtensions.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
 
-			// TODO: Iron out javascript reference injection for popup help in base site pages.
+			// TODO: Iron out javascript reference injection for first time help in base site pages.
 			// Attach jQueryUi CDN locations if not configured.
 			// Leaving out jQuery for the time being as it's likely included.
 			var javaScriptDependencies = new DocmahConfigurationSection().JsUrl;
 			if (string.IsNullOrEmpty(javaScriptDependencies))
-				popupViewHtml += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
+				firstTimeViewHtml += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
 
-			// TODO: Cache the non-dynamic portion of the popup HTML for faster loading.
+			// TODO: Cache the non-dynamic portion of the first time HTML for faster loading.
 			
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);
-			popupViewHtml = popupViewHtml.Replace("[PAGEJSON]", pageJson);
+			firstTimeViewHtml = firstTimeViewHtml.Replace("[PAGEJSON]", pageJson);
 
 			var userPageSettingsJson = serializer.Serialize(userPageSettings);
-			popupViewHtml = popupViewHtml.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
+			firstTimeViewHtml = firstTimeViewHtml.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
 			var access = new Access();
 			var applicationSettings = new ApplicationSettings { CanEdit = access.CanEdit };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
-			popupViewHtml = popupViewHtml.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
+			firstTimeViewHtml = firstTimeViewHtml.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
 
-			return popupViewHtml;
+			return firstTimeViewHtml;
 		}
 
 		#endregion

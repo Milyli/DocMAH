@@ -1,8 +1,8 @@
-﻿<div id="shPopupMask" class="sh-"></div>
-<div id="shPopupView" class="sh- shDialog">
+﻿<div id="dmhModalMask" class="dmh-"></div>
+<div id="dmhFirstTimeView" class="dmh- dmhDialog">
 	<div>
-		<div id="shShowDocumentationButton" title="View full documentation">
-			<svg version="1.1" id="shDocumentationIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px"
+		<div id="dmhShowDocumentationButton" title="View full documentation">
+			<svg version="1.1" id="dmhDocumentationIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px"
 				 height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
 			<g id="_x38_7">
 			<g>
@@ -25,38 +25,38 @@
 				</g>
 			</svg>
 		</div>
-		<div class="shDialogTitle"></div>
+		<div class="dmhDialogTitle"></div>
 	</div>
-	<div class="shDialogContent">
-		<div id="shPopupViewContent"></div>
-		<div id="shPopupViewBullets"></div>
-		<div class="shButtonBar">
-			<div id="shHideHelpButton" class="shButton" title="Do not show this help next time">Got it</div>
-			<div id="shCloseHelpButton" class="shButton" title="Show this help when I come back to the page">Remind me later</div>
+	<div class="dmhDialogContent">
+		<div id="dmhFirstTimeViewContent"></div>
+		<div id="dmhFirstTimeViewBullets"></div>
+		<div class="dmhButtonBar">
+			<div id="dmhHideHelpButton" class="dmhButton" title="Do not show this help next time">Got it</div>
+			<div id="dmhCloseHelpButton" class="dmhButton" title="Show this help when I come back to the page">Remind me later</div>
 		</div>
 	</div>
 	<!--
 		The id template is removed from cloned elements before being attached to the DOM
 		Otherwise, the class is used for styling.
 	-->
-	<div id="shBulletViewTemplate" class="shBulletView">
-		<div class="shBullet">
-			<svg version="1.1" class="shBulletImage" xmlns="http://www.w3.org/2000/svg"
+	<div id="dmhBulletViewTemplate" class="dmhBulletView">
+		<div class="dmhBullet">
+			<svg version="1.1" class="dmhBulletImage" xmlns="http://www.w3.org/2000/svg"
 				 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 				 viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
 			<circle cx="25" cy="25" r="24"></circle>
 			</svg>
-			<div class="shBulletNumber"></div>
+			<div class="dmhBulletNumber"></div>
 		</div>
-		<div class="shBulletViewTextContainer">
-			<div class="shBulletViewText"></div>
+		<div class="dmhBulletViewTextContainer">
+			<div class="dmhBulletViewText"></div>
 		</div>
 		<!--
 			The placed bullet is included in the template so that the bullet numbers
 			may be synced before the placed bullet is relocated to the page.
 		-->
-		<div class="sh- shPlacedBullet">
-			<div class="shPlacedBulletNumber"></div>
+		<div class="dmh- dmhPlacedBullet">
+			<div class="dmhPlacedBulletNumber"></div>
 		</div>
 	</div>
 </div>

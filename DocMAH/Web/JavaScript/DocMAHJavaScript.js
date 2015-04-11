@@ -1,18 +1,18 @@
 ﻿/** Namespace **/
-var SH = SH || {};
+var DMH = DMH || {};
 
 /** Constants and Singletons **/
-SH.PageTypes = function () {
+DMH.PageTypes = function () {
 
 	//** Public Fields **
-	this.PopupPage = 1;
+	this.FirstTimePage = 1;
 	this.DocumentationPage = 2;
 
 	// Return singleton.
 	return this;
 }();
 
-SH.HistoryState = function () {
+DMH.HistoryState = function () {
 	this.Replace = 1;
 	this.Push = 2;
 	this.Pop = 3;
@@ -20,7 +20,7 @@ SH.HistoryState = function () {
 	return this;
 }();
 
-SH.Urls = function () {
+DMH.Urls = function () {
 
 	// ** Public Fields **
 	this.DeletePage = '/help.axd?m=DeletePage';
@@ -37,7 +37,7 @@ SH.Urls = function () {
 	return this;
 }();
 
-SH.Helpers = function () {
+DMH.Helpers = function () {
 	this.GetQueryParameter = function (name) {
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -49,13 +49,13 @@ SH.Helpers = function () {
 }();
 
 /** Classes **/
-SH.AjaxClient = function () {
+DMH.AjaxClient = function () {
 
 	// ** Public Methods **
 	this.DeletePage = function (pageId, successCallback) {
 		$.ajax({
 			type: 'POST',
-			url: SH.Urls.DeletePage,
+			url: DMH.Urls.DeletePage,
 			data: pageId.toString(),
 			success: successCallback,
 		});
@@ -64,7 +64,7 @@ SH.AjaxClient = function () {
 	this.MovePage = function (pageId, newParentId, newPosition) {
 		$.ajax({
 			type: 'POST',
-			url: SH.Urls.MovePage,
+			url: DMH.Urls.MovePage,
 			data: JSON.stringify({
 				PageId: pageId,
 				NewParentId: newParentId,
@@ -77,7 +77,7 @@ SH.AjaxClient = function () {
 	this.ReadApplicationSettings = function (successCallback) {
 		$.ajax({
 			type: 'GET',
-			url: SH.Urls.ReadApplicationSettings,
+			url: DMH.Urls.ReadApplicationSettings,
 			success: successCallback,
 			async: false,
 		});
@@ -87,7 +87,7 @@ SH.AjaxClient = function () {
 		$.ajax({
 			type: 'GET',
 			data: { id: id },
-			url: SH.Urls.ReadPage,
+			url: DMH.Urls.ReadPage,
 			success: successCallback,
 		});
 	}
@@ -95,7 +95,7 @@ SH.AjaxClient = function () {
 	this.ReadTableOfContents = function (successCallback) {
 		$.ajax({
 			type: 'GET',
-			url: SH.Urls.ReadTableOfContents,
+			url: DMH.Urls.ReadTableOfContents,
 			success: successCallback,
 		});
 	}
@@ -105,7 +105,7 @@ SH.AjaxClient = function () {
 			type: 'POST',
 			contentType: "application/json",
 			dataType: 'json',
-			url: SH.Urls.SavePage,
+			url: DMH.Urls.SavePage,
 			data: JSON.stringify(page),
 			success: successCallback,
 		});
@@ -116,14 +116,14 @@ SH.AjaxClient = function () {
 			type: 'POST',
 			contentType: "application/json",
 			dataType: 'json',
-			url: SH.Urls.SaveUserPageSettings,
+			url: DMH.Urls.SaveUserPageSettings,
 			data: JSON.stringify(userPageSettings),
 		});
 	}
 }
 
-SH.AnchoredElementLogic = function () {
-	var _elements = new SH.SharedElements();
+DMH.AnchoredElementLogic = function () {
+	var _elements = new DMH.SharedElements();
 	var self = this;
 
 	// ** Private Methods ** 
@@ -144,10 +144,10 @@ SH.AnchoredElementLogic = function () {
 
 	// ** Public Methods **
 	this.UpdateElementPositions = function (pageModel, $form) {
-		if (_elements.$getPopupMask().is(':visible')) {
+		if (_elements.$getModalMask().is(':visible')) {
 			$.each(pageModel.Bullets, function (index, bullet) {
-				self.UpdateElementPosition(bullet, $('#shDraggableBullet-' + bullet.Number));
-				self.UpdateElementPosition(bullet, $('#shPlacedBullet-' + bullet.Number));
+				self.UpdateElementPosition(bullet, $('#dmhDraggableBullet-' + bullet.Number));
+				self.UpdateElementPosition(bullet, $('#dmhPlacedBullet-' + bullet.Number));
 			});
 			if ($form.is(':visible')) {
 				self.UpdateElementPosition(pageModel, $form);
@@ -156,7 +156,7 @@ SH.AnchoredElementLogic = function () {
 	}
 }
 
-SH.Cookies = function () {
+DMH.Cookies = function () {
 
 	// ** Public Methods **
 	this.DeleteCookie = function (cookieName) {
@@ -186,68 +186,68 @@ SH.Cookies = function () {
 	}
 }
 
-SH.DocumentationPage = function () {
+DMH.DocumentationPage = function () {
 
 	// ** Private Fields **
 	var _applicationSettings = null;
 	var _currentPage = null;
-	var _elements = new SH.SharedElements();
+	var _elements = new DMH.SharedElements();
 	var _newPage = null;		// Temporary new page when tree creates new page and name needs to be saved.
 	var _originalPage = null;	// State of page before editing begins.
-	var _popupView = null;		// Popup view to show popup help and modify documentation position.
+	var _firstTimeView = null;	// First time help viewer in draggable mode to modify documentation position.
 	var _historyId = 1;			// Compared to popstate data to determine if forward or back was pressed.
 
 
 	/** HTML Elements **/
-	function $getCancelButton() { return $('#shCancelButton'); }
-	function $getContentPanel() { return $('#shDocContentPanel'); }
-	function $getDocumentationEditor() { return $('#shDocumentationEditor'); }
-	function $getDocumentationEditorContent() { return $('#shDocumentationEditorContent'); }
-	function $getDocumentationEditorTitle() { return $('#shDocumentationEditorTitle'); }
-	function $getDocumentationTools() { return $('#shDocumentationTools'); }
-	function $getDocumentationView() { return $('#shDocumentationView'); }
-	function $getDocumentationViewContent() { return $('#shDocumentationViewContent'); }
-	function $getDocumentationViewTitle() { return $('#shDocumentationViewTitle'); }
-	function $getEditButton() { return $('#shEditButton'); }
-	function $getEditModeButtonBar() { return $('#shEditModeButtonBar'); }
-	function $getGenerateInstallScriptButton() { return $('#shGenerateInstallScriptButton'); }
-	function $getIsHidden() { return $('#shIsHidden'); }
-	function $getNewPageButton() { return $('#shNewPageButton'); }
-	function $getPage() { return $('#shPage'); }
-	function $getPageContainer() { return $('#shPageContainer'); }
-	function $getPopupImage() { return $('#shPopupImage'); }
-	function $getPopupImageUrl() { return $('#shPopupImageUrl'); }
-	function $getPopupTools() { return $('#shPopupTools'); }
-	function $getSaveButton() { return $('#shSaveButton'); }
-	function $getTableOfContents() { return $('#shToc'); }
-	function $getTitle() { return $('#shDocTitle'); }
-	function $getToolBar() { return $('#shDocToolBar'); }
-	function $getViewModeButtonBar() { return $('#shViewModeButtonBar'); }
+	function $getCancelButton() { return $('#dmhCancelButton'); }
+	function $getContentPanel() { return $('#dmhDocContentPanel'); }
+	function $getDocumentationEditor() { return $('#dmhDocumentationEditor'); }
+	function $getDocumentationEditorContent() { return $('#dmhDocumentationEditorContent'); }
+	function $getDocumentationEditorTitle() { return $('#dmhDocumentationEditorTitle'); }
+	function $getDocumentationTools() { return $('#dmhDocumentationTools'); }
+	function $getDocumentationView() { return $('#dmhDocumentationView'); }
+	function $getDocumentationViewContent() { return $('#dmhDocumentationViewContent'); }
+	function $getDocumentationViewTitle() { return $('#dmhDocumentationViewTitle'); }
+	function $getEditButton() { return $('#dmhEditButton'); }
+	function $getEditModeButtonBar() { return $('#dmhEditModeButtonBar'); }
+	function $getGenerateInstallScriptButton() { return $('#dmhGenerateInstallScriptButton'); }
+	function $getIsHidden() { return $('#dmhIsHidden'); }
+	function $getNewPageButton() { return $('#dmhNewPageButton'); }
+	function $getPage() { return $('#dmhPage'); }
+	function $getPageContainer() { return $('#dmhPageContainer'); }
+	function $getFirstTimeImage() { return $('#dmhFirstTimeImage'); }
+	function $getFirstTimeImageUrl() { return $('#dmhFirstTimeImageUrl'); }
+	function $getFirstTimeTools() { return $('#dmhFirstTimeTools'); }
+	function $getSaveButton() { return $('#dmhSaveButton'); }
+	function $getTableOfContents() { return $('#dmhToc'); }
+	function $getTitle() { return $('#dmhDocTitle'); }
+	function $getToolBar() { return $('#dmhDocToolBar'); }
+	function $getViewModeButtonBar() { return $('#dmhViewModeButtonBar'); }
 
 
 	// ** Private Methods **
 
 	// Reads the page model for the given node, selects the node in the toc and shows the page model.
 	function ActivateNode(node, historyState) {
-		historyState = historyState || SH.HistoryState.Push;
+		historyState = historyState || DMH.HistoryState.Push;
 
 		var id = GetPageIdFromElementId(node.id);
 
 		// if the clicked toc node id is valid (this is not a new page) and no page is loaded 
 		//	or the node clicked does not represent the current page, request the page information.
 		if (id && (!(_currentPage) || (_currentPage.Id !== id))) {
-			var client = new SH.AjaxClient();
+			var client = new DMH.AjaxClient();
 			client.ReadPage(id, function (page) {
 
 				// Handle the browser history as needed.
 				var url = "help.axd?m=DocumentationPage&id=" + page.Id;
-				if (historyState === SH.HistoryState.Replace) {
+				if (historyState === DMH.HistoryState.Replace) {
 					page.HistoryId = _historyId;
 					history.replaceState(page, page.Title, url);
-				} else if (historyState === SH.HistoryState.Push) {
+				} else if (historyState === DMH.HistoryState.Push) {
 					page.HistoryId = ++_historyId;
 					history.pushState(page, page.Title, url);
-				} else if (historyState === SH.HistoryState.Pop) {
+				} else if (historyState === DMH.HistoryState.Pop) {
 					page.HistoryId = _historyId;	// History id already adjusted by Window_PopState handler.
 				}
 
@@ -261,7 +261,7 @@ SH.DocumentationPage = function () {
 	}
 
 	function GetPageIdFromElementId(elementId) {
-		return parseInt(elementId.substring("shTocEntry-".length));
+		return parseInt(elementId.substring("dmhTocEntry-".length));
 	}
 
 	// Sets edit tool bar to initial values and view mode for current page.
@@ -278,7 +278,7 @@ SH.DocumentationPage = function () {
 			$getToolBar().show();
 
 			// Reset all bars.
-			$getPopupTools().hide();
+			$getFirstTimeTools().hide();
 			$getDocumentationTools().hide();
 			$getEditModeButtonBar().hide();
 			$getEditButton().hide();
@@ -291,13 +291,13 @@ SH.DocumentationPage = function () {
 					.prop('disabled', true)
 					.prop('checked', _currentPage.IsHidden);
 
-				if (_currentPage.PageType === SH.PageTypes.PopupPage) {
-					$getPopupImageUrl()
+				if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
+					$getFirstTimeImageUrl()
 						.prop('disabled', true)
 						.val(_currentPage.DocImageUrl || '');
 
-					$getPopupTools().show();
-				} else if (_currentPage.PageType === SH.PageTypes.DocumentationPage) {
+					$getFirstTimeTools().show();
+				} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
 					$getDocumentationTools().show();
 				}
 			}
@@ -310,15 +310,15 @@ SH.DocumentationPage = function () {
 			var $page = $getPage();
 			var height, width;
 
-			if (_currentPage.PageType === SH.PageTypes.PopupPage) {
-				var $background = $getPopupImage();
+			if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
+				var $background = $getFirstTimeImage();
 				// clientDimensions get value without scrollbar if present. 
 				// Scrollbar padding is automatically added with height() and width() which is bad.
 				height = Math.max($container.get(0).clientHeight, $background.height());
 				width = Math.max($container.get(0).clientWidth, $background.width());
 				$page.width(width).height(height);
-				_elements.$getPopupMask().width(width).height(height);
-			} else if (_currentPage.PageType === SH.PageTypes.DocumentationPage) {
+				_elements.$getModalMask().width(width).height(height);
+			} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
 				height = $container.get(0).clientHeight;
 				width = $container.get(0).clientWidth;
 				$page.width(width).height(height);
@@ -330,15 +330,15 @@ SH.DocumentationPage = function () {
 	// Reset the document to view mode for current page if successful.
 	function SavePage() {
 		if (_currentPage) {
-			var client = new SH.AjaxClient();
+			var client = new DMH.AjaxClient();
 			client.SavePage(_currentPage, function () {
 
-				var node = $getTableOfContents().jstree('get_node', 'shTocEntry-' + _currentPage.Id);
+				var node = $getTableOfContents().jstree('get_node', 'dmhTocEntry-' + _currentPage.Id);
 
 				// Update table of contents UI as needed for each type.
-				if (_currentPage.PageType === SH.PageTypes.PopupPage) {
+				if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
 					// Do nothing as of yet.
-				} else if (_currentPage.PageType === SH.PageTypes.DocumentationPage) {
+				} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
 					$getTableOfContents().jstree('rename_node', node, _currentPage.Title);
 				}
 
@@ -354,7 +354,7 @@ SH.DocumentationPage = function () {
 
 				ShowPage(_currentPage);
 
-				$('#shStatusMessage')
+				$('#dmhStatusMessage')
 					.html('Page saved.')
 					.css('background-color', '#2d9639')
 					.show()
@@ -374,7 +374,7 @@ SH.DocumentationPage = function () {
 	// Sets up the content area for the current page type.
 	function ShowPage(page) {
 		// Disable dragging for previous page.
-		_popupView.DisableDragging();
+		_firstTimeView.DisableDragging();
 
 		// Save original page values for cancel.
 		_currentPage = page;
@@ -383,16 +383,16 @@ SH.DocumentationPage = function () {
 		// Hide previous page contents.
 		$getDocumentationView().hide();
 		$getDocumentationEditor().hide();
-		$getPopupImage().hide();
-		_popupView.ClosePage();
+		$getFirstTimeImage().hide();
+		_firstTimeView.ClosePage();
 
 		// If there is a current page, show it's contents.
 		if (page) {
-			if (page.PageType === SH.PageTypes.PopupPage) {
+			if (page.PageType === DMH.PageTypes.FirstTimePage) {
 				// Show page image
-				$getPopupImage().attr('src', page.DocImageUrl).show();
-				_popupView.ShowPage(page);
-			} else if (page.PageType === SH.PageTypes.DocumentationPage) {
+				$getFirstTimeImage().attr('src', page.DocImageUrl).show();
+				_firstTimeView.ShowPage(page);
+			} else if (page.PageType === DMH.PageTypes.DocumentationPage) {
 				// Show custom documentation view form.
 				$getDocumentationViewTitle().html(_currentPage.Title);
 				$getDocumentationViewContent().html(_currentPage.Content);
@@ -410,7 +410,7 @@ SH.DocumentationPage = function () {
 
 	// Resets page to original, unedited page.
 	function CancelButton_Click() {
-		$('#shStatusMessage')
+		$('#dmhStatusMessage')
 			.html('Changes canceled.')
 			.css('background-color', '#3c454f')
 			.show()
@@ -424,10 +424,10 @@ SH.DocumentationPage = function () {
 		$getEditModeButtonBar().show();
 		$getIsHidden().prop('disabled', false);
 
-		if (_currentPage.PageType === SH.PageTypes.PopupPage) {
-			$getPopupImageUrl().prop('disabled', false);
-			_popupView.EnableDragging($getPageContainer());
-		} else if (_currentPage.PageType === SH.PageTypes.DocumentationPage) {
+		if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
+			$getFirstTimeImageUrl().prop('disabled', false);
+			_firstTimeView.EnableDragging($getPageContainer());
+		} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
 			$getDocumentationEditorTitle().val(_currentPage.Title);
 			$getDocumentationEditorContent().val(_currentPage.Content);
 			$getDocumentationView().hide();
@@ -436,7 +436,7 @@ SH.DocumentationPage = function () {
 	}
 
 	function GenerateInstallScriptButton_Click() {
-		window.open(SH.Urls.GenerateInstallScript);
+		window.open(DMH.Urls.GenerateInstallScript);
 	}
 
 	function NewPageButton_Click() {
@@ -446,20 +446,20 @@ SH.DocumentationPage = function () {
 		});
 	}
 
-	function PopupImageUrl_Change() {
-		$getPopupImage().attr('src', $(this).val());
+	function FirstTimeImageUrl_Change() {
+		$getFirstTimeImage().attr('src', $(this).val());
 		ResizeDocumentPage();
 	}
 
 	function ReadTableOfContents_Success(tableOfContents) {
 
 		$.each(tableOfContents, function (index, item) {
-			var html = '<li id="shTocEntry-' + item.Id + '" class="shTocEntry' + (item.IsHidden ? ' tocHidden' : '') + '">';
+			var html = '<li id="dmhTocEntry-' + item.Id + '" class="dmhTocEntry' + (item.IsHidden ? ' tocHidden' : '') + '">';
 			html += item.Title;
 			html += '<ul></ul></li>';
 
 			if (item.ParentPageId) {
-				$('#shTocEntry-' + item.ParentPageId + '>ul').append(html);
+				$('#dmhTocEntry-' + item.ParentPageId + '>ul').append(html);
 			} else {
 				$getTableOfContents().find('>ul').append(html);
 			}
@@ -531,7 +531,7 @@ SH.DocumentationPage = function () {
 							// Delete the node in question.
 							inst.delete_node(node);
 							var pageId = GetPageIdFromElementId(node.id);
-							var client = new SH.AjaxClient();
+							var client = new DMH.AjaxClient();
 							client.DeletePage(pageId);
 						},
 					},
@@ -558,11 +558,11 @@ SH.DocumentationPage = function () {
 	// Copy form values to page model and attempt to save page.
 	function SaveButton_Click() {
 		_currentPage.IsHidden = $getIsHidden().prop('checked');
-		if (_currentPage.PageType === SH.PageTypes.DocumentationPage) {
+		if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
 			_currentPage.Title = $getDocumentationEditorTitle().val();
 			_currentPage.Content = $getDocumentationEditorContent().val();
-		} else if (_currentPage.PageType === SH.PageTypes.PopupPage) {
-			_currentPage.DocImageUrl = $getPopupImageUrl().val();
+		} else if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
+			_currentPage.DocImageUrl = $getFirstTimeImageUrl().val();
 		}
 		SavePage();
 	}
@@ -578,15 +578,15 @@ SH.DocumentationPage = function () {
 
 		var newPage = {
 			ParentPageId: GetPageIdFromElementId(data.parent),
-			PageType: SH.PageTypes.DocumentationPage,  // All pages created here are Documentation Pages
+			PageType: DMH.PageTypes.DocumentationPage,  // All pages created here are Documentation Pages
 			Order: data.position,
 			Title: 'New Page',
 			Content: '',
 		};
 
-		var client = new SH.AjaxClient();
+		var client = new DMH.AjaxClient();
 		client.SavePage(newPage, function (page) {
-			data.instance.set_id(data.node, 'shTocEntry-' + page.Id);
+			data.instance.set_id(data.node, 'dmhTocEntry-' + page.Id);
 			_newPage = page;
 		});
 	}
@@ -597,7 +597,7 @@ SH.DocumentationPage = function () {
 		// Determine new selected node.
 		var newSelectedNode = null;
 		if (data.node.parent === '#') {	// If the parent was the root element, select the first entry if one exists.
-			var $tocEntries = $('.shTocEntry');
+			var $tocEntries = $('.dmhTocEntry');
 			if ($tocEntries.length > 0) {
 
 				// Get the first node id, or second if the first is the deleted node.
@@ -615,7 +615,7 @@ SH.DocumentationPage = function () {
 		}
 		if (newSelectedNode) {	// Only select a new node if one was found.
 			data.instance.select_node(newSelectedNode);
-			ActivateNode(newSelectedNode, SH.HistoryState.Replace);
+			ActivateNode(newSelectedNode, DMH.HistoryState.Replace);
 		} else // Activating an empty node empties the page.
 			ShowPage(null);
 	}
@@ -627,7 +627,7 @@ SH.DocumentationPage = function () {
 		var pageId = GetPageIdFromElementId(data.node.id);
 		var newParentId = GetPageIdFromElementId(data.parent);
 
-		var client = new SH.AjaxClient();
+		var client = new DMH.AjaxClient();
 		client.MovePage(pageId, newParentId, data.position);
 
 		if (_currentPage.Id === pageId) {
@@ -642,7 +642,7 @@ SH.DocumentationPage = function () {
 	function TocEntry_Rename(e, data) {
 		if (_newPage) {
 			_newPage.Title = data.text;
-			var client = new SH.AjaxClient();
+			var client = new DMH.AjaxClient();
 			client.SavePage(_newPage);
 			_newPage = null;
 		}
@@ -652,9 +652,9 @@ SH.DocumentationPage = function () {
 		var node = null;
 
 		// Check if a query parameter is set for the id of the page.
-		var id = SH.Helpers.GetQueryParameter("id");
+		var id = DMH.Helpers.GetQueryParameter("id");
 		if (id) {
-			node = $getTableOfContents().jstree('get_node', 'shTocEntry-' + id);
+			node = $getTableOfContents().jstree('get_node', 'dmhTocEntry-' + id);
 		}
 
 		// Otherwise, take the first selected node. jsTree is setup to remember the selected node between pages.
@@ -667,7 +667,7 @@ SH.DocumentationPage = function () {
 
 		// Load the node if one is present
 		if (node)
-			ActivateNode(node, SH.HistoryState.Replace);
+			ActivateNode(node, DMH.HistoryState.Replace);
 	}
 
 	function Window_PopState(event) {
@@ -680,7 +680,7 @@ SH.DocumentationPage = function () {
 		else
 			_historyId--;
 
-		var node = $getTableOfContents().jstree('get_node', 'shTocEntry-' + page.Id);
+		var node = $getTableOfContents().jstree('get_node', 'dmhTocEntry-' + page.Id);
 		// If the page from the event state still exists...
 		if (node) {
 			// Not using ActivateNode because we don't need to read the page model.
@@ -710,17 +710,17 @@ SH.DocumentationPage = function () {
 			showButtonBar: false,							// set to false to hide bottom button bar.
 			showDocumentLink: false,						// set to false to hide title bar documentation link.
 		};
-		_popupView = new SH.PopupView(options);
+		_firstTimeView = new DMH.FirstTimeView(options);
 
-		var client = new SH.AjaxClient();
+		var client = new DMH.AjaxClient();
 		client.ReadApplicationSettings(function (applicationSettings) {
 			_applicationSettings = applicationSettings;
-			_popupView.Initialize(applicationSettings);
+			_firstTimeView.Initialize(applicationSettings);
 			InitializeEditTools();
 		});
 		client.ReadTableOfContents(ReadTableOfContents_Success);
 
-		$getPopupImageUrl().change(PopupImageUrl_Change);
+		$getFirstTimeImageUrl().change(FirstTimeImageUrl_Change);
 		$getSaveButton().click(SaveButton_Click);
 		$getCancelButton().click(CancelButton_Click);
 		$getEditButton().click(EditButton_Click);
@@ -733,8 +733,8 @@ SH.DocumentationPage = function () {
 }
 
 // This is the help button that the external application must have in order to 
-// show hidden popup help or the full documentation page.
-SH.HelpButton = function () {
+// show hidden first time help or the full documentation page.
+DMH.HelpButton = function () {
 
 	/** Private Fields **/
 	var _button = this;
@@ -742,7 +742,7 @@ SH.HelpButton = function () {
 
 
 	/** HTML Elements **/
-	function $getHelpButton() { return $('.shHelpButton'); }
+	function $getHelpButton() { return $('.dmhHelpButton'); }
 
 	/** Private Methods **/
 	function UpdatePageHelpButton(currentPage) {
@@ -759,17 +759,17 @@ SH.HelpButton = function () {
 	/** Event Handlers **/
 	function HelpButton_Click() {
 		if (_currentPage)
-			$(_button).trigger('showPopup.sh');
+			$(_button).trigger('showFirstTime.dmh');
 		else
-			window.location = SH.Urls.NavigateDocumentation;
+			window.location = DMH.Urls.NavigateDocumentation;
 	}
 
 
 	/** Public Methods **/
-	this.Initialize = function (popupEdit, currentPage) {
+	this.Initialize = function (firstTimeEdit, currentPage) {
 		UpdatePageHelpButton(currentPage);
 
-		$(popupEdit).bind("pageUpdate.sh", function (event, newPage) {
+		$(firstTimeEdit).bind("pageUpdate.dmh", function (event, newPage) {
 			UpdatePageHelpButton(newPage);
 		});
 
@@ -778,37 +778,37 @@ SH.HelpButton = function () {
 
 
 	/** Events **/
-	// showPopup.sh
+	// showFirstTime.dmh
 }
 
-SH.PopupEdit = function () {
+DMH.FirstTimeEdit = function () {
 
 	// ** Private Fields **
-	var _anchoredElementLogic = new SH.AnchoredElementLogic();
+	var _anchoredElementLogic = new DMH.AnchoredElementLogic();
 	var _applicationSettings = null;
 	var _currentPage = null;
-	var _elements = new SH.SharedElements();
+	var _elements = new DMH.SharedElements();
 	var _leafElements = null;
 	var _originalPage = null;
 	var _self = this;
 
 
 	/** HTML Elements **/
-	function $getAddBulletButton() { return $('#shAddBulletButton'); }
-	function $getBulletEdit(context) { return $('.shBulletEdit', context); }
-	function $getBulletEditTemplate() { return $('#shBulletEditTemplate'); }
-	function $getBulletEditText(context) { return $('.shBulletEditText', context); }
-	function $getCancelHelpButton() { return $('#shCancelHelpButton'); }
-	function $getCreateHelpButton() { return $('#shCreateHelpButton'); }
-	function $getDialogTitle() { return $('.shDialogTitle'); }
-	function $getDraggableBullet(context) { return $('>.shDraggableBullet', context); }
-	function $getDraggableBulletNumber(context) { return $('.shDraggableBulletNumber', context); }
-	function $getPopupEdit() { return $('#shPopupEdit'); }
-	function $getPopupEditBullets() { return $('#shPopupEditBullets'); }
-	function $getPopupEditContent() { return $('#shPopupEditContent'); }
-	function $getPopupEditMatchUrls() { return $('#shPopupEditMatchUrls'); }
-	function $getPopupEditTitle() { return $('#shPopupEditTitle'); }
-	function $getSaveHelpButton() { return $('#shSaveHelpButton'); }
+	function $getAddBulletButton() { return $('#dmhAddBulletButton'); }
+	function $getBulletEdit(context) { return $('.dmhBulletEdit', context); }
+	function $getBulletEditTemplate() { return $('#dmhBulletEditTemplate'); }
+	function $getBulletEditText(context) { return $('.dmhBulletEditText', context); }
+	function $getCancelHelpButton() { return $('#dmhCancelHelpButton'); }
+	function $getCreateHelpButton() { return $('#dmhCreateHelpButton'); }
+	function $getDialogTitle() { return $('.dmhDialogTitle'); }
+	function $getDraggableBullet(context) { return $('>.dmhDraggableBullet', context); }
+	function $getDraggableBulletNumber(context) { return $('.dmhDraggableBulletNumber', context); }
+	function $getfirstTimeEdit() { return $('#dmhFirstTimeEdit'); }
+	function $getfirstTimeEditBullets() { return $('#dmhFirstTimeEditBullets'); }
+	function $getfirstTimeEditContent() { return $('#dmhFirstTimeEditContent'); }
+	function $getfirstTimeEditMatchUrls() { return $('#dmhFirstTimeEditMatchUrls'); }
+	function $getfirstTimeEditTitle() { return $('#dmhFirstTimeEditTitle'); }
+	function $getSaveHelpButton() { return $('#dmhSaveHelpButton'); }
 
 
 	// ** Private Methods **
@@ -816,12 +816,12 @@ SH.PopupEdit = function () {
 		// Clone the template to create a new editor, initialize, and add to form.
 		var $newBullet = $getBulletEditTemplate()
 			.clone(true, true)
-			.attr('id', 'shBulletEdit-' + bullet.Number);
-		$newBullet.find('.shBulletNumber').html(bullet.Number);
+			.attr('id', 'dmhBulletEdit-' + bullet.Number);
+		$newBullet.find('.dmhBulletNumber').html(bullet.Number);
 		if (bullet.Text) {
 			$getBulletEditText($newBullet).val(bullet.Text);
 		}
-		$getPopupEditBullets().append($newBullet);
+		$getfirstTimeEditBullets().append($newBullet);
 
 		// Clone the draggable bullet template, initilize, and add to page.
 		var $draggableBullet = $getDraggableBullet($newBullet);
@@ -838,7 +838,7 @@ SH.PopupEdit = function () {
 			bulletTop = $newBullet.offset().top - 3;
 			bulletLeft = $newBullet.offset().left - 50;
 		}
-		$draggableBullet.attr('id', 'shDraggableBullet-' + bullet.Number)
+		$draggableBullet.attr('id', 'dmhDraggableBullet-' + bullet.Number)
 			.css({ top: bulletTop + 'px', left: bulletLeft + 'px' })
 			.draggable({
 				containment: 'document',
@@ -849,8 +849,8 @@ SH.PopupEdit = function () {
 
 	function CloseEditHelpForm() {
 		$getDraggableBullet('body').remove();
-		$getPopupEdit().hide();
-		_elements.$getPopupMask().hide();
+		$getfirstTimeEdit().hide();
+		_elements.$getModalMask().hide();
 		$getCreateHelpButton().show();
 	}
 
@@ -858,24 +858,24 @@ SH.PopupEdit = function () {
 		$getSaveHelpButton().html('Create');
 		$getDialogTitle().html('Create Help Page');
 
-		$getPopupEditTitle().val('Help - ' + document.title);
-		$getPopupEditMatchUrls().val(window.location.pathname);
-		$getPopupEditContent().val('');
-		$getPopupEditBullets().empty();
+		$getfirstTimeEditTitle().val('Help - ' + document.title);
+		$getfirstTimeEditMatchUrls().val(window.location.pathname);
+		$getfirstTimeEditContent().val('');
+		$getfirstTimeEditBullets().empty();
 
-		var dialogLeft = ($(document).width() / 3 * 2) - ($getPopupEdit().width());
-		$getPopupEdit().css({ top: '200px', left: dialogLeft });
+		var dialogLeft = ($(document).width() / 3 * 2) - ($getfirstTimeEdit().width());
+		$getfirstTimeEdit().css({ top: '200px', left: dialogLeft });
 	}
 
 	function InitializeEditMode(page) {
 		$getSaveHelpButton().html('Save');
 		$getDialogTitle().html('Edit Help Page');
 
-		$getPopupEditTitle().val(page.Title);
-		$getPopupEditMatchUrls().val(page.MatchUrls);
-		$getPopupEditContent().val(page.Content);
+		$getfirstTimeEditTitle().val(page.Title);
+		$getfirstTimeEditMatchUrls().val(page.MatchUrls);
+		$getfirstTimeEditContent().val(page.Content);
 
-		$getPopupEditBullets().empty();
+		$getfirstTimeEditBullets().empty();
 		$.each(page.Bullets, function (index, bullet) {
 			AddBullet(bullet);
 		});
@@ -883,7 +883,7 @@ SH.PopupEdit = function () {
 		var anchor = $('#' + page.OffsetElementId);
 		var top = (anchor.offset().top + page.VerticalOffset) + 'px';
 		var left = (anchor.offset().left + page.HorizontalOffset) + 'px';
-		$getPopupEdit().css({ top: top, left: left });
+		$getfirstTimeEdit().css({ top: top, left: left });
 	}
 
 	// Find the LeafElement that overlaps most with, 
@@ -960,14 +960,14 @@ SH.PopupEdit = function () {
 		var sourceUrl = href.substring(href.indexOf(host) + host.length, href.length);
 
 		_currentPage.Id = _currentPage.Id || 0;
-		_currentPage.PageType = _currentPage.PageType || SH.PageTypes.PopupPage;
-		_currentPage.Title = $getPopupEditTitle().val();
-		_currentPage.MatchUrls = $getPopupEditMatchUrls().val();
+		_currentPage.PageType = _currentPage.PageType || DMH.PageTypes.FirstTimePage;
+		_currentPage.Title = $getfirstTimeEditTitle().val();
+		_currentPage.MatchUrls = $getfirstTimeEditMatchUrls().val();
 		_currentPage.SourceUrl = sourceUrl;
-		_currentPage.Content = $getPopupEditContent().val();
+		_currentPage.Content = $getfirstTimeEditContent().val();
 
 		$.each(_currentPage.Bullets, function (index, bullet) {
-			bullet.Text = $getBulletEditText($('#shBulletEdit-' + (index + 1))).val();
+			bullet.Text = $getBulletEditText($('#dmhBulletEdit-' + (index + 1))).val();
 		});
 	}
 
@@ -1005,9 +1005,9 @@ SH.PopupEdit = function () {
 
 		// flip visibilities and position form.
 		$getCreateHelpButton().hide();
-		_elements.$getPopupMask().show();
+		_elements.$getModalMask().show();
 
-		var $form = $getPopupEdit().show();
+		var $form = $getfirstTimeEdit().show();
 		UpdateFormPositionValues($form.get(0));
 	}
 
@@ -1023,19 +1023,19 @@ SH.PopupEdit = function () {
 
 	function RemoveBulletButton_Click() {
 		// Remove the editor and draggable bullet associated with this remove button.
-		var $editor = $(this).closest('.shBulletEdit');
-		var number = $editor.find('.shBulletNumber').html();
+		var $editor = $(this).closest('.dmhBulletEdit');
+		var number = $editor.find('.dmhBulletNumber').html();
 		$editor.remove();
-		$('#shDraggableBullet-' + number).remove();
+		$('#dmhDraggableBullet-' + number).remove();
 
 		// Reassign all bullet numbers and element ids from top down.
-		$getBulletEdit($getPopupEditBullets()).each(function (index, editor) {
+		$getBulletEdit($getfirstTimeEditBullets()).each(function (index, editor) {
 			var newNumber = index + 1;
-			var $currentNumber = $(editor).find('.shBulletNumber');
+			var $currentNumber = $(editor).find('.dmhBulletNumber');
 			var currentNumber = $currentNumber.html();
 			$currentNumber.html(newNumber);
-			$(editor).attr('id', 'shBulletEdit-' + newNumber);
-			var $draggableBullet = $('#shDraggableBullet-' + currentNumber).attr('id', 'shDraggableBullet-' + newNumber);
+			$(editor).attr('id', 'dmhBulletEdit-' + newNumber);
+			var $draggableBullet = $('#dmhDraggableBullet-' + currentNumber).attr('id', 'dmhDraggableBullet-' + newNumber);
 			$getDraggableBulletNumber($draggableBullet).html(newNumber);
 		});
 
@@ -1050,7 +1050,7 @@ SH.PopupEdit = function () {
 
 	function SaveHelpButton_Click() {
 		UpdatePageModel();
-		var client = new SH.AjaxClient();
+		var client = new DMH.AjaxClient();
 		client.SavePage(_currentPage, function (page) {
 			_currentPage.Id = page.Id;
 		});
@@ -1058,11 +1058,11 @@ SH.PopupEdit = function () {
 		$getCreateHelpButton().html('Edit Help Page');
 		CloseEditHelpForm();
 
-		$(_self).trigger('pageUpdate.sh', _currentPage);
+		$(_self).trigger('pageUpdate.dmh', _currentPage);
 	}
 
 	function Window_Resize() {
-		_anchoredElementLogic.UpdateElementPositions(_currentPage, $getPopupEdit());
+		_anchoredElementLogic.UpdateElementPositions(_currentPage, $getfirstTimeEdit());
 	}
 
 
@@ -1080,15 +1080,15 @@ SH.PopupEdit = function () {
 			$getSaveHelpButton().click(SaveHelpButton_Click);
 			$getCancelHelpButton().click(CancelHelpButton_Click);
 			$getAddBulletButton().click(AddBulletButton_Click);
-			$getBulletEditTemplate().find('.shButtonCancel').click(RemoveBulletButton_Click);
-			$getPopupEdit().draggable({
+			$getBulletEditTemplate().find('.dmhButtonCancel').click(RemoveBulletButton_Click);
+			$getfirstTimeEdit().draggable({
 				handle: $getDialogTitle(),
 				containment: 'document',
 				stop: EditForm_DraggableStop,
 			});
 			// for drop anchors, only interested in visible elements that have ids, 
 			// contain no child nodes, are not help related and are not certain other tags.
-			_leafElements = $('*[id]:visible:not(.sh-,.sh- *,link,meta,script,style,:has(*))');
+			_leafElements = $('*[id]:visible:not(.dmh-,.dmh- *,link,meta,script,style,:has(*))');
 		}
 
 		$(window).resize(Window_Resize);
@@ -1096,10 +1096,10 @@ SH.PopupEdit = function () {
 
 
 	// ** Events ** 
-	// pageUpdate.sh
+	// pageUpdate.dmh
 }
 
-SH.PopupView = function (options) {
+DMH.FirstTimeView = function (options) {
 
 	/** Default Options **/
 	var _options = {
@@ -1112,30 +1112,30 @@ SH.PopupView = function (options) {
 
 
 	// ** Private Fields **
-	var _anchoredElementLogic = new SH.AnchoredElementLogic();
+	var _anchoredElementLogic = new DMH.AnchoredElementLogic();
 	var _applicationSettings = null;
 	var _currentPage = null;
 	var _dragablesInitialized = false;
-	var _elements = new SH.SharedElements();
+	var _elements = new DMH.SharedElements();
 	var _self = this;
 	var _userPageSettings = null;
 	var _nextBulletOffset = 0;		// Tracks left offset for unset bullets on documentation page.
 
 
 	/** HTML Elements **/
-	function $getBulletNumber(context) { return $('.shBulletNumber', context); }
-	function $getBulletViewTemplate() { return $('#shBulletViewTemplate'); }
-	function $getBulletViewText(context) { return $('.shBulletViewText', context); }
-	function $getButtonBar() { return $('#shPopupView .shButtonBar'); }
-	function $getCloseHelpButton() { return $('#shCloseHelpButton'); }
-	function $getDialogTitle() { return $('.shDialogTitle'); }
-	function $getHideHelpButton() { return $('#shHideHelpButton'); }
-	function $getPlacedBulletNumber(context) { return $('.shPlacedBulletNumber', context); }
-	function $getPlacedBullets(context) { return $('>.shPlacedBullet', context); }
-	function $getPopupView() { return $('#shPopupView'); }
-	function $getPopupViewBullets() { return $('#shPopupViewBullets'); }
-	function $getPopupViewContent() { return $('#shPopupViewContent'); }
-	function $getShowDocumentationButton() { return $('#shShowDocumentationButton'); }
+	function $getBulletNumber(context) { return $('.dmhBulletNumber', context); }
+	function $getBulletViewTemplate() { return $('#dmhBulletViewTemplate'); }
+	function $getBulletViewText(context) { return $('.dmhBulletViewText', context); }
+	function $getButtonBar() { return $('#dmhFirstTimeView .dmhButtonBar'); }
+	function $getCloseHelpButton() { return $('#dmhCloseHelpButton'); }
+	function $getDialogTitle() { return $('.dmhDialogTitle'); }
+	function $getHideHelpButton() { return $('#dmhHideHelpButton'); }
+	function $getPlacedBulletNumber(context) { return $('.dmhPlacedBulletNumber', context); }
+	function $getPlacedBullets(context) { return $('>.dmhPlacedBullet', context); }
+	function $getfirstTimeView() { return $('#dmhFirstTimeView'); }
+	function $getfirstTimeViewBullets() { return $('#dmhFirstTimeViewBullets'); }
+	function $getfirstTimeViewContent() { return $('#dmhFirstTimeViewContent'); }
+	function $getShowDocumentationButton() { return $('#dmhShowDocumentationButton'); }
 
 
 	// ** Private Methods **
@@ -1149,7 +1149,7 @@ SH.PopupView = function (options) {
 			_userPageSettings.HidePage = hidePage;
 		}
 
-		var client = new SH.AjaxClient();
+		var client = new DMH.AjaxClient();
 		client.SaveUserPageSettings(_userPageSettings);
 	}
 
@@ -1158,13 +1158,13 @@ SH.PopupView = function (options) {
 			&& _applicationSettings
 			&& _applicationSettings.CanEdit
 			&& _currentPage
-			&& _currentPage.PageType === SH.PageTypes.PopupPage) {
+			&& _currentPage.PageType === DMH.PageTypes.FirstTimePage) {
 
 			$getDialogTitle().css({ cursor: 'move' });
-			$getPopupView().draggable({
+			$getfirstTimeView().draggable({
 				handle: $getDialogTitle(),
 				containment: _options.documentationContainer,
-				stop: PopupView_DraggableStop,
+				stop: firstTimeView_DraggableStop,
 			});
 			$getPlacedBullets(_options.documentationContainer).each(function (index, bullet) {
 				$(bullet).css({ cursor: 'move' })
@@ -1195,17 +1195,17 @@ SH.PopupView = function (options) {
 
 		var $newBullet = $getBulletViewTemplate()
 			.clone(true, true)
-			.attr("id", 'shBulletView-' + bullet.Number);
+			.attr("id", 'dmhBulletView-' + bullet.Number);
 		$getBulletNumber($newBullet).html(bullet.Number);
 		$getBulletViewText($newBullet).html(bullet.Text);
 
-		$getPopupViewBullets().append($newBullet);
+		$getfirstTimeViewBullets().append($newBullet);
 
 		var placedBullet = $getPlacedBullets($newBullet);
 		$getPlacedBulletNumber(placedBullet).html(bullet.Number);
 		placedBullet.detach();
 		$container.append(placedBullet);
-		placedBullet.attr('id', 'shPlacedBullet-' + bullet.Number)
+		placedBullet.attr('id', 'dmhPlacedBullet-' + bullet.Number)
 			.css({ top: top, left: left });
 	}
 
@@ -1230,41 +1230,41 @@ SH.PopupView = function (options) {
 
 	function CloseHelpButtons_Click(e) {
 		e.data.model.ClosePage();
-		var cookies = new SH.Cookies();
-		cookies.SetCookie("SH-HideHelp", e.data.hide.toString(), 730);
+		var cookies = new DMH.Cookies();
+		cookies.SetCookie("DMH-HideHelp", e.data.hide.toString(), 730);
 		AjaxSaveUserPageSettings(e.data.hide);
 	}
 
-	function PopupView_DraggableStop() {
+	function firstTimeView_DraggableStop() {
 		_currentPage.DocVerticalOffset = Math.round($(this).css('top').replace('px', ''));
 		_currentPage.DocHorizontalOffset = Math.round($(this).css('left').replace('px', ''));
 	}
 
 	function ViewHelpButton_Click() {
-		// TODO: move documentation button logic out of PopupView.
+		// TODO: move documentation button logic out of firstTimeView.
 		// will need to tease apart new page creation events... maybe.
-		// popupView defined in PopupViewInjectedScripts.html
-		popupView.ShowPage();
+		// firstTimeView defined in firstTimeViewInjectedScripts.html
+		firstTimeView.ShowPage();
 	}
 
 	function Window_Resize() {
 		if (_options.anchoredMode)
-			_anchoredElementLogic.UpdateElementPositions(_currentPage, $getPopupView());
+			_anchoredElementLogic.UpdateElementPositions(_currentPage, $getfirstTimeView());
 	}
 
 
 	// ** Public Methods **
 	this.ClosePage = function () {
 		RemoveBullets();
-		$getPopupView().hide();
-		_elements.$getPopupMask().hide();
+		$getfirstTimeView().hide();
+		_elements.$getModalMask().hide();
 	}
 
 	this.DisableDragging = function () {
 		if (_dragablesInitialized) {
 			$getDialogTitle().css({ cursor: 'auto' });
 			// Must destroy draggables because the next page shown may have a different number of elements.
-			$getPopupView().draggable('destroy');
+			$getfirstTimeView().draggable('destroy');
 			$getPlacedBullets(_options.documentationContainer).each(function (index, bullet) {
 				$(bullet).css({ cursor: 'auto' })
 					.draggable('destroy');
@@ -1277,7 +1277,7 @@ SH.PopupView = function (options) {
 		InitializeDraggables();
 	}
 
-	this.Initialize = function (applicationSettings, popupEdit, helpButton) {
+	this.Initialize = function (applicationSettings, firstTimeEdit, helpButton) {
 		_applicationSettings = applicationSettings;
 
 		if (_options.showButtonBar) {
@@ -1290,17 +1290,17 @@ SH.PopupView = function (options) {
 		if (_options.showDocumentLink) {
 			$getShowDocumentationButton()
 				.show()
-				.click(function () { window.location = SH.Urls.NavigateDocumentation; });
+				.click(function () { window.location = DMH.Urls.NavigateDocumentation; });
 		} else {
 			$getShowDocumentationButton().hide();
 		}
 
 		$(window).resize(Window_Resize);
 
-		$(popupEdit).bind("pageUpdate.sh", function (event, newPage) {
+		$(firstTimeEdit).bind("pageUpdate.dmh", function (event, newPage) {
 			_currentPage = newPage;
 		});
-		$(helpButton).bind("showPopup.sh", function () {
+		$(helpButton).bind("showFirstTime.dmh", function () {
 			_self.ShowPage();
 		});
 	}
@@ -1311,14 +1311,14 @@ SH.PopupView = function (options) {
 			_currentPage = page;
 
 		if (_currentPage) {
-			// This is needed on the documentation page when moving from one popup help to another popup help.
+			// This is needed on the documentation page when moving from one first time help to another first time help.
 			// But it doesn't hurt to have for all other transitions.
 			RemoveBullets();
 
-			$getPopupViewContent().html(_currentPage.Content);
+			$getfirstTimeViewContent().html(_currentPage.Content);
 			$getDialogTitle().html(_currentPage.Title);
 
-			var view = $getPopupView();
+			var view = $getfirstTimeView();
 			if (_options.anchoredMode) {
 				_anchoredElementLogic.UpdateElementPosition(_currentPage, view);
 			} else {
@@ -1328,12 +1328,12 @@ SH.PopupView = function (options) {
 			}
 
 			_nextBulletOffset = 0;
-			$getPopupViewBullets().empty();
+			$getfirstTimeViewBullets().empty();
 			$.each(_currentPage.Bullets, function (index, bullet) {
 				PlaceBullet(bullet);
 			});
 
-			_elements.$getPopupMask().show();
+			_elements.$getModalMask().show();
 			view.show();
 		}
 	}
@@ -1342,17 +1342,17 @@ SH.PopupView = function (options) {
 		_userPageSettings = userPageSettings;
 		_currentPage = page;
 
-		var cookies = new SH.Cookies();
+		var cookies = new DMH.Cookies();
 
 		if (_currentPage &&
-			cookies.GetCookie("SH-HideHelp") !== "true" &&
+			cookies.GetCookie("DMH-HideHelp") !== "true" &&
 			(_userPageSettings === null || !_userPageSettings.HidePage)) {
 			this.ShowPage();
 		}
 	}
 }
 
-SH.SharedElements = function () {
+DMH.SharedElements = function () {
 	/** HTML Elements **/
-	this.$getPopupMask = function () { return $('#shPopupMask'); }
+	this.$getModalMask = function () { return $('#dmhModalMask'); }
 }

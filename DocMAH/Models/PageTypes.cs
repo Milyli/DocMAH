@@ -2,7 +2,7 @@
 {
 	public enum PageTypes
 	{
-		PopupPage = 1,
+		FirstTimePage = 1,
 		DocumentationPage = 2,
 	}
 }

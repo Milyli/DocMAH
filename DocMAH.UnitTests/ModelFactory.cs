@@ -40,7 +40,7 @@ namespace DocMAH.UnitTests
 				MatchUrls = matchUrls ?? string.Format("/Test/Run-{0}*",_pageCount++) ,
 				Order = order,
 				ParentPageId = parentPageId,
-				PageType = PageTypes.PopupPage,
+				PageType = PageTypes.FirstTimePage,
 				SourceUrl = string.Format("/Test/Run/{0}", _pageCount),
 				Title = string.Format("Unit Test Help {0}", _pageCount.ToString("00#")),
 				IsHidden = isHidden,

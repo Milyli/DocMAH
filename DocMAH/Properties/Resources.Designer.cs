@@ -62,20 +62,20 @@ namespace DocMAH.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to /** Namespace **/
-        ///var SH = SH || {};
+        ///var DMH = DMH || {};
         ///
         ////** Constants and Singletons **/
-        ///SH.PageTypes = function () {
+        ///DMH.PageTypes = function () {
         ///
         ///	//** Public Fields **
-        ///	this.PopupPage = 1;
+        ///	this.FirstTimePage = 1;
         ///	this.DocumentationPage = 2;
         ///
         ///	// Return singleton.
         ///	return this;
         ///}();
         ///
-        ///SH.HistoryState = function () {
+        ///DMH.HistoryState = function () {
         ///	this.Replace = 1;
         ///	this.Push = 2;
         ///	this.Pop = 3;
@@ -83,12 +83,11 @@ namespace DocMAH.Properties {
         ///	return this;
         ///}();
         ///
-        ///SH.Urls = function () {
+        ///DMH.Urls = function () {
         ///
         ///	// ** Public Fields **
         ///	this.DeletePage = &apos;/help.axd?m=DeletePage&apos;;
-        ///	this.GenerateInstallScript = &apos;/help.axd?m=GenerateInstallScript&apos;;
-        ///	thi [rest of string was truncated]&quot;;.
+        ///	this.GenerateInstallScript = &apos;/help.axd?m=GenerateInstallScrip [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DocMAHJavaScript {
             get {
@@ -97,7 +96,7 @@ namespace DocMAH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to var SH=SH||{};SH.PageTypes=function(){return this.PopupPage=1,this.DocumentationPage=2,this}();SH.HistoryState=function(){return this.Replace=1,this.Push=2,this.Pop=3,this}();SH.Urls=function(){return this.DeletePage=&quot;/help.axd?m=DeletePage&quot;,this.GenerateInstallScript=&quot;/help.axd?m=GenerateInstallScript&quot;,this.MovePage=&quot;/help.axd?m=MovePage&quot;,this.NavigateDocumentation=&quot;/help.axd?m=DocumentationPage&quot;,this.ReadApplicationSettings=&quot;/help.axd?m=ReadApplicationSettings&quot;,this.ReadPage=&quot;/help.axd?m=ReadPage&quot;,this.Re [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to var DMH=DMH||{};DMH.PageTypes=function(){return this.FirstTimePage=1,this.DocumentationPage=2,this}();DMH.HistoryState=function(){return this.Replace=1,this.Push=2,this.Pop=3,this}();DMH.Urls=function(){return this.DeletePage=&quot;/help.axd?m=DeletePage&quot;,this.GenerateInstallScript=&quot;/help.axd?m=GenerateInstallScript&quot;,this.MovePage=&quot;/help.axd?m=MovePage&quot;,this.NavigateDocumentation=&quot;/help.axd?m=DocumentationPage&quot;,this.ReadApplicationSettings=&quot;/help.axd?m=ReadApplicationSettings&quot;,this.ReadPage=&quot;/help.axd?m=ReadPage [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DocMAHJavaScript_min {
             get {
@@ -137,7 +136,7 @@ namespace DocMAH.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html class=&quot;sh-&quot;&gt;
+        ///&lt;html class=&quot;dmh-&quot;&gt;
         ///&lt;head&gt;
         ///	&lt;title&gt;[TITLE]&lt;/title&gt;
         ///	[JSTREECSS]
@@ -145,17 +144,17 @@ namespace DocMAH.Properties {
         ///	[CUSTOMCSS]
         ///&lt;/head&gt;
         ///&lt;body&gt;
-        ///	&lt;div id=&quot;shDocToolBar&quot;&gt;
+        ///	&lt;div id=&quot;dmhDocToolBar&quot;&gt;
         ///		&lt;h3&gt;Edit Tools&lt;/h3&gt;
-        ///		&lt;div class=&quot;shButtonBar&quot;&gt;
-        ///			&lt;div id=&quot;shGenerateInstallScriptButton&quot; class=&quot;shButton shButtonSmall&quot;&gt;Generate Install Scripts&lt;/div&gt;
+        ///		&lt;div class=&quot;dmhButtonBar&quot;&gt;
+        ///			&lt;div id=&quot;dmhGenerateInstallScriptButton&quot; class=&quot;dmhButton dmhButtonSmall&quot;&gt;Generate Install Scripts&lt;/div&gt;
         ///		&lt;/div&gt;
-        ///		&lt;div id=&quot;shDocToolBarBreak&quot;&gt;&lt;/div&gt;
-        ///		&lt;div id=&quot;shStatusBar&quot;&gt;
-        ///			&lt;div id=&quot;shStatusMessage&quot;&gt;&lt;/div&gt;
+        ///		&lt;div id=&quot;dmhDocToolBarBreak&quot;&gt;&lt;/div&gt;
+        ///		&lt;div id=&quot;dmhStatusBar&quot;&gt;
+        ///			&lt;div id=&quot;dmhStatusMessage&quot;&gt;&lt;/div&gt;
         ///		&lt;/div&gt;
-        ///		&lt;div id=&quot;shCommonTools&quot;&gt;
-        ///			&lt;div class [rest of string was truncated]&quot;;.
+        ///		&lt;div id=&quot;dmhCommonTools&quot;&gt;
+        ///			 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Html_Documentation {
             get {
@@ -164,7 +163,7 @@ namespace DocMAH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;&lt;html class=&quot;sh-&quot;&gt;&lt;head&gt;&lt;title&gt;[TITLE]&lt;/title&gt;[JSTREECSS]&lt;link href=&quot;/help.axd?m=CSS&quot; rel=&quot;stylesheet&quot;&gt;[CUSTOMCSS]&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;shDocToolBar&quot;&gt;&lt;h3&gt;Edit Tools&lt;/h3&gt;&lt;div class=&quot;shButtonBar&quot;&gt;&lt;div id=&quot;shGenerateInstallScriptButton&quot; class=&quot;shButton shButtonSmall&quot;&gt;Generate Install Scripts&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;shDocToolBarBreak&quot;&gt;&lt;/div&gt;&lt;div id=&quot;shStatusBar&quot;&gt;&lt;div id=&quot;shStatusMessage&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;shCommonTools&quot;&gt;&lt;div class=&quot;shFormRow&quot;&gt;&lt;label for=&quot;shIsHidden&quot;&gt;Hide Page&lt;/label&gt; &lt;input id=&quot;sh [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;&lt;html class=&quot;dmh-&quot;&gt;&lt;head&gt;&lt;title&gt;[TITLE]&lt;/title&gt;[JSTREECSS]&lt;link href=&quot;/help.axd?m=CSS&quot; rel=&quot;stylesheet&quot;&gt;[CUSTOMCSS]&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;dmhDocToolBar&quot;&gt;&lt;h3&gt;Edit Tools&lt;/h3&gt;&lt;div class=&quot;dmhButtonBar&quot;&gt;&lt;div id=&quot;dmhGenerateInstallScriptButton&quot; class=&quot;dmhButton dmhButtonSmall&quot;&gt;Generate Install Scripts&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;dmhDocToolBarBreak&quot;&gt;&lt;/div&gt;&lt;div id=&quot;dmhStatusBar&quot;&gt;&lt;div id=&quot;dmhStatusMessage&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;dmhCommonTools&quot;&gt;&lt;div class=&quot;dmhFormRow&quot;&gt;&lt;label for=&quot;dmhIsHidden&quot;&gt;Hide Page&lt;/label&gt; &lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Html_Documentation_min {
             get {
@@ -173,58 +172,58 @@ namespace DocMAH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;shCreateHelpButton&quot; class=&quot;sh- shButton&quot;&gt;Create Help Page&lt;/div&gt;
-        ///&lt;div id=&quot;shPopupEdit&quot; class=&quot;sh- shDialog&quot;&gt;
-        ///	&lt;div class=&quot;shDialogTitle&quot;&gt;Create Help Page&lt;/div&gt;
-        ///	&lt;div class=&quot;shDialogContent&quot;&gt;
-        ///		&lt;div class=&quot;shFormRow&quot;&gt;
-        ///			&lt;label for=&quot;shPopupEditTitle&quot;&gt;Help Title&lt;/label&gt;
-        ///			&lt;input id=&quot;shPopupEditTitle&quot; type=&quot;text&quot; /&gt;
-        ///			&lt;div class=&quot;shFieldHelp&quot;&gt;Required&lt;/div&gt;
+        ///   Looks up a localized string similar to &lt;div id=&quot;dmhCreateHelpButton&quot; class=&quot;dmh- dmhButton&quot;&gt;Create Help Page&lt;/div&gt;
+        ///&lt;div id=&quot;dmhFirstTimeEdit&quot; class=&quot;dmh- dmhDialog&quot;&gt;
+        ///	&lt;div class=&quot;dmhDialogTitle&quot;&gt;Create Help Page&lt;/div&gt;
+        ///	&lt;div class=&quot;dmhDialogContent&quot;&gt;
+        ///		&lt;div class=&quot;dmhFormRow&quot;&gt;
+        ///			&lt;label for=&quot;dmhFirstTimeEditTitle&quot;&gt;Help Title&lt;/label&gt;
+        ///			&lt;input id=&quot;dmhFirstTimeEditTitle&quot; type=&quot;text&quot; /&gt;
+        ///			&lt;div class=&quot;dmhFieldHelp&quot;&gt;Required&lt;/div&gt;
         ///		&lt;/div&gt;
-        ///		&lt;div class=&quot;shFormRow&quot;&gt;
-        ///			&lt;label for=&quot;shPopupEditMatchUrls&quot;&gt;Match Urls&lt;/label&gt;
-        ///			&lt;input id=&quot;shPopupEditMatchUrls&quot; type=&quot;t [rest of string was truncated]&quot;;.
+        ///		&lt;div class=&quot;dmhFormRow&quot;&gt;
+        ///			&lt;label for=&quot;dmhFirstTimeEditMatchUrls&quot;&gt;Match Urls&lt;/label&gt;
+        ///			&lt;input id= [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupEdit {
+        internal static string Html_FirstTimeEdit {
             get {
-                return ResourceManager.GetString("Html_PopupEdit", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeEdit", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;shCreateHelpButton&quot; class=&quot;sh- shButton&quot;&gt;Create Help Page&lt;/div&gt;&lt;div id=&quot;shPopupEdit&quot; class=&quot;sh- shDialog&quot;&gt;&lt;div class=&quot;shDialogTitle&quot;&gt;Create Help Page&lt;/div&gt;&lt;div class=&quot;shDialogContent&quot;&gt;&lt;div class=&quot;shFormRow&quot;&gt;&lt;label for=&quot;shPopupEditTitle&quot;&gt;Help Title&lt;/label&gt; &lt;input id=&quot;shPopupEditTitle&quot; type=&quot;text&quot;&gt;&lt;div class=&quot;shFieldHelp&quot;&gt;Required&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;shFormRow&quot;&gt;&lt;label for=&quot;shPopupEditMatchUrls&quot;&gt;Match Urls&lt;/label&gt; &lt;input id=&quot;shPopupEditMatchUrls&quot; type=&quot;text&quot;&gt;&lt;div class=&quot;shFieldHelp&quot;&gt;Required&lt;/div&gt;&lt; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div id=&quot;dmhCreateHelpButton&quot; class=&quot;dmh- dmhButton&quot;&gt;Create Help Page&lt;/div&gt;&lt;div id=&quot;dmhFirstTimeEdit&quot; class=&quot;dmh- dmhDialog&quot;&gt;&lt;div class=&quot;dmhDialogTitle&quot;&gt;Create Help Page&lt;/div&gt;&lt;div class=&quot;dmhDialogContent&quot;&gt;&lt;div class=&quot;dmhFormRow&quot;&gt;&lt;label for=&quot;dmhFirstTimeEditTitle&quot;&gt;Help Title&lt;/label&gt; &lt;input id=&quot;dmhFirstTimeEditTitle&quot; type=&quot;text&quot;&gt;&lt;div class=&quot;dmhFieldHelp&quot;&gt;Required&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dmhFormRow&quot;&gt;&lt;label for=&quot;dmhFirstTimeEditMatchUrls&quot;&gt;Match Urls&lt;/label&gt; &lt;input id=&quot;dmhFirstTimeEditMatchUrls&quot; type=&quot;text&quot;&gt;&lt;div  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupEdit_min {
+        internal static string Html_FirstTimeEdit_min {
             get {
-                return ResourceManager.GetString("Html_PopupEdit_min", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeEdit_min", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;shPopupMask&quot; class=&quot;sh-&quot;&gt;&lt;/div&gt;
-        ///&lt;div id=&quot;shPopupView&quot; class=&quot;sh- shDialog&quot;&gt;
+        ///   Looks up a localized string similar to &lt;div id=&quot;dmhModalMask&quot; class=&quot;dmh-&quot;&gt;&lt;/div&gt;
+        ///&lt;div id=&quot;dmhFirstTimeView&quot; class=&quot;dmh- dmhDialog&quot;&gt;
         ///	&lt;div&gt;
-        ///		&lt;div id=&quot;shShowDocumentationButton&quot; title=&quot;View full documentation&quot;&gt;
-        ///			&lt;svg version=&quot;1.1&quot; id=&quot;shDocumentationIcon&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;50px&quot;
+        ///		&lt;div id=&quot;dmhShowDocumentationButton&quot; title=&quot;View full documentation&quot;&gt;
+        ///			&lt;svg version=&quot;1.1&quot; id=&quot;dmhDocumentationIcon&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;50px&quot;
         ///				 height=&quot;50px&quot; viewBox=&quot;0 0 50 50&quot; enable-background=&quot;new 0 0 50 50&quot; xml:space=&quot;preserve&quot;&gt;
         ///			&lt;g id=&quot;_x38_7&quot;&gt;
         ///			&lt;g&gt;
-        ///			&lt;path d=&quot;M12.03,21.967c-1.318,0-1.318,2.047,0,2.047c5.249,0,10. [rest of string was truncated]&quot;;.
+        ///			&lt;path d=&quot;M12.03,21.967c-1.318,0-1.318,2.047,0,2.047c [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupView {
+        internal static string Html_FirstTimeView {
             get {
-                return ResourceManager.GetString("Html_PopupView", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeView", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;shPopupMask&quot; class=&quot;sh-&quot;&gt;&lt;/div&gt;&lt;div id=&quot;shPopupView&quot; class=&quot;sh- shDialog&quot;&gt;&lt;div&gt;&lt;div id=&quot;shShowDocumentationButton&quot; title=&quot;View full documentation&quot;&gt;&lt;svg version=&quot;1.1&quot; id=&quot;shDocumentationIcon&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;50px&quot; height=&quot;50px&quot; viewBox=&quot;0 0 50 50&quot; enable-background=&quot;new 0 0 50 50&quot; xml:space=&quot;preserve&quot;&gt;&lt;g id=&quot;_x38_7&quot;&gt;&lt;g&gt;&lt;path d=&quot;M12.03,21.967c-1.318,0-1.318,2.047,0,2.047c5.249,0,10.497,0,15.746,0c1.319,0,1.319-2.047,0-2.047
-        ///												C22.527,21.967 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div id=&quot;dmhModalMask&quot; class=&quot;dmh-&quot;&gt;&lt;/div&gt;&lt;div id=&quot;dmhFirstTimeView&quot; class=&quot;dmh- dmhDialog&quot;&gt;&lt;div&gt;&lt;div id=&quot;dmhShowDocumentationButton&quot; title=&quot;View full documentation&quot;&gt;&lt;svg version=&quot;1.1&quot; id=&quot;dmhDocumentationIcon&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;50px&quot; height=&quot;50px&quot; viewBox=&quot;0 0 50 50&quot; enable-background=&quot;new 0 0 50 50&quot; xml:space=&quot;preserve&quot;&gt;&lt;g id=&quot;_x38_7&quot;&gt;&lt;g&gt;&lt;path d=&quot;M12.03,21.967c-1.318,0-1.318,2.047,0,2.047c5.249,0,10.497,0,15.746,0c1.319,0,1.319-2.047,0-2.047
+        ///												C22 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupView_min {
+        internal static string Html_FirstTimeView_min {
             get {
-                return ResourceManager.GetString("Html_PopupView_min", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeView_min", resourceCulture);
             }
         }
         
@@ -235,28 +234,28 @@ namespace DocMAH.Properties {
         ///	var page = [PAGEJSON];
         ///	var userPageSettings = [USERPAGESETTINGSJSON];
         ///	$(function () {
-        ///		var popupEdit;
+        ///		var firstTimeEdit;
         ///		if (applicationSettings &amp;&amp; applicationSettings.CanEdit) {
-        ///			var popupEdit = new SH.PopupEdit();
-        ///			popupEdit.Initialize(applicationSettings, page);
+        ///			var firstTimeEdit = new DMH.FirstTimeEdit();
+        ///			firstTimeEdit.Initialize(applicationSettings, page);
         ///		}
         ///
-        ///		var helpButton = new SH.HelpButton();
-        ///		helpButton.Initialize(pop [rest of string was truncated]&quot;;.
+        ///		var helpButton = new DMH.HelpButton();
+        ///		helpBut [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupViewInjectedScripts {
+        internal static string Html_FirstTimeViewInjectedScripts {
             get {
-                return ResourceManager.GetString("Html_PopupViewInjectedScripts", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeViewInjectedScripts", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;script src=&quot;/help.axd?m=JavaScript&quot; type=&quot;application/javascript&quot;&gt;&lt;/script&gt;&lt;script type=&quot;application/javascript&quot;&gt;var applicationSettings=[APPLICATIONSETTINGSJSON];var page=[PAGEJSON];var userPageSettings=[USERPAGESETTINGSJSON];$(function(){var popupEdit;if(applicationSettings&amp;&amp;applicationSettings.CanEdit){var popupEdit=new SH.PopupEdit();popupEdit.Initialize(applicationSettings,page);}
-        ///var helpButton=new SH.HelpButton();helpButton.Initialize(popupEdit,page);var popupView;popupView=new SH.PopupView();popupV [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;script src=&quot;/help.axd?m=JavaScript&quot; type=&quot;application/javascript&quot;&gt;&lt;/script&gt;&lt;script type=&quot;application/javascript&quot;&gt;var applicationSettings=[APPLICATIONSETTINGSJSON];var page=[PAGEJSON];var userPageSettings=[USERPAGESETTINGSJSON];$(function(){var firstTimeEdit;if(applicationSettings&amp;&amp;applicationSettings.CanEdit){var firstTimeEdit=new DMH.FirstTimeEdit();firstTimeEdit.Initialize(applicationSettings,page);}
+        ///var helpButton=new DMH.HelpButton();helpButton.Initialize(firstTimeEdit,page);var firstTimeView;firstTime [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Html_PopupViewInjectedScripts_min {
+        internal static string Html_FirstTimeViewInjectedScripts_min {
             get {
-                return ResourceManager.GetString("Html_PopupViewInjectedScripts_min", resourceCulture);
+                return ResourceManager.GetString("Html_FirstTimeViewInjectedScripts_min", resourceCulture);
             }
         }
         
