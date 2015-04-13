@@ -1,5 +1,5 @@
 # DocMAH - Documentation Module and Handler
-In the spirit of ELMAH, DocMAH is a library that easily integrates with any .NET web 
+DocMAH is a library that easily integrates with any .NET web 
 application to provide a full service help and documentation system.
 
 _More information available at http://docmah.net... eventually._
