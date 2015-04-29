@@ -95,7 +95,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DocMAH\DocMAH.csproj">
       <Project>{745167d4-85f8-4a2c-83fb-2802af181292}</Project>
-      <Name>Scintillic.NarrativeNet.Help</Name>
+      <Name>DocMAH</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

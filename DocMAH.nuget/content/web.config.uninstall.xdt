@@ -1,0 +1,21 @@
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+	<configSections>
+		<section name="docmah" type="DocMAH.Configuration.DocmahConfigurationSection, DocMAH" xdt:Transform="Remove" xdt:Locator="Match(name)" />
+	</configSections>
+
+	<system.webServer>
+		<modules>
+			<add name="DocMAH" type="DocMAH.Web.HttpModule, DocMAH" preCondition="integratedMode" xdt:Transform="Remove" xdt:Locator="Match(name)" />
+		</modules>
+		<handlers>
+			<add name="DocMAH" path="help.axd" verb="GET,POST" type="DocMAH.Web.HttpHandler, DocMAH" preCondition="integratedMode" xdt:Transform="Remove" xdt:Locator="Match(name)" />
+		</handlers>
+	</system.webServer>
+
+	<docmah connectionStringName="DefaultConnection" jsUrl="" cssUrl="" xdt:Transform="Remove">
+		<documentation pageTitle="Documentation Pages" customCss=""/>
+		<editHelp disabled="false" requireAuthentication="true" requireLocalConnection="true"/>
+	</docmah>
+
+</configuration>

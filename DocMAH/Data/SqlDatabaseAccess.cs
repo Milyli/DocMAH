@@ -55,7 +55,14 @@ namespace DocMAH.Data
 			if (string.IsNullOrEmpty(connectionString))
 			{
 				string connectionStringName = DocmahConfigurationSection.Current.ConnectionStringName;
-				connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+				try
+				{
+					connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+				}
+				catch(NullReferenceException ex)
+				{
+					throw new InvalidOperationException("The DocMAH connection string has not been set. Set the connection string using either the docmah element connectionStringName attribute in web.config, or in DocMAHConfig.Configure and call Configure from Application_Start in Global.asax.", ex);
+				}
 			}
 			return new SqlConnection(connectionString);
 		}

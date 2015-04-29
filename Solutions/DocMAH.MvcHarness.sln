@@ -23,6 +23,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.UnitTests", "..\DocM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.MvcHarness", "..\DocMAH.MvcHarness\DocMAH.MvcHarness.csproj", "{99C9CD9B-0C07-4AB0-B34A-54EE541BEECD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocMAH.nuget", "DocMAH.nuget", "{55F41AAB-0D0D-4FDB-8888-AAFC49814127}"
+	ProjectSection(SolutionItems) = preProject
+		..\DocMAH.nuget\Package.nuspec = ..\DocMAH.nuget\Package.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{C45D1904-A4B1-46CC-867D-926B7E819133}"
+	ProjectSection(SolutionItems) = preProject
+		..\DocMAH.nuget\content\web.config.install.xdt = ..\DocMAH.nuget\content\web.config.install.xdt
+		..\DocMAH.nuget\content\web.config.uninstall.xdt = ..\DocMAH.nuget\content\web.config.uninstall.xdt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +65,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C45D1904-A4B1-46CC-867D-926B7E819133} = {55F41AAB-0D0D-4FDB-8888-AAFC49814127}
 	EndGlobalSection
 EndGlobal

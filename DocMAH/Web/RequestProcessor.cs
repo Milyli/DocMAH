@@ -244,10 +244,13 @@ namespace DocMAH.Web
 				}
 
 				// Delete bullets for all deleted pages.
-				xmlWriter.WriteElementString(
-					XmlNodeNames.UpdateScriptElement,
-					string.Format("DELETE DocmahBullets WHERE PageId NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
-				);
+				if (existingPageIds.Count > 0)
+				{
+					xmlWriter.WriteElementString(
+						XmlNodeNames.UpdateScriptElement,
+						string.Format("DELETE DocmahBullets WHERE PageId NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
+					);
+				}
 
 				// Delete all page urls as all will be recreated.
 				xmlWriter.WriteElementString(
@@ -256,16 +259,22 @@ namespace DocMAH.Web
 				);
 
 				// Delete user settings for all deleted pages. Otherwise, leave them alone.
-				xmlWriter.WriteElementString(
-					XmlNodeNames.UpdateScriptElement,
-					string.Format("DELETE DocmahUserPageSettings WHERE PageId NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
-				);
+				if (existingPageIds.Count > 0)
+				{
+					xmlWriter.WriteElementString(
+						XmlNodeNames.UpdateScriptElement,
+						string.Format("DELETE DocmahUserPageSettings WHERE PageId NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
+					);
+				}
 
-				// Delete all deleted pages.
-				xmlWriter.WriteElementString(
-					XmlNodeNames.UpdateScriptElement,
-					string.Format("DELETE DocmahPages WHERE Id NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
-				);
+				if (existingPageIds.Count > 0)
+				{
+					// Delete all deleted pages.
+					xmlWriter.WriteElementString(
+						XmlNodeNames.UpdateScriptElement,
+						string.Format("DELETE DocmahPages WHERE Id NOT IN({0});{1}", existingPageIds.ToCsv(), Environment.NewLine)
+					);
+				}
 
 				// Create insert statements for all page urls.
 				foreach (var script in pageUrlScripts)
@@ -294,10 +303,13 @@ namespace DocMAH.Web
 				}
 
 				// Delete any bullets that were deleted for existing pages.
-				xmlWriter.WriteElementString(
-					XmlNodeNames.UpdateScriptElement,
-					string.Format("DELETE DocmahBullets WHERE Id NOT IN({0});{1}", existingBulletIds.ToCsv(), Environment.NewLine)
-				);
+				if (existingBulletIds.Count > 0)
+				{
+					xmlWriter.WriteElementString(
+						XmlNodeNames.UpdateScriptElement,
+						string.Format("DELETE DocmahBullets WHERE Id NOT IN({0});{1}", existingBulletIds.ToCsv(), Environment.NewLine)
+					);
+				}
 
 				// Update help version
 				xmlWriter.WriteElementString(

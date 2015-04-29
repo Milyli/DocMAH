@@ -1,0 +1,23 @@
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+	<configSections xdt:Transform="InsertBefore(/configuration/*[1])" />
+	<configSections xdt:Locator="XPath(/configuration/configSections[last()])">
+		<section name="docmah" type="DocMAH.Configuration.DocmahConfigurationSection, DocMAH" xdt:Locator="Match(name)" xdt:Transform="InsertIfMissing"/>
+	</configSections>
+	<configSections xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)" />	
+
+	<system.webServer xdt:Transform="InsertIfMissing">
+		<modules xdt:Tansform="InsertIfMissing">
+			<add name="DocMAH" type="DocMAH.Web.HttpModule, DocMAH" preCondition="integratedMode" xdt:Locator="Match(name)" xdt:Transform="InsertIfMissing" />
+		</modules>
+		<handlers xdt:Transform="InsertIfMissing">
+			<add name="DocMAH" path="help.axd" verb="GET,POST" type="DocMAH.Web.HttpHandler, DocMAH" preCondition="integratedMode" xdt:Locator="Match(name)" xdt:Transform="InsertIfMissing" />
+		</handlers>
+	</system.webServer>
+
+	<docmah connectionStringName="DefaultConnection" jsUrl="" cssUrl="" xdt:Transform="InsertIfMissing">
+		<documentation pageTitle="Documentation Pages" customCss=""/>
+		<editHelp disabled="false" requireAuthentication="false" requireLocalConnection="true"/>
+	</docmah>
+
+</configuration>

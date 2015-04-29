@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DocMAH</RootNamespace>
     <AssemblyName>DocMAH</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -107,7 +107,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Attributions.txt" />
     <Content Include="Web\Css\Images\closedBook.png" />
     <Content Include="Web\Css\Images\closedBook.svg" />
     <Content Include="Web\Css\Images\document.png" />
@@ -176,7 +175,7 @@
     <EmbeddedResource Include="Web\Html\Documentation.min.html">
       <DependentUpon>Documentation.html</DependentUpon>
     </EmbeddedResource>
-    <Content Include="Implementation.txt" />
+    <Content Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

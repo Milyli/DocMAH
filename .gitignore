@@ -6,3 +6,5 @@
 *.suo
 Solutions/packages/
 Solutions/TestResults/Coverage/DocMAHCoverage/
+/DocMAH.nuget
+/Solutions/Scripts/NuGet.DocMAH.Local

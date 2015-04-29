@@ -93,33 +93,39 @@ namespace DocMAH.Web
 				}
 			}
 
+			var result = string.Empty;
+
 			// The HTML is reused on the documentation page.
 			// When injecting into other requests, the initialization scripts must be included.
-			var firstTimeViewHtml = ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
-			firstTimeViewHtml += ResourcesExtensions.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
+			result += ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
 
 			// TODO: Iron out javascript reference injection for first time help in base site pages.
 			// Attach jQueryUi CDN locations if not configured.
 			// Leaving out jQuery for the time being as it's likely included.
 			var javaScriptDependencies = new DocmahConfigurationSection().JsUrl;
 			if (string.IsNullOrEmpty(javaScriptDependencies))
-				firstTimeViewHtml += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
+			{
+				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);
+				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
+			}
+
+			result += ResourcesExtensions.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
 
 			// TODO: Cache the non-dynamic portion of the first time HTML for faster loading.
 			
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);
-			firstTimeViewHtml = firstTimeViewHtml.Replace("[PAGEJSON]", pageJson);
+			result = result.Replace("[PAGEJSON]", pageJson);
 
 			var userPageSettingsJson = serializer.Serialize(userPageSettings);
-			firstTimeViewHtml = firstTimeViewHtml.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
+			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
 			var access = new Access();
 			var applicationSettings = new ApplicationSettings { CanEdit = access.CanEdit };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
-			firstTimeViewHtml = firstTimeViewHtml.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
+			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
 
-			return firstTimeViewHtml;
+			return result;
 		}
 
 		#endregion

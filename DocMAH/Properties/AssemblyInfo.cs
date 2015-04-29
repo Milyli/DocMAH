@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Milyli")]
 [assembly: AssemblyProduct("DocMAH")]
-[assembly: AssemblyCopyright("Apache License V2 since 2014")]
+[assembly: AssemblyCopyright("Copyright © 2015 Milyli")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
