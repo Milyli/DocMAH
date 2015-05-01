@@ -8,3 +8,5 @@ Solutions/packages/
 Solutions/TestResults/Coverage/DocMAHCoverage/
 /DocMAH.nuget
 /Solutions/Scripts/NuGet.DocMAH.Local
+*.nupkg
+/Solutions/Deployment/_version.txt

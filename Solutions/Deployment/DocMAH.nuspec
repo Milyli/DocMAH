@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+
+		<id>DocMAH</id>
+		<version>0.0.0</version>
+		<authors>Scintillic</authors>
+		<owners>Milyli</owners>
+		<licenseUrl>https://github.com/Milyli/DocMAH/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/Milyli/DocMAH</projectUrl>
+		<!-- <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl> -->
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>
+			DocMAH - an ASP.NET and MVC help and documentation library that makes help easy to setup, create and deploy.
+		</summary>
+		<description>
+			Documentation Module and Handler, DocMAH, is a full-service, integrated documentation system for .NET web applications. DocMAH provides ease of setup, content generation, customization and deployment that does not exist in any other single documentation tool.
+			Help is provided in two forms: 1) First time help popups when a user first lands on a page. 2) CHM-like documentation pages.
+		</description>
+		<releaseNotes>First release of NuGet package.</releaseNotes>
+		<copyright>Copyright © 2015 Milyli</copyright>
+		<tags>ASP.NET MVC Documentation Help popup page </tags>
+	</metadata>
+</package>
