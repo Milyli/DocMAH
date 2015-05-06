@@ -1,22 +1,20 @@
-# Errors should all be handled. If they're not, we want to see them.
-$ErrorActionPreference = "Stop"
+# Creates the NuGet package folder structure.
+# Places files within the structure.
+# Builds the NuGet package.
 
-#Set root script directory.
+# Set script file paths.
 $deploymentDirectoryPath = $PSScriptRoot
 $versionFilePath = $deploymentDirectoryPath + "\_version.txt"
 $packageDirectoryPath = $deploymentDirectoryPath + "\Package"
 $contentDirectoryPath = $packageDirectoryPath + "\content"
 $libDirectoryPath = $packageDirectoryPath + "\lib"
 $net40DirectoryPath = $libDirectoryPath + "\net40"
-
-$solutionDirectoryPath = $deploymentDirectoryPath + "\.."
-$projectOutputDirectoryPath = ($deploymentDirectoryPath + "..\..\..\DocMAh\bin\Debug")
+$solutionDirectoryPath = $deploymentDirectoryPath + "\..\Solutions"
+$projectOutputDirectoryPath = $deploymentDirectoryPath + "\..\DocMAh\bin\Debug"
 $nugetExePath = $solutionDirectoryPath + "\.nuget\NuGet.exe"
 
-#Get next build number.
+# Get build number.
 $version = Get-Content $versionFilePath
-$versionComponents = $version.Split(".")
-$version = [System.String]::Format("{0}.{1}.{2}.{3}", $versionComponents[0], $versionComponents[1], $versionComponents[2], [System.Int32]::Parse($versionComponents[3]) + 1)
 
 Try {
 	Remove-Item $packageDirectoryPath -Recurse -ErrorAction Stop | Out-Null
@@ -43,6 +41,3 @@ Invoke-Expression "$($nugetExePath) pack $($packageDirectoryPath + "\DocMAH.nusp
 
 Remove-Item $packageDirectoryPath -Recurse
 "Package directory deleted."
-
-"Writing last build number to version file."
-$version | Out-File $versionFilePath

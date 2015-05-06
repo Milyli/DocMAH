@@ -175,7 +175,6 @@
     <EmbeddedResource Include="Web\Html\Documentation.min.html">
       <DependentUpon>Documentation.html</DependentUpon>
     </EmbeddedResource>
-    <Content Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

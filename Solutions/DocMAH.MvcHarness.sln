@@ -23,15 +23,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.UnitTests", "..\DocM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.MvcHarness", "..\DocMAH.MvcHarness\DocMAH.MvcHarness.csproj", "{99C9CD9B-0C07-4AB0-B34A-54EE541BEECD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocMAH.nuget", "DocMAH.nuget", "{55F41AAB-0D0D-4FDB-8888-AAFC49814127}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{6F735085-EF29-4E02-ACEA-08A082E351E7}"
 	ProjectSection(SolutionItems) = preProject
-		..\DocMAH.nuget\Package.nuspec = ..\DocMAH.nuget\Package.nuspec
+		Deployment\_version.txt = Deployment\_version.txt
+		Deployment\DocMAH.nuspec = Deployment\DocMAH.nuspec
+		Deployment\PackNuGet.ps1 = Deployment\PackNuGet.ps1
+		Deployment\readme.txt = Deployment\readme.txt
+		Deployment\web.config.install.xdt = Deployment\web.config.install.xdt
+		Deployment\web.config.uninstall.xdt = Deployment\web.config.uninstall.xdt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{C45D1904-A4B1-46CC-867D-926B7E819133}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{0E6E057F-2060-4129-A89E-FB50E3E99D56}"
 	ProjectSection(SolutionItems) = preProject
-		..\DocMAH.nuget\content\web.config.install.xdt = ..\DocMAH.nuget\content\web.config.install.xdt
-		..\DocMAH.nuget\content\web.config.uninstall.xdt = ..\DocMAH.nuget\content\web.config.uninstall.xdt
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global
@@ -65,8 +70,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C45D1904-A4B1-46CC-867D-926B7E819133} = {55F41AAB-0D0D-4FDB-8888-AAFC49814127}
 	EndGlobalSection
 EndGlobal
