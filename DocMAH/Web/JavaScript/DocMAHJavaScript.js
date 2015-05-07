@@ -1072,11 +1072,8 @@ DMH.FirstTimeEdit = function () {
 		_currentPage = page;
 
 		if (_applicationSettings && _applicationSettings.CanEdit) {
-			if (_currentPage)
-				$getCreateHelpButton().html('Edit Help Page');
 
 			// Initializes the form as much as possible.
-			$getCreateHelpButton().click(CreateHelpButton_Click);
 			$getSaveHelpButton().click(SaveHelpButton_Click);
 			$getCancelHelpButton().click(CancelHelpButton_Click);
 			$getAddBulletButton().click(AddBulletButton_Click);
@@ -1086,9 +1083,26 @@ DMH.FirstTimeEdit = function () {
 				containment: 'document',
 				stop: EditForm_DraggableStop,
 			});
-			// for drop anchors, only interested in visible elements that have ids, 
+			// For bullet anchors, first find visible elements that have ids, 
 			// contain no child nodes, are not help related and are not certain other tags.
 			_leafElements = $('*[id]:visible:not(.dmh-,.dmh- *,link,meta,script,style,:has(*))');
+			// Fall back on any non-help related elements with ids.
+			if (_leafElements.length === 0) {
+				_leafElements = $('*[id]:visible:not(.dmh-, dmh- *,link,meta,script,style');
+			}
+			// If there are still no elements, inform the user.
+			if (_leafElements.length === 0) {
+				$getCreateHelpButton()
+					.html('Cannot Create Help')
+					.attr('title', 'Click for more information.')
+					.click(function () {
+						alert("DocMAH was unable to find elements to anchor to. Please add IDs to elements you wish to place help near.");
+					});
+			} else {	// Otherwise, check to see if page should be in edit mode and attach edit event handler.
+				if (_currentPage)
+					$getCreateHelpButton().html('Edit Help Page');
+				$getCreateHelpButton().click(CreateHelpButton_Click);
+			}
 		}
 
 		$(window).resize(Window_Resize);

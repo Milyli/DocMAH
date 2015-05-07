@@ -25,12 +25,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.MvcHarness", "..\Doc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{6F735085-EF29-4E02-ACEA-08A082E351E7}"
 	ProjectSection(SolutionItems) = preProject
-		Deployment\_version.txt = Deployment\_version.txt
-		Deployment\DocMAH.nuspec = Deployment\DocMAH.nuspec
-		Deployment\PackNuGet.ps1 = Deployment\PackNuGet.ps1
+		..\Deployment\_version.txt = ..\Deployment\_version.txt
+		..\Deployment\AdvanceVersion.ps1 = ..\Deployment\AdvanceVersion.ps1
+		..\Deployment\BuildAndPack.ps1 = ..\Deployment\BuildAndPack.ps1
+		..\Deployment\BuildProject.ps1 = ..\Deployment\BuildProject.ps1
+		..\Deployment\DocMAH.nuspec = ..\Deployment\DocMAH.nuspec
+		..\Deployment\PackNuGet.ps1 = ..\Deployment\PackNuGet.ps1
+		..\Deployment\PublishNuGetLocal.ps1 = ..\Deployment\PublishNuGetLocal.ps1
 		Deployment\readme.txt = Deployment\readme.txt
-		Deployment\web.config.install.xdt = Deployment\web.config.install.xdt
-		Deployment\web.config.uninstall.xdt = Deployment\web.config.uninstall.xdt
+		..\Deployment\readme.txt = ..\Deployment\readme.txt
+		..\Deployment\ReleaseNotes.md = ..\Deployment\ReleaseNotes.md
+		..\Deployment\web.config.install.xdt = ..\Deployment\web.config.install.xdt
+		..\Deployment\web.config.uninstall.xdt = ..\Deployment\web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{0E6E057F-2060-4129-A89E-FB50E3E99D56}"
