@@ -32,7 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 		..\Deployment\DocMAH.nuspec = ..\Deployment\DocMAH.nuspec
 		..\Deployment\PackNuGet.ps1 = ..\Deployment\PackNuGet.ps1
 		..\Deployment\PublishNuGetLocal.ps1 = ..\Deployment\PublishNuGetLocal.ps1
-		Deployment\readme.txt = Deployment\readme.txt
 		..\Deployment\readme.txt = ..\Deployment\readme.txt
 		..\Deployment\ReleaseNotes.md = ..\Deployment\ReleaseNotes.md
 		..\Deployment\web.config.install.xdt = ..\Deployment\web.config.install.xdt
