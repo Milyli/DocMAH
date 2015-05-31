@@ -145,6 +145,9 @@ namespace DocMAH.Web
 			var documentationHtml = ResourcesExtensions.Minify(Resources.Html_Documentation, Resources.Html_Documentation_min);
 
 			documentationHtml = documentationHtml.Replace("[TITLE]", configuration.Documentation.PageTitle);
+			var request = context.Request;
+			var returnLink = new UriBuilder(request.Url.Scheme, request.Url.Host, request.Url.Port, request.ApplicationPath);
+			documentationHtml = documentationHtml.Replace("[RETURNLINK]", returnLink.ToString());
 
 			var cssUrl = DocmahConfigurationSection.Current.CssUrl;
 			if (string.IsNullOrEmpty(cssUrl))
@@ -325,7 +328,7 @@ namespace DocMAH.Web
 			// Copy file to response stream for good measure.
 			context.Response.Cache.SetNoStore();
 			context.Response.ContentType = "text/plain";
-			context.Response.AddHeader("Content-Disposition", "attachment;filename=InstallHelp.sql");
+			context.Response.AddHeader("Content-Disposition", "attachment;filename=ApplicationHelpInstall.xml");
 
 			using (var fileReader = new StreamReader(fileName))
 			{

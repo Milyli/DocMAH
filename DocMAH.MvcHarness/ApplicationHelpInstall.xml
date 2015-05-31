@@ -1,75 +1,108 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<UpdateScripts fileSchemaVersion="1" fileHelpVersion="1">
+<UpdateScripts fileSchemaVersion="1" fileHelpVersion="2">
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 2) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 0,SourceUrl = NULL,Title = 'DocMAH Documentation',Content = '&lt;p&gt;This will be the landing page for the DocMAH documentation.&lt;/p&gt;
-&lt;p&gt;Beneath this entry you will find another custom documentation page about something, as well as a mock up of the home page.&lt;/p&gt;
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 0,SourceUrl = NULL,Title = 'DocMAH Documentation',Content = '&lt;p&gt;We used DocMAH to host the its own documentation to give a sense of what''s possible.&lt;/p&gt;
+&lt;p&gt;DocMAH can be used to create not only the documentation you are now reading, but also first time help popups as shown in the image below.&lt;/p&gt;
+&lt;img src=''...not yet available...''/&gt;
 ',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 2
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (2,2,NULL,0,NULL,'DocMAH Documentation','&lt;p&gt;This will be the landing page for the DocMAH documentation.&lt;/p&gt;
-&lt;p&gt;Beneath this entry you will find another custom documentation page about something, as well as a mock up of the home page.&lt;/p&gt;
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (2,2,NULL,0,NULL,'DocMAH Documentation','&lt;p&gt;We used DocMAH to host the its own documentation to give a sense of what''s possible.&lt;/p&gt;
+&lt;p&gt;DocMAH can be used to create not only the documentation you are now reading, but also first time help popups as shown in the image below.&lt;/p&gt;
+&lt;img src=''...not yet available...''/&gt;
 ',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
-	<UpdateScript>
-		IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 1) BEGIN
-		UPDATE DocmahPages SET PageTypeId = 1,ParentPageId = 2,[Order] = 0,SourceUrl = '/',Title = 'Home Page Help',Content = 'This is the home page of the DocMAH MVC Harness web application.',VerticalOffset = -207,HorizontalOffset = 76,OffsetElementId = 'learnMoreButton',DocImageUrl = '/Images/Help/HomePage.png',DocVerticalOffset = 98,DocHorizontalOffset = 308,IsHidden = 1 WHERE Id = 1
-		END ELSE BEGIN
-		INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (1,1,2,0,'/','Home Page Help','This is the home page of the DocMAH MVC Harness web application.',-207,76,'learnMoreButton','/Images/Help/HomePage.png',98,308,1)
-		END
-	</UpdateScript>
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 3) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 1,SourceUrl = NULL,Title = 'Setup DocMAH',Content = '&lt;p&gt;This page will contain the initial setup steps including:&lt;/p&gt;
-&lt;ul&gt;
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 1,SourceUrl = NULL,Title = 'Add DocMAH to Your Project',Content = '&lt;ol&gt;
 &lt;li&gt;Pull from NuGet.&lt;/li&gt;
 &lt;li&gt;Required configuration file updates. (handled by NuGet)&lt;/li&gt;
 &lt;li&gt;Optional configuration settings.&lt;/li&gt;
-&lt;/ul&gt;',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 3
+&lt;/ol&gt;',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 3
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (3,2,2,1,NULL,'Setup DocMAH','&lt;p&gt;This page will contain the initial setup steps including:&lt;/p&gt;
-&lt;ul&gt;
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (3,2,NULL,1,NULL,'Add DocMAH to Your Project','&lt;ol&gt;
 &lt;li&gt;Pull from NuGet.&lt;/li&gt;
 &lt;li&gt;Required configuration file updates. (handled by NuGet)&lt;/li&gt;
 &lt;li&gt;Optional configuration settings.&lt;/li&gt;
-&lt;/ul&gt;',NULL,NULL,NULL,NULL,NULL,NULL,0)
+&lt;/ol&gt;',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
-	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 4) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 2,SourceUrl = NULL,Title = 'Create First Time Help',Content = 'Description of how to use the First Time Help editor.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 4
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 11) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 2,SourceUrl = NULL,Title = 'Basic Usage',Content = '',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 11
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (4,2,2,2,NULL,'Create First Time Help','Description of how to use the First Time Help editor.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (11,2,NULL,2,NULL,'Basic Usage','',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
-	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 5) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 3,SourceUrl = NULL,Title = 'Create Documentation',Content = 'Description of how to use the documentation editor.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 5
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 12) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 3,SourceUrl = NULL,Title = 'HowTos',Content = '',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 12
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (5,2,2,3,NULL,'Create Documentation','Description of how to use the documentation editor.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (12,2,NULL,3,NULL,'HowTos','',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
-	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 6) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 4,SourceUrl = NULL,Title = 'Hook Up Help Button',Content = 'Describes how to create a help button on the base web site that launches DocMAH help components.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 6
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 13) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = NULL,[Order] = 4,SourceUrl = NULL,Title = 'Reference',Content = '',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 13
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (6,2,2,4,NULL,'Hook Up Help Button','Describes how to create a help button on the base web site that launches DocMAH help components.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (13,2,NULL,4,NULL,'Reference','',NULL,NULL,NULL,NULL,NULL,NULL,0)
+END
+</UpdateScript>
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 14) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 13,[Order] = 0,SourceUrl = NULL,Title = 'Configuration',Content = '',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 14
+END ELSE BEGIN
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (14,2,13,0,NULL,'Configuration','',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 7) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 5,SourceUrl = NULL,Title = 'Styling DocMAH',Content = 'Detailed instructions on using optional configuration to override default style for first time help and documentation pages.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 7
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 12,[Order] = 0,SourceUrl = NULL,Title = 'Styling DocMAH',Content = 'Detailed instructions on using optional configuration to override default style for popup help and documentation pages.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 7
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (7,2,2,5,NULL,'Styling DocMAH','Detailed instructions on using optional configuration to override default style for first time help and documentation pages.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (7,2,12,0,NULL,'Styling DocMAH','Detailed instructions on using optional configuration to override default style for popup help and documentation pages.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+END
+</UpdateScript>
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 4) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 11,[Order] = 0,SourceUrl = NULL,Title = 'Create First Time Help',Content = 'Description of how to use the First Time Help editor.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 4
+END ELSE BEGIN
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (4,2,11,0,NULL,'Create First Time Help','Description of how to use the First Time Help editor.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+END
+</UpdateScript>
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 1) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 1,ParentPageId = 2,[Order] = 0,SourceUrl = '/',Title = 'Home Page Help',Content = 'This is the home page of the DocMAH MVC Harness web application.',VerticalOffset = -75,HorizontalOffset = 152,OffsetElementId = 'learnMoreButton',DocImageUrl = '/Images/Help/HomePage.png',DocVerticalOffset = 98,DocHorizontalOffset = 308,IsHidden = 1 WHERE Id = 1
+END ELSE BEGIN
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (1,1,2,0,'/','Home Page Help','This is the home page of the DocMAH MVC Harness web application.',-75,152,'learnMoreButton','/Images/Help/HomePage.png',98,308,1)
+END
+</UpdateScript>
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 5) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 11,[Order] = 1,SourceUrl = NULL,Title = 'Create Documentation',Content = 'Description of how to use the documentation editor.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 5
+END ELSE BEGIN
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (5,2,11,1,NULL,'Create Documentation','Description of how to use the documentation editor.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+END
+</UpdateScript>
+	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 6) BEGIN 
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 11,[Order] = 2,SourceUrl = NULL,Title = 'Add a Help Button to Your Site',Content = '&lt;p&gt;The purpose of adding a help button is to allow users to view the first time help for a page again after they''ve hidden it. It also allows users to access the full documentation for your application from pages that do not provide first time help.&lt;p&gt;
+&lt;p&gt;Adding help button functionality is accomplished by adding the class ''dmhHelpButton'' to any element you would like to use as your help button. This can be any element that supports the &lt;a href=''http://api.jquery.com/click/''&gt;jQuery click event&lt;/a&gt;: input, div, image, anchor, etc. In this way, you can create a help button that looks and behaves exactly as you like.&lt;p&gt;
+&lt;p&gt;For example:&lt;p&gt;
+&lt;pre&gt;
+        &amp;lt;a class="button &lt;span style=''color:green''&gt;dmhHelpButton&lt;/span&gt;" href="#"&amp;gt;HELP ME! I''M LOST!&amp;lt;/a&amp;gt;
+&lt;/pre&gt;',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 6
+END ELSE BEGIN
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (6,2,11,2,NULL,'Add a Help Button to Your Site','&lt;p&gt;The purpose of adding a help button is to allow users to view the first time help for a page again after they''ve hidden it. It also allows users to access the full documentation for your application from pages that do not provide first time help.&lt;p&gt;
+&lt;p&gt;Adding help button functionality is accomplished by adding the class ''dmhHelpButton'' to any element you would like to use as your help button. This can be any element that supports the &lt;a href=''http://api.jquery.com/click/''&gt;jQuery click event&lt;/a&gt;: input, div, image, anchor, etc. In this way, you can create a help button that looks and behaves exactly as you like.&lt;p&gt;
+&lt;p&gt;For example:&lt;p&gt;
+&lt;pre&gt;
+        &amp;lt;a class="button &lt;span style=''color:green''&gt;dmhHelpButton&lt;/span&gt;" href="#"&amp;gt;HELP ME! I''M LOST!&amp;lt;/a&amp;gt;
+&lt;/pre&gt;',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
 	<UpdateScript>IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = 8) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 2,[Order] = 6,SourceUrl = NULL,Title = 'Production Installation',Content = 'Walks through using the ''Generate Install Scripts'' button and the content XML file to automatically deploy help content to production servers.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 8
+	UPDATE DocmahPages SET PageTypeId = 2,ParentPageId = 11,[Order] = 3,SourceUrl = NULL,Title = 'Production Installation',Content = 'Walks through using the ''Generate Install Scripts'' button and the content XML file to automatically deploy help content to production servers.',VerticalOffset = NULL,HorizontalOffset = NULL,OffsetElementId = NULL,DocImageUrl = NULL,DocVerticalOffset = NULL,DocHorizontalOffset = NULL,IsHidden = 0 WHERE Id = 8
 END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (8,2,2,6,NULL,'Production Installation','Walks through using the ''Generate Install Scripts'' button and the content XML file to automatically deploy help content to production servers.',NULL,NULL,NULL,NULL,NULL,NULL,0)
+	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES (8,2,11,3,NULL,'Production Installation','Walks through using the ''Generate Install Scripts'' button and the content XML file to automatically deploy help content to production servers.',NULL,NULL,NULL,NULL,NULL,NULL,0)
 END
 </UpdateScript>
-	<UpdateScript>DELETE DocmahBullets WHERE PageId NOT IN(2,1,3,4,5,6,7,8);
+	<UpdateScript>DELETE DocmahBullets WHERE PageId NOT IN(2,3,11,12,13,14,7,4,1,5,6,8);
 </UpdateScript>
 	<UpdateScript>DELETE DocmahPageUrls;
 </UpdateScript>
-	<UpdateScript>DELETE DocmahUserPageSettings WHERE PageId NOT IN(2,1,3,4,5,6,7,8);
+	<UpdateScript>DELETE DocmahUserPageSettings WHERE PageId NOT IN(2,3,11,12,13,14,7,4,1,5,6,8);
 </UpdateScript>
-	<UpdateScript>DELETE DocmahPages WHERE Id NOT IN(2,1,3,4,5,6,7,8);
+	<UpdateScript>DELETE DocmahPages WHERE Id NOT IN(2,3,11,12,13,14,7,4,1,5,6,8);
 </UpdateScript>
 	<UpdateScript>INSERT DocmahPageUrls VALUES ('/',1);
 </UpdateScript>
@@ -80,19 +113,19 @@ END
 	<UpdateScript>INSERT DocmahPageUrls VALUES ('/Home/Index%',1);
 </UpdateScript>
 	<UpdateScript>IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = 1) = 1)BEGIN
-	UPDATE DocmahBullets SET PageId = 1,Number = 1,Text = 'Learn more about ASP.NET from the DocMAH home page.',VerticalOffset = 10,HorizontalOffset = 159,OffsetElementId = 'learnMoreButton',DocVerticalOffset = 279,DocHorizontalOffset = 280 WHERE Id = 1
+	UPDATE DocmahBullets SET PageId = 1,Number = 1,Text = 'Learn more about ASP.NET from the DocMAH home page.',VerticalOffset = 5,HorizontalOffset = -39,OffsetElementId = 'learnMoreButton',DocVerticalOffset = 279,DocHorizontalOffset = 280 WHERE Id = 1
 END ELSE BEGIN
-	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES (1,1,1,'Learn more about ASP.NET from the DocMAH home page.',10,159,'learnMoreButton',279,280)
+	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES (1,1,1,'Learn more about ASP.NET from the DocMAH home page.',5,-39,'learnMoreButton',279,280)
 END
 </UpdateScript>
 	<UpdateScript>IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = 2) = 1)BEGIN
-	UPDATE DocmahBullets SET PageId = 1,Number = 2,Text = 'Hosting your DocMAH enabled web application someplace else.',VerticalOffset = 1,HorizontalOffset = -50,OffsetElementId = 'webHostingLearnMoreButton',DocVerticalOffset = 537,DocHorizontalOffset = 659 WHERE Id = 2
+	UPDATE DocmahBullets SET PageId = 1,Number = 2,Text = 'Hosting your DocMAH enabled web application someplace else.',VerticalOffset = 268,HorizontalOffset = 288,OffsetElementId = 'learnMoreButton',DocVerticalOffset = 537,DocHorizontalOffset = 659 WHERE Id = 2
 END ELSE BEGIN
-	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES (2,1,2,'Hosting your DocMAH enabled web application someplace else.',1,-50,'webHostingLearnMoreButton',537,659)
+	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES (2,1,2,'Hosting your DocMAH enabled web application someplace else.',268,288,'learnMoreButton',537,659)
 END
 </UpdateScript>
 	<UpdateScript>DELETE DocmahBullets WHERE Id NOT IN(1,2);
 </UpdateScript>
-	<UpdateScript>UPDATE DocmahConfiguration SET [Value] = 1 WHERE [Name] = 'DatabaseHelpVersion';
+	<UpdateScript>UPDATE DocmahConfiguration SET [Value] = 2 WHERE [Name] = 'DatabaseHelpVersion';
 </UpdateScript>
 </UpdateScripts>

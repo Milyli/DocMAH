@@ -41,15 +41,24 @@ html.dmh- {
   margin: 0;
   height: 100%;
 }
-#dmhDocTitle {
+#dmhDocTitleBar {
   position: absolute;
   right: 0;
   left: 0;
+  padding: 15px 50px 15px 75px;
+  background-color: #3c454f;
+}
+#dmhDocTitle {
   font-size: 18px;
   color: #ffffff;
-  padding: 15px 0 15px 75px;
-  background-color: #3c454f;
   white-space: nowrap;
+}
+#dmhDocReturnLink {
+  font-size: 12px;
+  color: #ffffff;
+  display: inline-block;
+  float: right;
+  text-decoration: none;
 }
 #dmhDocToolBar {
   float: left;
