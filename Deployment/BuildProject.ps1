@@ -1,3 +1,4 @@
+# Called from master build script BuildAndPack.ps1
 # Replaces the version numbers in DocMAH AssemblyInfo.cs, 
 #   builds the DocMAH project, and reverts the version numbers.
 

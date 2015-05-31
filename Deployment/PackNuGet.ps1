@@ -1,3 +1,4 @@
+# Called from master build script BuildAndPack.ps1
 # Creates the NuGet package folder structure.
 # Places files within the structure.
 # Builds the NuGet package.
