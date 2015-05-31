@@ -1262,8 +1262,12 @@ DMH.FirstTimeView = function (options) {
 	}
 
 	function Window_Resize() {
-		if (_options.anchoredMode)
+		if (_options.anchoredMode) {
 			_anchoredElementLogic.UpdateElementPositions(_currentPage, $getfirstTimeView());
+			_elements.$getModalMask()
+				.height($(document).height())
+				.width($(document).width());
+		}
 	}
 
 
@@ -1271,6 +1275,7 @@ DMH.FirstTimeView = function (options) {
 	this.ClosePage = function () {
 		RemoveBullets();
 		$getfirstTimeView().hide();
+		$(document).off('resize');
 		_elements.$getModalMask().hide();
 	}
 
@@ -1335,6 +1340,9 @@ DMH.FirstTimeView = function (options) {
 			var view = $getfirstTimeView();
 			if (_options.anchoredMode) {
 				_anchoredElementLogic.UpdateElementPosition(_currentPage, view);
+				_elements.$getModalMask()
+					.height($(document).height())
+					.width($(document).width());
 			} else {
 				var formTop = page.DocVerticalOffset || 40;
 				var formLeft = page.DocHorizontalOffset || 0;
