@@ -1088,7 +1088,7 @@ DMH.FirstTimeEdit = function () {
 			_leafElements = $('*[id]:visible:not(.dmh-,.dmh- *,link,meta,script,style,:has(*))');
 			// Fall back on any non-help related elements with ids.
 			if (_leafElements.length === 0) {
-				_leafElements = $('*[id]:visible:not(.dmh-, dmh- *,link,meta,script,style');
+				_leafElements = $('*[id]:visible:not(.dmh-,.dmh- *,link,meta,script,style)');
 			}
 			// If there are still no elements, inform the user.
 			if (_leafElements.length === 0) {
