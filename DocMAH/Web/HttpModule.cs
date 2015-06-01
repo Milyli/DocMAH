@@ -17,7 +17,7 @@ namespace DocMAH.Web
 
 		}
 
-		public HttpModule(IDatabaseUpdater databaseUpdater)
+		public HttpModule(IDataStoreUpdater databaseUpdater)
 		{
 			_databaseUpdater = databaseUpdater;
 		}
@@ -26,7 +26,7 @@ namespace DocMAH.Web
 
 		#region Private Fields
 
-		private IDatabaseUpdater _databaseUpdater;
+		private IDataStoreUpdater _databaseUpdater;
 
 		#endregion
 

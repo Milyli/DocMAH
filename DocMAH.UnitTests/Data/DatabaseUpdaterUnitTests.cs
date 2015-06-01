@@ -43,7 +43,7 @@ namespace DocMAH.UnitTests.Data
 			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion);
 			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
 
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
@@ -102,7 +102,7 @@ namespace DocMAH.UnitTests.Data
 			});
 			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
 
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(a => a.Database_Update((DatabaseVersions)databaseVersions.GetValue(lastIndex)));
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
@@ -139,7 +139,7 @@ namespace DocMAH.UnitTests.Data
 			var databaseConfiguration = new Mock<IDatabaseConfiguration>(MockBehavior.Strict);
 			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion - 1);
 
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(a => a.Database_Update((DatabaseVersions)databaseVersions.GetValue(lastIndex)));
 
 			var httpContext = new Mock<HttpContextBase>();

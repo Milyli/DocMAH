@@ -187,6 +187,12 @@
   <data name="Sql_Database_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data\sql\database_01.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-16</value>
   </data>
+  <data name="Sql_Database_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\data\sql\database_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Sql_Database_Drop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\data\sql\database_drop.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="Sql_PageUrl_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data\sql\pageurl_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

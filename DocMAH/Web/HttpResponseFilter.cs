@@ -79,7 +79,7 @@ namespace DocMAH.Web
 		private string FormatHtmlViewHelp()
 		{
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
-			var database = new SqlDatabaseAccess();
+			var database = new SqlDataStore();
 			var page = database.Page_ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
 

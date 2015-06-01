@@ -15,7 +15,7 @@ using System.IO;
 
 namespace DocMAH.Data
 {
-	public interface IDatabaseAccess
+	public interface IDataStore
 	{
 		void Bullet_Create(Bullet bullet);
 		void Bullet_Delete(int id);
@@ -25,6 +25,8 @@ namespace DocMAH.Data
 		void Bullet_Update(Bullet bullet);
 		int Configuration_Read(string name);
 		void Configuration_Update(string name, int value);
+		void DataStore_Create();
+		void DataStore_Delete();
 		void Database_RunScript(string sql);
 		void Database_Update(DatabaseVersions toVersion);
 		void Page_Create(Page page);

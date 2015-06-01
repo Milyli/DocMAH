@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using NUnit.Framework;
 using System.Data;
-using DocMAH.UnitTests.Properties;
 using DocMAH.Data;
 using Moq;
 using System.Web;
@@ -14,7 +13,7 @@ using DocMAH.Models;
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
-	public class SqlDatabaseAccessUnitTests
+	public class SqlDataStoreUnitTests
 	{
 		#region Private Methods
 
@@ -34,30 +33,11 @@ namespace DocMAH.UnitTests.Data
 			return pageCount;
 		}
 
-		private static bool ExecuteDatabaseTests
-		{
-			get
-			{
-				var setting = ConfigurationManager.AppSettings["ExecuteDatabaseTests"];
-				if (string.IsNullOrEmpty(setting))
-					return false;
-				return bool.Parse(setting);
-			}
-		}
-
-		private static string GetMasterConnectionString()
-		{
-			var connectionString =
-				ConfigurationManager.ConnectionStrings["docmahUnitTests"]
-					.ConnectionString
-					.Replace("Initial Catalog=docmahUnitTests", "Initial Catalog=master");
-			return connectionString;
-		}
 		#endregion
 
 		#region Private Fields
 
-		private SqlDatabaseAccess _database;
+		private SqlDataStore _database;
 		private ModelFactory _models;
 
 		#endregion
@@ -67,63 +47,27 @@ namespace DocMAH.UnitTests.Data
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			if (!ExecuteDatabaseTests) return;
-
-			// Delete and recreate database as necessary.
-			var connectionString = GetMasterConnectionString();
-			using (var connection = new SqlConnection(connectionString))
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Database_Initialize;
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-
-			// Fake the HttpContext to indicate the database needs to be updated.
-			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application["DMH.Initialized"]).Returns(false);
-			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
-
-			// Update the database.
-			// This servers as the test for this routine as none of the
-			//	other tests will work if this doesn't.
-			var databaseUpdater = new DatabaseUpdater(context.Object);
-			databaseUpdater.Update();
+			var dataStoreManager = new TestFixtureDataStoreManager();
+			dataStoreManager.TestFixtureDataStoreSetUp();
 		}
 
 		[TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
-			if (!ExecuteDatabaseTests) return;
-
-			// Drop the database when tests are done.
-			var connectionString = GetMasterConnectionString();
-			using (var connection = new SqlConnection(connectionString))
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Database_Drop;
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
+			var dataStoreManager = new TestFixtureDataStoreManager();
+			dataStoreManager.TestFixtureDataStoreTearDown();
 		}
 
 		[SetUp]
 		public void TestInitialize()
 		{
-			if (!ExecuteDatabaseTests) return;
-
-			_database = new SqlDatabaseAccess();
+			_database = new SqlDataStore();
 			_models = new ModelFactory();
 		}
 
 		[TearDown]
 		public void TestCleanup()
 		{
-			if (!ExecuteDatabaseTests) return;
-
-
 			// Remove test artifacts from database.
 			foreach (var bullet in _database.Bullet_ReadAll())
 				_database.Bullet_Delete(bullet.Id);
@@ -155,8 +99,6 @@ namespace DocMAH.UnitTests.Data
 		[Description("Tests bullet create, read, update and delete methods.")]
 		public void Bullet_Crud()
 		{
-			if (!ExecuteDatabaseTests) Assert.Inconclusive();
-
 			var page = _models.CreatePage();
 			_database.Page_Create(page);
 
@@ -214,6 +156,11 @@ namespace DocMAH.UnitTests.Data
 			Assert.IsNotNull(noiseBullets.Where(b => b.Id == noiseBullet.Id).FirstOrDefault(), "The noise bullet should exist in the noise bullets read.");
 		}
 
+		public void CreateDataStore_Success()
+		{
+
+		}
+
 		// I'm not normally a fan of testing multiple methods in a single test.
 		// However, in this case I would otherwise need to write a bunch of
 		// SQL just for the unit tests.
@@ -226,8 +173,6 @@ namespace DocMAH.UnitTests.Data
 		[Description("Tests page create, read, update and delete methods.")]
 		public void Page_Crud()
 		{
-			if (!ExecuteDatabaseTests) Assert.Inconclusive();
-
 			Assert.AreEqual(0, CountPages(), "All tests should start with an empty database.");
 
 			var newPage = _models.CreatePage();
@@ -254,8 +199,6 @@ namespace DocMAH.UnitTests.Data
 		[Description("Reads pages by parent id.")]
 		public void Page_ReadByParentId()
 		{
-			if (!ExecuteDatabaseTests) Assert.Inconclusive();
-
 			// Arrange
 			var parentPage = _models.CreatePage();
 			_database.Page_Create(parentPage);
@@ -279,8 +222,6 @@ namespace DocMAH.UnitTests.Data
 		[Description("Reads pages by URLs.")]
 		public void Page_ReadByUrl()
 		{
-			if (!ExecuteDatabaseTests) Assert.Inconclusive();
-
 			// Arrange
 			var targetPage = _models.CreatePage(matchUrls: "/Controller/Target /Controller/Target/*");
 			_database.Page_Create(targetPage);
@@ -305,8 +246,6 @@ namespace DocMAH.UnitTests.Data
 		[Description("Reads all table of contents as page models.")]
 		public void Page_ReadTableOfContents_All()
 		{
-			if (!ExecuteDatabaseTests) Assert.Inconclusive();
-
 			// Arrange
 			var root_1 = _models.CreatePage(order: 1);
 			_database.Page_Create(root_1);

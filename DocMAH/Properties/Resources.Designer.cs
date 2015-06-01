@@ -419,6 +419,53 @@ namespace DocMAH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///DECLARE @databaseName NVARCHAR(128)
+        ///SET @databaseName = &apos;DocmahUnitTests&apos;
+        ///
+        ///IF (
+        ///	EXISTS(
+        ///		SELECT name 
+        ///		FROM master.dbo.sysdatabases 
+        ///		WHERE &apos;[&apos; + name + &apos;]&apos; = &apos;DocmahUnitTests&apos;
+        ///			OR name = &apos;DocmahUnitTests&apos;
+        ///	)
+        ///) BEGIN
+        ///	DROP DATABASE DocmahUnitTests
+        ///END
+        ///
+        ///CREATE DATABASE DocmahUnitTests
+        ///.
+        /// </summary>
+        internal static string Sql_Database_Create {
+            get {
+                return ResourceManager.GetString("Sql_Database_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///DECLARE @databaseName NVARCHAR(128)
+        ///IF (
+        ///	EXISTS(
+        ///		SELECT name 
+        ///		FROM master.dbo.sysdatabases 
+        ///		WHERE &apos;[&apos; + name + &apos;]&apos; = &apos;DocmahUnitTests&apos;
+        ///			OR name = &apos;DocmahUnitTests&apos;
+        ///	)
+        ///) BEGIN
+        ///	ALTER DATABASE DocmahUnitTests SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+        ///
+        ///	DROP DATABASE DocmahUnitTests
+        ///END.
+        /// </summary>
+        internal static string Sql_Database_Drop {
+            get {
+                return ResourceManager.GetString("Sql_Database_Drop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Need to fake identity column so that Ids generated when writing documentation
         ///-- are used in production so that installation scripts can update help 
         ///-- without invalidating user settings.

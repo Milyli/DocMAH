@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}</ProjectGuid>
+    <ProjectGuid>{B54A4631-1AD2-455A-852E-0986F0BEA792}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocMAH.UnitTests</RootNamespace>
-    <AssemblyName>DocMAH.UnitTests</AssemblyName>
+    <RootNamespace>DocMAH.IntegrationTests</RootNamespace>
+    <AssemblyName>DocMAH.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,8 +61,6 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <Choose>
@@ -74,21 +72,18 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\DatabaseUpdaterUnitTests.cs" />
-    <Compile Include="Data\DatabaseConfigurationUnitTests.cs" />
-    <Compile Include="Data\SqlDataStoreUnitTests.cs" />
-    <Compile Include="Extensions\Int32ExtensionsUnitTests.cs" />
-    <Compile Include="Extensions\ListExtensionsUnitTests.cs" />
-    <Compile Include="Extensions\StringExtensionUnitTests.cs" />
-    <Compile Include="ModelFactory.cs" />
+    <Compile Include="SqlContentInstallationUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFixtureDataStoreManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DocMAH.UnitTests\DocMAH.UnitTests.csproj">
+      <Project>{1833fb9b-12f7-44df-b16d-d20df7b3c885}</Project>
+      <Name>DocMAH.UnitTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DocMAH\DocMAH.csproj">
       <Project>{745167d4-85f8-4a2c-83fb-2802af181292}</Project>
       <Name>DocMAH</Name>

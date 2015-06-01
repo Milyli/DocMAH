@@ -15,7 +15,7 @@ namespace DocMAH.UnitTests.Data
 		public void DatabaseHelpVersion_Read()
 		{
 			// Arrange
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(d => d.Configuration_Read(DatabaseConfiguration.DatabaseHelpVersionKey)).Returns(int.MaxValue);
 
 			var configuration = new DatabaseConfiguration(databaseAccess.Object);
@@ -33,7 +33,7 @@ namespace DocMAH.UnitTests.Data
 		public void DatabaseHelpVersion_Update()
 		{
 			// Arrange
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(d => d.Configuration_Update(DatabaseConfiguration.DatabaseHelpVersionKey, int.MaxValue));
 
 			var configuration = new DatabaseConfiguration(databaseAccess.Object);
@@ -50,7 +50,7 @@ namespace DocMAH.UnitTests.Data
 		public void DatabaseSchemaVersion_Read()
 		{
 			// Arrange
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(d => d.Configuration_Read(DatabaseConfiguration.DatabaseSchemaVersionKey)).Returns(int.MaxValue);
 
 			var configuration = new DatabaseConfiguration(databaseAccess.Object);
@@ -69,7 +69,7 @@ namespace DocMAH.UnitTests.Data
 		public void DatabaseSchemaVersion_Update()
 		{
 			// Arrange
-			var databaseAccess = new Mock<IDatabaseAccess>(MockBehavior.Strict);
+			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(d => d.Configuration_Update(DatabaseConfiguration.DatabaseSchemaVersionKey, int.MaxValue));
 
 			var configuration = new DatabaseConfiguration(databaseAccess.Object);

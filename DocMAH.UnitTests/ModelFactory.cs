@@ -26,9 +26,13 @@ namespace DocMAH.UnitTests
 			};
 		}
 
-		public Page CreatePage(int? parentPageId = null, string matchUrls = null, int order = 1, bool isHidden = false)
+		public Page CreatePage(
+			int? parentPageId = null, 
+			string matchUrls = null, 
+			int order = 1, 
+			bool isHidden = false)
 		{
-			return new Page
+			var result = new Page
 			{
 				Content = "This is some test content for a page.",
 				DocHorizontalOffset = 10,
@@ -37,7 +41,7 @@ namespace DocMAH.UnitTests
 				HorizontalOffset = 20,
 				VerticalOffset = 20,
 				OffsetElementId = "TestPageOffsetElementId",
-				MatchUrls = matchUrls ?? string.Format("/Test/Run-{0}*",_pageCount++) ,
+				MatchUrls = matchUrls ?? string.Format("/Test/Run-{0}*",_pageCount) ,
 				Order = order,
 				ParentPageId = parentPageId,
 				PageType = PageTypes.FirstTimePage,
@@ -45,6 +49,10 @@ namespace DocMAH.UnitTests
 				Title = string.Format("Unit Test Help {0}", _pageCount.ToString("00#")),
 				IsHidden = isHidden,
 			};
+
+			_pageCount++;
+
+			return result;
 		}
 	}
 }

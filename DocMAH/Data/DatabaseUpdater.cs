@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace DocMAH.Data
 {
-	public class DatabaseUpdater : IDatabaseUpdater
+	public class DatabaseUpdater : IDataStoreUpdater
 	{
 		#region Constructors
 
@@ -19,11 +19,11 @@ namespace DocMAH.Data
 		}
 
 		public DatabaseUpdater(HttpContextBase httpContext)
-			: this(httpContext, new SqlDatabaseAccess(), new DatabaseConfiguration())
+			: this(httpContext, new SqlDataStore(), new DatabaseConfiguration())
 		{
 		}
 
-		public DatabaseUpdater(HttpContextBase httpContext, IDatabaseAccess databaseAccess, IDatabaseConfiguration databaseConfiguration)
+		public DatabaseUpdater(HttpContextBase httpContext, IDataStore databaseAccess, IDatabaseConfiguration databaseConfiguration)
 		{
 			_databaseAccess = databaseAccess;
 			_databaseConfiguration = databaseConfiguration;
@@ -34,7 +34,7 @@ namespace DocMAH.Data
 
 		#region Private Fields
 
-		private IDatabaseAccess _databaseAccess;
+		private IDataStore _databaseAccess;
 		private IDatabaseConfiguration _databaseConfiguration;
 		private HttpContextBase _httpContext;
 

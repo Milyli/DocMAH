@@ -11,12 +11,12 @@ namespace DocMAH.Data
 		#region Constructors
 
 		public DatabaseConfiguration()
-			: this(new SqlDatabaseAccess())
+			: this(new SqlDataStore())
 		{
 
 		}
 
-		public DatabaseConfiguration(IDatabaseAccess databaseAccess)
+		public DatabaseConfiguration(IDataStore databaseAccess)
 		{
 			_databaseAccess = databaseAccess;
 		}
@@ -32,7 +32,7 @@ namespace DocMAH.Data
 
 		#region Private Fields
 
-		private IDatabaseAccess _databaseAccess;
+		private IDataStore _databaseAccess;
 
 		#endregion
 

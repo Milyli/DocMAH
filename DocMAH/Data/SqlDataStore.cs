@@ -15,18 +15,18 @@ using System.IO;
 
 namespace DocMAH.Data
 {
-	public class SqlDatabaseAccess : IDatabaseAccess
+	public class SqlDataStore : IDataStore
 	{
 		#region Constructors
 
-		static SqlDatabaseAccess()
+		static SqlDataStore()
 		{
 			_updateScripts = new Dictionary<DatabaseVersions, string>();
 			_updateScripts.Add(DatabaseVersions.Database_01, Resources.Sql_Database_01);
 		}
 
 		#endregion
-		
+
 		#region Private Fields
 
 		private static Dictionary<DatabaseVersions, string> _updateScripts;
@@ -49,7 +49,7 @@ namespace DocMAH.Data
 					});
 		}
 
-		private static SqlConnection GetConnection()
+		private static SqlConnection GetConnection(string initialCatalog = null)
 		{
 			string connectionString = Configurator.ConnectionString;
 			if (string.IsNullOrEmpty(connectionString))
@@ -59,11 +59,20 @@ namespace DocMAH.Data
 				{
 					connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
 				}
-				catch(NullReferenceException ex)
+				catch (NullReferenceException ex)
 				{
 					throw new InvalidOperationException("The DocMAH connection string has not been set. Set the connection string using either the docmah element connectionStringName attribute in web.config, or in DocMAHConfig.Configure and call Configure from Application_Start in Global.asax.", ex);
 				}
 			}
+
+			// Override configuration values based on parameters.
+			if (!string.IsNullOrEmpty(initialCatalog))
+			{
+				var builder = new SqlConnectionStringBuilder(connectionString);
+				builder.InitialCatalog = initialCatalog;
+				connectionString = builder.ToString();
+			}
+
 			return new SqlConnection(connectionString);
 		}
 
@@ -372,6 +381,32 @@ namespace DocMAH.Data
 				command.CommandText = Resources.Sql_Configuration_Update;
 				command.Parameters.Add(new SqlParameter("@name", name));
 				command.Parameters.Add(new SqlParameter("@value", value));
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void DataStore_Create()
+		{
+			using (var connection = GetConnection(initialCatalog: "master"))
+			using (var command = connection.CreateCommand())
+			{
+				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
+				command.CommandType = CommandType.Text;
+				command.CommandText = Resources.Sql_Database_Create.Replace("CatalogName", builder.InitialCatalog);
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void DataStore_Delete()
+		{
+			using (var connection = GetConnection(initialCatalog: "master"))
+			using (var command = connection.CreateCommand())
+			{
+				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
+				command.CommandType = CommandType.Text;
+				command.CommandText = Resources.Sql_Database_Drop.Replace("CatalogName", builder.InitialCatalog);
 				connection.Open();
 				command.ExecuteNonQuery();
 			}

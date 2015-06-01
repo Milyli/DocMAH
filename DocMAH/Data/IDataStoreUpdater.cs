@@ -8,7 +8,7 @@ using System.Web;
 
 namespace DocMAH.Data
 {
-	public interface IDatabaseUpdater
+	public interface IDataStoreUpdater
 	{
 		void Update();
 	}

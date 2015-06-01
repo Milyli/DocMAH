@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{0E6E05
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.IntegrationTests", "..\DocMAH.IntegrationTests\DocMAH.IntegrationTests.csproj", "{B54A4631-1AD2-455A-852E-0986F0BEA792}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,12 @@ Global
 		{99C9CD9B-0C07-4AB0-B34A-54EE541BEECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99C9CD9B-0C07-4AB0-B34A-54EE541BEECD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{99C9CD9B-0C07-4AB0-B34A-54EE541BEECD}.Release|x64.ActiveCfg = Release|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

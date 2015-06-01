@@ -20,12 +20,12 @@ namespace DocMAH.Web
 		#region Constructors
 
 		public RequestProcessor()
-			: this(new SqlDatabaseAccess(), new DatabaseConfiguration())
+			: this(new SqlDataStore(), new DatabaseConfiguration())
 		{
 
 		}
 
-		public RequestProcessor(IDatabaseAccess databaseAccess, IDatabaseConfiguration databaseConfiguration)
+		public RequestProcessor(IDataStore databaseAccess, IDatabaseConfiguration databaseConfiguration)
 		{
 			_databaseAccess = databaseAccess;
 			_databaseConfiguration = databaseConfiguration;
@@ -38,7 +38,7 @@ namespace DocMAH.Web
 		private const string JavaScriptLinkFormat = "<script src='{0}'></script>";
 		private const string CssLinkFormat = "<link href='{0}' rel='stylesheet'/>";
 
-		private readonly IDatabaseAccess _databaseAccess;
+		private readonly IDataStore _databaseAccess;
 		private readonly IDatabaseConfiguration _databaseConfiguration;
 
 		#endregion
@@ -188,7 +188,7 @@ namespace DocMAH.Web
 		public void ProcessGenerateInstallScriptRequest(HttpContextBase context)
 		{
 			// There is an open task to make this path configurable.
-			var fileName = Path.Combine(HttpContext.Current.Server.MapPath("~"), "ApplicationHelpInstall.xml");
+			var fileName = Path.Combine(context.Server.MapPath("~"), "ApplicationHelpInstall.xml");
 
 			var settings = new XmlWriterSettings()
 			{
