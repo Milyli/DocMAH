@@ -49,7 +49,7 @@ namespace DocMAH.IntegrationTests
 			// Create installation file.
 			var cachePolicy = new Mock<HttpCachePolicyBase>();
 			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application["DMH.Initialized"]).Returns(false);
+			context.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(false);
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			context.SetupGet(c => c.Response.Cache).Returns(cachePolicy.Object);
 

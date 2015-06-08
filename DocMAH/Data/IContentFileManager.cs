@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DocMAH.Data
 {
-	public interface IDatabaseConfiguration
+	public interface IContentFileManager
 	{
-		int DatabaseHelpVersion { get; set; }
-		int DatabaseSchemaVersion { get; set; }
+		void Update();
 	}
 }

@@ -16,9 +16,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(d => d.Configuration_Read(DatabaseConfiguration.DatabaseHelpVersionKey)).Returns(int.MaxValue);
+			databaseAccess.Setup(d => d.Configuration_Read(DocMAH.Data.Sql.SqlConfigurationService.DatabaseHelpVersionKey)).Returns(int.MaxValue);
 
-			var configuration = new DatabaseConfiguration(databaseAccess.Object);
+			var configuration = new DocMAH.Data.Sql.SqlConfigurationService(databaseAccess.Object);
 			
 			// Act
 			var result = configuration.DatabaseHelpVersion;
@@ -34,9 +34,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(d => d.Configuration_Update(DatabaseConfiguration.DatabaseHelpVersionKey, int.MaxValue));
+			databaseAccess.Setup(d => d.Configuration_Update(DocMAH.Data.Sql.SqlConfigurationService.DatabaseHelpVersionKey, int.MaxValue));
 
-			var configuration = new DatabaseConfiguration(databaseAccess.Object);
+			var configuration = new DocMAH.Data.Sql.SqlConfigurationService(databaseAccess.Object);
 
 			// Act
 			configuration.DatabaseHelpVersion = int.MaxValue;
@@ -51,9 +51,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(d => d.Configuration_Read(DatabaseConfiguration.DatabaseSchemaVersionKey)).Returns(int.MaxValue);
+			databaseAccess.Setup(d => d.Configuration_Read(DocMAH.Data.Sql.SqlConfigurationService.DatabaseSchemaVersionKey)).Returns(int.MaxValue);
 
-			var configuration = new DatabaseConfiguration(databaseAccess.Object);
+			var configuration = new DocMAH.Data.Sql.SqlConfigurationService(databaseAccess.Object);
 
 			// Act
 			var result = configuration.DatabaseSchemaVersion;
@@ -70,9 +70,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(d => d.Configuration_Update(DatabaseConfiguration.DatabaseSchemaVersionKey, int.MaxValue));
+			databaseAccess.Setup(d => d.Configuration_Update(DocMAH.Data.Sql.SqlConfigurationService.DatabaseSchemaVersionKey, int.MaxValue));
 
-			var configuration = new DatabaseConfiguration(databaseAccess.Object);
+			var configuration = new DocMAH.Data.Sql.SqlConfigurationService(databaseAccess.Object);
 
 			// Act
 			configuration.DatabaseSchemaVersion = int.MaxValue;

@@ -58,11 +58,11 @@
     <Compile Include="Configuration\DocumentationElement.cs" />
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
-    <Compile Include="Data\DatabaseConfiguration.cs" />
-    <Compile Include="Data\DatabaseUpdater.cs" />
-    <Compile Include="Data\DatabaseVersions.cs" />
-    <Compile Include="Data\IDatabaseConfiguration.cs" />
-    <Compile Include="Data\IDataStoreUpdater.cs" />
+    <Compile Include="Data\IContentFileManager.cs" />
+    <Compile Include="Data\Sql\SqlConfigurationService.cs" />
+    <Compile Include="Data\ContentFileManager.cs" />
+    <Compile Include="Data\IConfigurationService.cs" />
+    <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
     <Compile Include="Data\Sql\SqlScripts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

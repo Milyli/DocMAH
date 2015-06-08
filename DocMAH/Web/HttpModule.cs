@@ -12,21 +12,21 @@ namespace DocMAH.Web
 	{
 		#region Constructors
 
-		public HttpModule() : this(new DatabaseUpdater())
+		public HttpModule() : this(new ContentFileManager())
 		{
 
 		}
 
-		public HttpModule(IDataStoreUpdater databaseUpdater)
+		public HttpModule(IContentFileManager databaseUpdater)
 		{
-			_databaseUpdater = databaseUpdater;
+			_dataStoreUpdater = databaseUpdater;
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private IDataStoreUpdater _databaseUpdater;
+		private IContentFileManager _dataStoreUpdater;
 
 		#endregion
 
@@ -45,7 +45,7 @@ namespace DocMAH.Web
 
 		public void Init(HttpApplication context)
 		{
-			_databaseUpdater.Update();
+			_dataStoreUpdater.Update();
 
 			context.PreSendRequestHeaders += AttachFilterEventHandler;
 			context.PostReleaseRequestState += AttachFilterEventHandler;

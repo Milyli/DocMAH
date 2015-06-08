@@ -31,7 +31,7 @@ namespace DocMAH.UnitTests
 		{
 			// Fake the HttpContext to indicate the database needs to be updated.
 			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application["DMH.Initialized"]).Returns(false);
+			context.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(false);
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			
 			// Create data store for unit tests.
@@ -41,7 +41,7 @@ namespace DocMAH.UnitTests
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
 			//	other tests will work if this doesn't.
-			var databaseUpdater = new DatabaseUpdater(context.Object);
+			var databaseUpdater = new ContentFileManager(context.Object);
 			databaseUpdater.Update();
 		}
 
@@ -49,7 +49,7 @@ namespace DocMAH.UnitTests
 		{
 			// Clean up the data store when tests are done.
 			var dataStore = new SqlDataStore();
-			dataStore.DataStore_Delete();
+			dataStore.DataStore_Drop();
 		}
 	}
 }

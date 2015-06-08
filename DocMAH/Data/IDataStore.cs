@@ -25,10 +25,22 @@ namespace DocMAH.Data
 		void Bullet_Update(Bullet bullet);
 		int Configuration_Read(string name);
 		void Configuration_Update(string name, int value);
+
+		/// <summary>
+		/// Creates a new DocMAH data store if one does not exist.
+		/// </summary>
 		void DataStore_Create();
-		void DataStore_Delete();
+
+		/// <summary>
+		/// Deletes a data store.
+		/// Should only be used in unit tests.
+		/// </summary>
+		void DataStore_Drop();
+
+		
+		//void DataStore_Update();
 		void Database_RunScript(string sql);
-		void Database_Update(DatabaseVersions toVersion);
+		void Database_Update();
 		void Page_Create(Page page);
 		void Page_Delete(int id);
 		IEnumerable<Page> Page_ReadAll();

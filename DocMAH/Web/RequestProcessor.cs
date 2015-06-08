@@ -21,12 +21,12 @@ namespace DocMAH.Web
 		#region Constructors
 
 		public RequestProcessor()
-			: this(new SqlDataStore(), new DatabaseConfiguration())
+			: this(new SqlDataStore(), new SqlConfigurationService())
 		{
 
 		}
 
-		public RequestProcessor(IDataStore dataStore, IDatabaseConfiguration databaseConfiguration)
+		public RequestProcessor(IDataStore dataStore, IConfigurationService databaseConfiguration)
 		{
 			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
@@ -40,7 +40,7 @@ namespace DocMAH.Web
 		private const string CssLinkFormat = "<link href='{0}' rel='stylesheet'/>";
 
 		private readonly IDataStore _dataStore;
-		private readonly IDatabaseConfiguration _databaseConfiguration;
+		private readonly IConfigurationService _databaseConfiguration;
 
 		#endregion
 
@@ -207,7 +207,7 @@ namespace DocMAH.Web
 					xmlWriter.WriteStartElement(XmlNodeNames.UpdateScriptsElement);
 					xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _databaseConfiguration.DatabaseSchemaVersion.ToString());
 
-					var nextHelpVersion = _dataStore.Configuration_Read(DatabaseConfiguration.DatabaseHelpVersionKey) + 1;
+					var nextHelpVersion = _dataStore.Configuration_Read(SqlConfigurationService.DatabaseHelpVersionKey) + 1;
 					xmlWriter.WriteAttributeString(XmlNodeNames.FileHelpVersionAttribute, nextHelpVersion.ToString());
 
 					var existingPageIds = new List<int>();
@@ -320,7 +320,7 @@ namespace DocMAH.Web
 					// Update help version
 					xmlWriter.WriteElementString(
 						XmlNodeNames.UpdateScriptElement,
-						string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, DatabaseConfiguration.DatabaseHelpVersionKey, Environment.NewLine)
+						string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, SqlConfigurationService.DatabaseHelpVersionKey, Environment.NewLine)
 					);
 
 					xmlWriter.Flush();

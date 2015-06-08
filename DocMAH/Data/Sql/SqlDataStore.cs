@@ -22,15 +22,15 @@ namespace DocMAH.Data.Sql
 
 		static SqlDataStore()
 		{
-			_updateScripts = new Dictionary<DatabaseVersions, string>();
-			_updateScripts.Add(DatabaseVersions.Database_01, SqlScripts.Database_Update_01);
+			_updateScripts = new Dictionary<SqlDataStoreVersions, string>();
+			_updateScripts.Add(SqlDataStoreVersions.Database_01, SqlScripts.Database_Update_01);
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private static Dictionary<DatabaseVersions, string> _updateScripts;
+		private static Dictionary<SqlDataStoreVersions, string> _updateScripts;
 
 		#endregion
 
@@ -403,7 +403,7 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		public void DataStore_Delete()
+		public void DataStore_Drop()
 		{
 			using (var connection = GetConnection(initialCatalog: "master"))
 			using (var command = connection.CreateCommand())
@@ -416,15 +416,27 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		public void Database_Update(DatabaseVersions toVersion)
+		public void Database_Update()
 		{
+			var currentDataStoreVersion = Configuration_Read(SqlConfigurationService.DatabaseSchemaVersionKey);
+
+			var allDataStoreVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
 			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = _updateScripts[toVersion];
-				connection.Open();
-				command.ExecuteNonQuery();
+				foreach (SqlDataStoreVersions dataStoreVersion in allDataStoreVersions)
+				{
+					
+					if (currentDataStoreVersion < (int)dataStoreVersion)
+					{
+						using (var command = connection.CreateCommand())
+						{
+							command.CommandType = CommandType.Text;
+							command.CommandText = _updateScripts[dataStoreVersion];
+							connection.Open();
+							command.ExecuteNonQuery();
+						}
+					}
+				}
 			}
 		}
 

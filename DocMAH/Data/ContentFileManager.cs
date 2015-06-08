@@ -6,33 +6,39 @@ using DocMAH.Data.Sql;
 
 namespace DocMAH.Data
 {
-	public class DatabaseUpdater : IDataStoreUpdater
+	public class ContentFileManager : IContentFileManager
 	{
 		#region Constructors
 
-		public DatabaseUpdater()
+		public ContentFileManager()
 			: this(new HttpContextWrapper(HttpContext.Current))
 		{
 		}
 
-		public DatabaseUpdater(HttpContextBase httpContext)
-			: this(httpContext, new SqlDataStore(), new DatabaseConfiguration())
+		public ContentFileManager(HttpContextBase httpContext)
+			: this(httpContext, new SqlDataStore(), new SqlConfigurationService())
 		{
 		}
 
-		public DatabaseUpdater(HttpContextBase httpContext, IDataStore databaseAccess, IDatabaseConfiguration databaseConfiguration)
+		public ContentFileManager(HttpContextBase httpContext, IDataStore dataStore, IConfigurationService databaseConfiguration)
 		{
-			_databaseAccess = databaseAccess;
+			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
 			_httpContext = httpContext;
 		}
 
 		#endregion
 
+		#region Public Fields
+
+		public const string DocmahInitializedKey = "DocMAH.Initialized";
+
+		#endregion
+
 		#region Private Fields
 
-		private IDataStore _databaseAccess;
-		private IDatabaseConfiguration _databaseConfiguration;
+		private IDataStore _dataStore;
+		private IConfigurationService _databaseConfiguration; 
 		private HttpContextBase _httpContext;
 
 		#endregion
@@ -41,18 +47,11 @@ namespace DocMAH.Data
 
 		public void Update()
 		{
-			if (!(bool)(_httpContext.Application["DMH.Initialized"] ?? false))
+			if (!(bool)(_httpContext.Application[DocmahInitializedKey] ?? false))
 			{
-				var databaseVersions = Enum.GetValues(typeof(DatabaseVersions));
-
-				// Run each database script higher than the current version in order.
-				foreach (DatabaseVersions databaseVersion in databaseVersions)
-				{
-					if (_databaseConfiguration.DatabaseSchemaVersion < (int)databaseVersion)
-					{
-						_databaseAccess.Database_Update(databaseVersion);
-					}
-				}
+				// TODO: Remove datastore update call from ContentFileManager. Move to Application Start
+				// Update data store as needed.
+				_dataStore.Database_Update();
 
 				// Find help installation script. Read and execute it if it exists.
 				var versionChecks = false;
@@ -88,7 +87,7 @@ namespace DocMAH.Data
 									if (!versionChecks)
 										throw new InvalidOperationException("Cannot execute help upgrade scripts. Schema and/or help version checks did not pass.");
 									var sql = xmlReader.ReadElementContentAsString();
-									_databaseAccess.Database_RunScript(sql);
+									_dataStore.Database_RunScript(sql);
 								}
 							}
 						}
@@ -97,7 +96,7 @@ namespace DocMAH.Data
 					}
 				}
 
-				_httpContext.Application["DMH.Initialized"] = true;
+				_httpContext.Application[DocmahInitializedKey] = true;
 			}
 		}
 

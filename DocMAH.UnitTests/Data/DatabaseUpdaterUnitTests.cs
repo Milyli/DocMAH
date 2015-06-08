@@ -5,12 +5,38 @@ using System.Web;
 using NUnit.Framework;
 using Moq;
 using DocMAH.Data;
+using DocMAH.Data.Sql;
 
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
 	public class DatabaseUpdaterUnitTests
 	{
+		#region Private Fields
+
+		private string _installFileName;
+		private string _tempPath;
+
+		#endregion
+
+		#region SetUp / TearDown
+		
+		[SetUp]
+		public void SetUp()
+		{
+			_tempPath = Path.GetTempPath();
+			_installFileName = Path.Combine(_tempPath, "ApplicationHelpInstall.xml");
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			if (File.Exists(_installFileName))
+				File.Delete(_installFileName);
+		}
+
+		#endregion
+
 		#region Tests
 
 		[Test]
@@ -18,13 +44,11 @@ namespace DocMAH.UnitTests.Data
 		public void Update_HelpUpdateOnly()
 		{
 			// Arrange
-			var databaseVersions = Enum.GetValues(typeof(DatabaseVersions));
+			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			var lastVersion = databaseVersions.Length;
 
-			var path = Path.GetTempPath();
-			string fileName = Path.Combine(path, "ApplicationHelpInstall.xml");
 			var updateScript = "Update Script";
-			using (var tempFile = File.Create(fileName))
+			using (var tempFile = File.Create(_installFileName))
 			{
 				var fileContents = string.Format("<{0} {1}='{2}' {3}='{4}'><{5}>{6}</{5}></{0}>",
 					XmlNodeNames.UpdateScriptsElement,
@@ -39,28 +63,27 @@ namespace DocMAH.UnitTests.Data
 				tempFile.Close();
 			}
 
-			var databaseConfiguration = new Mock<IDatabaseConfiguration>(MockBehavior.Strict);
+			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
 			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion);
 			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
 
-			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
+			var dataStore = new Mock<IDataStore>(MockBehavior.Strict);
+			dataStore.Setup(d => d.Database_Update());
+			dataStore.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
-			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
+			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
+			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
 
-			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
+			var updater = new ContentFileManager(httpContext.Object, dataStore.Object, databaseConfiguration.Object);
 
 			// Act
 			updater.Update();
 
 			// Assert
 			databaseConfiguration.VerifyAll();
-			databaseAccess.VerifyAll();
-
-			File.Delete(fileName);
+			dataStore.VerifyAll();
 		}
 
 		[Test]
@@ -68,50 +91,39 @@ namespace DocMAH.UnitTests.Data
 		public void Update_FirstTime()
 		{
 			// Arrange			
-			var databaseVersions = Enum.GetValues(typeof(DatabaseVersions));
+			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			var lastVersion = databaseVersions.Length;
 
-			var path = Path.GetTempPath();
-			string fileName = Path.Combine(path, "ApplicationHelpInstall.xml");
 			var updateScript = "Update Script";
-			using (var tempFile = File.Create(fileName))
+			using (var tempFile = File.Create(_installFileName))
 			{
-				var fileContents = string.Format("<{0} {1}='{2}' {3}='{4}'><{5}>{6}</{5}></{0}>", 
+				var fileContents = string.Format("<{0} {1}='{2}' {3}='{4}'><{5}>{6}</{5}></{0}>",
 					XmlNodeNames.UpdateScriptsElement,
 					XmlNodeNames.FileSchemaVersionAttribute,
 					lastVersion,
-					XmlNodeNames.FileHelpVersionAttribute, 
+					XmlNodeNames.FileHelpVersionAttribute,
 					1,
-					XmlNodeNames.UpdateScriptElement, 
+					XmlNodeNames.UpdateScriptElement,
 					updateScript);
 				var bytes = System.Text.Encoding.UTF8.GetBytes(fileContents);
 				tempFile.Write(bytes, 0, bytes.Length);
 				tempFile.Close();
 			}
 
-			var beforeUpdate = true;
-			var lastIndex = lastVersion - 1;
-			var databaseConfiguration = new Mock<IDatabaseConfiguration>(MockBehavior.Strict);
-			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(() => {
-				if (beforeUpdate)
-				{
-					beforeUpdate = false;
-					return lastVersion - 1;
-				}
-				return lastVersion;
-			});
+			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
+			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion);
 			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
 
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(a => a.Database_Update((DatabaseVersions)databaseVersions.GetValue(lastIndex)));
+			databaseAccess.Setup(a => a.Database_Update());
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
-			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
+			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
+			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
 
-			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
+			var updater = new ContentFileManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
 			// Act
 			updater.Update();
@@ -119,8 +131,6 @@ namespace DocMAH.UnitTests.Data
 			// Assert
 			databaseConfiguration.VerifyAll();
 			databaseAccess.VerifyAll();
-
-			File.Delete(fileName);
 		}
 
 		[Test]
@@ -128,26 +138,19 @@ namespace DocMAH.UnitTests.Data
 		public void Update_SchemaOnly()
 		{
 			// Arrange
-			var path = Path.GetTempPath();
-			string fileName = Path.Combine(path, "ApplicationHelpInstall.xml");
-			if (File.Exists(fileName))
-				File.Delete(fileName);
-
-			var databaseVersions = Enum.GetValues(typeof(DatabaseVersions));
+			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			var lastVersion = databaseVersions.Length;
-			var lastIndex = lastVersion - 1;
-			var databaseConfiguration = new Mock<IDatabaseConfiguration>(MockBehavior.Strict);
-			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion - 1);
+			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
 
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(a => a.Database_Update((DatabaseVersions)databaseVersions.GetValue(lastIndex)));
+			databaseAccess.Setup(a => a.Database_Update());
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(null);
-			httpContext.Setup(c => c.Server.MapPath("~")).Returns(path);
-			httpContext.SetupSet(c => c.Application["DMH.Initialized"] = true);
+			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
+			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
 
-			var updater = new DatabaseUpdater(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
+			var updater = new ContentFileManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
 			// Act
 			updater.Update();
@@ -156,7 +159,7 @@ namespace DocMAH.UnitTests.Data
 			databaseConfiguration.VerifyAll();
 			databaseAccess.VerifyAll();
 
-			File.Delete(fileName);
+			File.Delete(_installFileName);
 
 		}
 
@@ -166,9 +169,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application["DMH.Initialized"]).Returns(true);
+			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(true);
 
-			var updater = new DatabaseUpdater(httpContext.Object, null, null);
+			var updater = new ContentFileManager(httpContext.Object, null, null);
 
 			// Act
 			updater.Update();

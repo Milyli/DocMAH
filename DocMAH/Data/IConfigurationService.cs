@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Data
 {
-	public enum DatabaseVersions : int
+	public interface IConfigurationService
 	{
-		Database_01 = 1,
+		int DatabaseHelpVersion { get; set; }
+		int DatabaseSchemaVersion { get; set; }
 	}
 }
