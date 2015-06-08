@@ -25,9 +25,9 @@ namespace DocMAH.Web
 
 		}
 
-		public RequestProcessor(IDataStore databaseAccess, IDatabaseConfiguration databaseConfiguration)
+		public RequestProcessor(IDataStore dataStore, IDatabaseConfiguration databaseConfiguration)
 		{
-			_databaseAccess = databaseAccess;
+			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
 		}
 
@@ -38,7 +38,7 @@ namespace DocMAH.Web
 		private const string JavaScriptLinkFormat = "<script src='{0}'></script>";
 		private const string CssLinkFormat = "<link href='{0}' rel='stylesheet'/>";
 
-		private readonly IDataStore _databaseAccess;
+		private readonly IDataStore _dataStore;
 		private readonly IDatabaseConfiguration _databaseConfiguration;
 
 		#endregion
@@ -62,7 +62,7 @@ namespace DocMAH.Web
 
 		private static bool HasEditAuthorization(HttpContextBase context)
 		{
-			var access = new Access();
+			var access = new Access(context);
 			if (!access.CanEdit)
 			{
 				context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -107,18 +107,18 @@ namespace DocMAH.Web
 				var pageIdString = ReadPostData(context);
 				var pageId = int.Parse(pageIdString);
 
-				_databaseAccess.Bullet_DeleteByPageId(pageId);
+				_dataStore.Bullet_DeleteByPageId(pageId);
 
 				// Get the page so we have the parent id.
-				var page = _databaseAccess.Page_ReadById(pageId);
+				var page = _dataStore.Page_ReadById(pageId);
 
 				// Get its siblings and remove the page from the collection.
-				var siblings = _databaseAccess.Page_ReadByParentId(page.ParentPageId);
+				var siblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
 				page = siblings.Where(p => p.Id == pageId).First();
 				siblings.Remove(page);
 
 				// Insert deleted page's children in order at deleted page's location.
-				var children = _databaseAccess.Page_ReadByParentId(pageId);
+				var children = _dataStore.Page_ReadByParentId(pageId);
 				for (int i = children.Count - 1; i >= 0; i--)
 				{
 					siblings.Insert(page.Order, children[i]);
@@ -130,11 +130,11 @@ namespace DocMAH.Web
 					var sibling = siblings[i];
 					sibling.ParentPageId = page.ParentPageId;
 					sibling.Order = i;
-					_databaseAccess.Page_Update(sibling);
+					_dataStore.Page_Update(sibling);
 				}
 
 				// Delete page after all children have been moved.
-				_databaseAccess.Page_Delete(pageId);
+				_dataStore.Page_Delete(pageId);
 			}
 		}
 
@@ -204,12 +204,12 @@ namespace DocMAH.Web
 				xmlWriter.WriteStartElement(XmlNodeNames.UpdateScriptsElement);
 				xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _databaseConfiguration.DatabaseSchemaVersion.ToString());
 
-				var nextHelpVersion = _databaseAccess.Configuration_Read(DatabaseConfiguration.DatabaseHelpVersionKey) + 1;
+				var nextHelpVersion = _dataStore.Configuration_Read(DatabaseConfiguration.DatabaseHelpVersionKey) + 1;
 				xmlWriter.WriteAttributeString(XmlNodeNames.FileHelpVersionAttribute, nextHelpVersion.ToString());
 				
 				var existingPageIds = new List<int>();
 				var pageUrlScripts = new List<string>();
-				foreach (var page in _databaseAccess.Page_ReadAll())
+				foreach (var page in _dataStore.Page_ReadAll())
 				{
 					// Create insert or update statements for all existing pages.
 					xmlWriter.WriteElementString(
@@ -285,7 +285,7 @@ namespace DocMAH.Web
 
 				// Create insert or update statements for bullets.
 				var existingBulletIds = new List<int>();
-				foreach (var bullet in _databaseAccess.Bullet_ReadAll())
+				foreach (var bullet in _dataStore.Bullet_ReadAll())
 				{
 					xmlWriter.WriteElementString(
 						XmlNodeNames.UpdateScriptElement,
@@ -360,7 +360,7 @@ namespace DocMAH.Web
 
 		public void ProcessReadApplicationSettingsRequest(HttpContextBase context)
 		{
-			var access = new Access();
+			var access = new Access(context);
 			var applicationSettings = new ApplicationSettings
 			{
 				CanEdit = access.CanEdit,
@@ -376,8 +376,8 @@ namespace DocMAH.Web
 		{
 			var id = int.Parse(context.Request["id"]);
 
-			var page = _databaseAccess.Page_ReadById(id);
-			page.Bullets = _databaseAccess.Bullet_ReadByPageId(id);
+			var page = _dataStore.Page_ReadById(id);
+			page.Bullets = _dataStore.Bullet_ReadByPageId(id);
 
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);
@@ -387,8 +387,8 @@ namespace DocMAH.Web
 
 		public void ProcessReadTableOfContentsRequest(HttpContextBase context)
 		{
-			var access = new Access();
-			var pages = _databaseAccess.Page_ReadTableOfContents(access.CanEdit);
+			var access = new Access(context);
+			var pages = _dataStore.Page_ReadTableOfContents(access.CanEdit);
 
 			var serializer = new JavaScriptSerializer();
 			var pagesJson = serializer.Serialize(pages);
@@ -408,44 +408,44 @@ namespace DocMAH.Web
 				if (page.Id > 0)	// For existing pages ...
 				{
 					// Validate that the parent and order are not changing on updates.
-					var originalPage = _databaseAccess.Page_ReadById(page.Id);
+					var originalPage = _dataStore.Page_ReadById(page.Id);
 					if (!(originalPage.Order == page.Order && originalPage.ParentPageId == page.ParentPageId))
 						throw new InvalidOperationException("Changing page order and parent id not supported by SavePage. Use MovePage instead.");
 
-					_databaseAccess.Page_Update(page);
+					_dataStore.Page_Update(page);
 
-					var existingBullets = _databaseAccess.Bullet_ReadByPageId(page.Id);
+					var existingBullets = _dataStore.Bullet_ReadByPageId(page.Id);
 					// Process incoming bullets. If they exist update, otherwise create.
 					page.Bullets.ForEach(bullet =>
 					{
 						bullet.PageId = page.Id;
 						if (existingBullets.Any(existing => existing.Id == bullet.Id))
-							_databaseAccess.Bullet_Update(bullet);
+							_dataStore.Bullet_Update(bullet);
 						else
-							_databaseAccess.Bullet_Create(bullet);
+							_dataStore.Bullet_Create(bullet);
 					});
 					// Delete any existing bullets not included with incoming bullets.
 					existingBullets.ForEach(existing =>
 					{
 						if (!page.Bullets.Any(bullet => bullet.Id == existing.Id))
-							_databaseAccess.Bullet_Delete(existing.Id);
+							_dataStore.Bullet_Delete(existing.Id);
 					});
 				}
 				else // For new pages ...
 				{
 					// Push siblings after the starting at the new page's order up by one.
-					var siblings = _databaseAccess.Page_ReadByParentId(page.ParentPageId);
+					var siblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
 					for (int i = page.Order; i < siblings.Count; i++)
 					{
 						siblings[i].Order++;
-						_databaseAccess.Page_Update(siblings[i]);
+						_dataStore.Page_Update(siblings[i]);
 					}
 
-					_databaseAccess.Page_Create(page);
+					_dataStore.Page_Create(page);
 					page.Bullets.ForEach(bullet =>
 					{
 						bullet.PageId = page.Id;
-						_databaseAccess.Bullet_Create(bullet);
+						_dataStore.Bullet_Create(bullet);
 					});
 
 				}
@@ -470,17 +470,17 @@ namespace DocMAH.Web
 				var jsonSerializer = new JavaScriptSerializer();
 				var clientUserPageSettings = jsonSerializer.Deserialize<UserPageSettings>(jsonString);
 
-				var databaseUserPageSettings = _databaseAccess.UserPageSettings_ReadByUserAndPage(userName, clientUserPageSettings.PageId);
+				var databaseUserPageSettings = _dataStore.UserPageSettings_ReadByUserAndPage(userName, clientUserPageSettings.PageId);
 
 				if (null == databaseUserPageSettings)
 				{
 					clientUserPageSettings.UserName = userName;
-					_databaseAccess.UserPageSettings_Create(clientUserPageSettings);
+					_dataStore.UserPageSettings_Create(clientUserPageSettings);
 				}
 				else
 				{
 					databaseUserPageSettings.HidePage = clientUserPageSettings.HidePage;
-					_databaseAccess.UserPageSettings_Update(databaseUserPageSettings);
+					_dataStore.UserPageSettings_Update(databaseUserPageSettings);
 				}
 			}
 			WriteResponse(context, "text/html", "Success");
@@ -495,8 +495,8 @@ namespace DocMAH.Web
 				var jsonSerializer = new JavaScriptSerializer();
 				var moveRequest = jsonSerializer.Deserialize<MoveTocRequest>(moveRequestJson);
 
-				var page = _databaseAccess.Page_ReadById(moveRequest.PageId);
-				var oldSiblings = _databaseAccess.Page_ReadByParentId(page.ParentPageId);
+				var page = _dataStore.Page_ReadById(moveRequest.PageId);
+				var oldSiblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
 				List<Page> newSiblings;
 
 				int insertIndex, updateStartIndex, updateEndIndex;
@@ -510,11 +510,11 @@ namespace DocMAH.Web
 					for (int i = page.Order; i < oldSiblings.Count; i++)
 					{
 						oldSiblings[i].Order = i;
-						_databaseAccess.Page_Update(oldSiblings[i]);
+						_dataStore.Page_Update(oldSiblings[i]);
 					}
 
 					// Read new siblings and set update values.
-					newSiblings = _databaseAccess.Page_ReadByParentId(moveRequest.NewParentId);
+					newSiblings = _dataStore.Page_ReadByParentId(moveRequest.NewParentId);
 					insertIndex = moveRequest.NewPosition;
 					updateStartIndex = moveRequest.NewPosition;
 					updateEndIndex = newSiblings.Count;
@@ -545,7 +545,7 @@ namespace DocMAH.Web
 				for (int i = updateStartIndex; i <= updateEndIndex; i++)
 				{
 					newSiblings[i].Order = i;
-					_databaseAccess.Page_Update(newSiblings[i]);
+					_dataStore.Page_Update(newSiblings[i]);
 				}
 			}
 		}

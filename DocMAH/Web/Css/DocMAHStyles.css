@@ -155,8 +155,8 @@ html.dmh- {
 #dmhDocumentationEditorContent {
   height: 300px;
 }
-/****** First Time Editor ******/
-#dmhFirstTimeEdit .dmhDialogTitle {
+/****** Documentation Page Content ******/
+#dmhContentView .tip #dmhFirstTimeEdit .dmhDialogTitle {
   cursor: move;
 }
 #dmhCreateHelpButton {

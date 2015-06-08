@@ -124,7 +124,7 @@ namespace DocMAH.Data
 
 			while (reader.Read())
 			{
-				yield return new Page
+				var result =  new Page
 				{
 					Id = reader.GetInt32(idOrdinal),
 					PageType = (PageTypes)reader.GetInt32(pageTypeIdOrdinal),
@@ -139,8 +139,11 @@ namespace DocMAH.Data
 					DocImageUrl = reader.IsDBNull(docImageUrlOrdinal) ? (string)null : reader.GetString(docImageUrlOrdinal),
 					DocVerticalOffset = reader.IsDBNull(docVerticalOffsetOrdinal) ? (int?)null : reader.GetInt32(docVerticalOffsetOrdinal),
 					DocHorizontalOffset = reader.IsDBNull(docHorizontalOffsetOrdinal) ? (int?)null : reader.GetInt32(docHorizontalOffsetOrdinal),
-					IsHidden = reader.GetBoolean(isHiddenOrdinal),
+					IsHidden = reader.GetBoolean(isHiddenOrdinal)
 				};
+
+				result.MatchUrls = MatchUrls_ReadByPageId(result.Id);
+				yield return result;
 			}
 		}
 
@@ -480,7 +483,6 @@ namespace DocMAH.Data
 				var reader = command.ExecuteReader();
 				foreach (var page in HydratePages(reader))
 				{
-					page.MatchUrls = MatchUrls_ReadByPageId(page.Id);
 					yield return page;
 				}
 			}
@@ -503,8 +505,6 @@ namespace DocMAH.Data
 					result = HydratePages(reader).FirstOrDefault();
 				}
 			}
-
-			result.MatchUrls = MatchUrls_ReadByPageId(result.Id);
 
 			return result;
 		}
@@ -547,9 +547,6 @@ namespace DocMAH.Data
 					result = HydratePages(reader).FirstOrDefault();
 				}
 			}
-
-			if (null != result)
-				result.MatchUrls = MatchUrls_ReadByPageId(result.Id);
 
 			return result;
 		}

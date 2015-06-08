@@ -215,7 +215,9 @@ namespace DocMAH.UnitTests.Data
 			// Assert
 			Assert.AreEqual(2, results.Count(), "Two child pages exist and should be returned.");
 			Assert.IsNotNull(results.Where(p => p.Id == childPage1.Id).FirstOrDefault(), "The results should contain childPage1.");
-			Assert.IsNotNull(results.Where(p => p.Id == childPage2.Id).FirstOrDefault(), "The results should contain childPage2.");
+			var childPage2Result = results.Where(p => p.Id == childPage2.Id).FirstOrDefault();
+			Assert.IsNotNull(childPage2Result, "The results should contain childPage2.");
+			Assert.That(childPage2.MatchUrls, Is.EqualTo(childPage2Result.MatchUrls), "The match URLs not being populated is causing issues in the page move algorithm. B36");
 		}
 
 		[Test]

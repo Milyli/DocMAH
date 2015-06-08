@@ -10,6 +10,21 @@ namespace DocMAH
 {
 	public class Access
 	{
+		#region Constructors
+
+		public Access(HttpContextBase httpContext)
+		{
+			_httpContext = httpContext;
+		}
+
+		#endregion
+
+		#region Private Fields
+
+		private HttpContextBase _httpContext;
+
+		#endregion
+
 		/// <summary>
 		/// Returns true if the current request is authorized to edit documentation.
 		/// </summary>
@@ -17,7 +32,7 @@ namespace DocMAH
 		{
 			get
 			{
-				var request = HttpContext.Current.Request;
+				var request = _httpContext.Request;
 
 				if (DocmahConfigurationSection.Current.EditHelp.IsDisabled)
 					return false;

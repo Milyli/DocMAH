@@ -46,7 +46,7 @@ namespace DocMAH.Web
 			// TODO: break out documentation link script and only write first time view script if page is present or user can edit.
 			if (!string.IsNullOrEmpty(content))
 			{
-				var access = new Access();
+				var access = new Access(new HttpContextWrapper(HttpContext.Current));
 
 				// Look for complete beginning of head tag.
 				// Inject CSS links after opening head tag so that styles may be overridden by site specific CSS.
@@ -120,7 +120,7 @@ namespace DocMAH.Web
 			var userPageSettingsJson = serializer.Serialize(userPageSettings);
 			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
-			var access = new Access();
+			var access = new Access(new HttpContextWrapper(HttpContext.Current));
 			var applicationSettings = new ApplicationSettings { CanEdit = access.CanEdit };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
 			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
