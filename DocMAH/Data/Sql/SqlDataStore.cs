@@ -12,8 +12,9 @@ using System.Web.Routing;
 using System.Web;
 using DocMAH.Properties;
 using System.IO;
+using DocMAH.Data.Sql;
 
-namespace DocMAH.Data
+namespace DocMAH.Data.Sql
 {
 	public class SqlDataStore : IDataStore
 	{
@@ -22,7 +23,7 @@ namespace DocMAH.Data
 		static SqlDataStore()
 		{
 			_updateScripts = new Dictionary<DatabaseVersions, string>();
-			_updateScripts.Add(DatabaseVersions.Database_01, Resources.Sql_Database_01);
+			_updateScripts.Add(DatabaseVersions.Database_01, SqlScripts.Database_Update_01);
 		}
 
 		#endregion
@@ -184,7 +185,7 @@ namespace DocMAH.Data
 						using (var command = connection.CreateCommand())
 						{
 							command.CommandType = CommandType.Text;
-							command.CommandText = Resources.Sql_PageUrl_Create;
+							command.CommandText = SqlScripts.PageUrl_Create;
 							command.Parameters.Add(new SqlParameter("@url", pageUrl.Replace('*', '%')));
 							command.Parameters.Add(new SqlParameter("@pageId", pageId));
 
@@ -201,7 +202,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_PageUrl_DeleteByPageId;
+				command.CommandText = SqlScripts.PageUrl_DeleteByPageId;
 				command.Parameters.Add(new SqlParameter("@pageId", pageId));
 
 				connection.Open();
@@ -217,7 +218,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_PageUrl_ReadByPageId;
+				command.CommandText = SqlScripts.PageUrl_ReadByPageId;
 				command.Parameters.Add(new SqlParameter("@pageId", pageId));
 
 				connection.Open();
@@ -274,7 +275,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_Create;
+				command.CommandText = SqlScripts.Bullet_Create;
 				Bullet_AddParameters(bullet, command);
 
 				connection.Open();
@@ -288,7 +289,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_Delete;
+				command.CommandText = SqlScripts.Bullet_Delete;
 				command.Parameters.Add(new SqlParameter("@id", id));
 
 				connection.Open();
@@ -302,7 +303,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_ReadAll;
+				command.CommandText = SqlScripts.Bullet_ReadAll;
 
 				connection.Open();
 				var reader = command.ExecuteReader();
@@ -317,7 +318,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_DeleteByPageId;
+				command.CommandText = SqlScripts.Bullet_DeleteByPageId;
 				command.Parameters.Add(new SqlParameter("@pageId", pageId));
 
 				connection.Open();
@@ -333,7 +334,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_ReadByPageId;
+				command.CommandText = SqlScripts.Bullet_ReadByPageId;
 				command.Parameters.Add(new SqlParameter("@pageId", pageId));
 
 				connection.Open();
@@ -352,7 +353,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Bullet_Update;
+				command.CommandText = SqlScripts.Bullet_Update;
 				Bullet_AddParameters(bullet, command);
 				command.Parameters.Add(new SqlParameter("@id", bullet.Id));
 
@@ -367,7 +368,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Configuration_Read;
+				command.CommandText = SqlScripts.Configuration_Read;
 				command.Parameters.Add(new SqlParameter("@name", name));
 				connection.Open();
 				var result = command.ExecuteScalar();
@@ -381,7 +382,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Configuration_Update;
+				command.CommandText = SqlScripts.Configuration_Update;
 				command.Parameters.Add(new SqlParameter("@name", name));
 				command.Parameters.Add(new SqlParameter("@value", value));
 				connection.Open();
@@ -396,7 +397,7 @@ namespace DocMAH.Data
 			{
 				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Database_Create.Replace("CatalogName", builder.InitialCatalog);
+				command.CommandText = SqlScripts.Database_Create.Replace("CatalogName", builder.InitialCatalog);
 				connection.Open();
 				command.ExecuteNonQuery();
 			}
@@ -409,7 +410,7 @@ namespace DocMAH.Data
 			{
 				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Database_Drop.Replace("CatalogName", builder.InitialCatalog);
+				command.CommandText = SqlScripts.Database_Drop.Replace("CatalogName", builder.InitialCatalog);
 				connection.Open();
 				command.ExecuteNonQuery();
 			}
@@ -445,7 +446,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_Create;
+				command.CommandText = SqlScripts.Page_Create;
 				Page_AddParameters(page, command);
 
 				connection.Open();
@@ -463,7 +464,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_Delete;
+				command.CommandText = SqlScripts.Page_Delete;
 				command.Parameters.Add(new SqlParameter("@id", id));
 
 				connection.Open();
@@ -477,7 +478,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_ReadAll;
+				command.CommandText = SqlScripts.Page_ReadAll;
 
 				connection.Open();
 				var reader = command.ExecuteReader();
@@ -496,7 +497,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_ReadById;
+				command.CommandText = SqlScripts.Page_ReadById;
 				command.Parameters.Add(new SqlParameter("@id", id));
 
 				connection.Open();
@@ -517,7 +518,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_ReadByParentId;
+				command.CommandText = SqlScripts.Page_ReadByParentId;
 				command.Parameters.Add(new SqlParameter("@parentId", (object)parentId ?? DBNull.Value));
 
 				connection.Open();
@@ -538,7 +539,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_ReadByUrl;
+				command.CommandText = SqlScripts.Page_ReadByUrl;
 				command.Parameters.Add(new SqlParameter("@url", url));
 
 				connection.Open();
@@ -559,7 +560,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_Page_ReadTableOfContents;
+				command.CommandText = SqlScripts.Page_ReadTableOfContents;
 				command.Parameters.Add(new SqlParameter("@includeHidden", includeHidden));
 
 				connection.Open();
@@ -595,7 +596,7 @@ namespace DocMAH.Data
 				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
-					command.CommandText = Resources.Sql_Page_Update;
+					command.CommandText = SqlScripts.Page_Update;
 					Page_AddParameters(page, command);
 					command.Parameters.Add(new SqlParameter("@id", page.Id));
 
@@ -614,7 +615,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_UserPageSettings_Create;
+				command.CommandText = SqlScripts.UserPageSettings_Create;
 				UserPageSettings_AddParameters(userPageSettings, command);
 
 				connection.Open();
@@ -630,7 +631,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_UserPageSettings_ReadByUserAndPage;
+				command.CommandText = SqlScripts.UserPageSettings_ReadByUserAndPage;
 				command.Parameters.AddRange(new SqlParameter[]{
 					new SqlParameter("@userName", userName),
 					new SqlParameter("@pageId", pageId)
@@ -652,7 +653,7 @@ namespace DocMAH.Data
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
-				command.CommandText = Resources.Sql_UserPageSettings_Update;
+				command.CommandText = SqlScripts.UserPageSettings_Update;
 				UserPageSettings_AddParameters(userPageSettings, command);
 				command.Parameters.Add(new SqlParameter("@id", userPageSettings.Id));
 

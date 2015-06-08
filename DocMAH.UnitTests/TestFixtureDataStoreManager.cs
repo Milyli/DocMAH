@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using DocMAH.Data;
+using DocMAH.Data.Sql;
 using Moq;
 using NUnit.Framework;
 

@@ -13,6 +13,7 @@ using DocMAH.UnitTests;
 using DocMAH.Web;
 using DocMAH.Models;
 using System.Web.Script.Serialization;
+using DocMAH.Data.Sql;
 
 namespace DocMAH.IntegrationTests
 {

@@ -63,6 +63,11 @@
     <Compile Include="Data\DatabaseVersions.cs" />
     <Compile Include="Data\IDatabaseConfiguration.cs" />
     <Compile Include="Data\IDataStoreUpdater.cs" />
+    <Compile Include="Data\Sql\SqlScripts.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SqlScripts.resx</DependentUpon>
+    </Compile>
     <Compile Include="Data\XmlNodeNames.cs" />
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -86,11 +91,15 @@
     <Compile Include="Models\UserPageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ResourcesExtensions.cs" />
-    <Compile Include="Data\SqlDataStore.cs" />
+    <Compile Include="Data\Sql\SqlDataStore.cs" />
     <Compile Include="Web\IRequestProcessor.cs" />
     <Compile Include="Web\RequestProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Sql\SqlScripts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SqlScripts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Web\Html\FirstTimeView.html" />
   </ItemGroup>
   <ItemGroup>
@@ -107,8 +116,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Sql\Database_Create.sql" />
-    <Content Include="Data\Sql\Database_Drop.sql" />
+    <Content Include="Data\Sql\Scripts\Database_Create.sql" />
+    <Content Include="Data\Sql\Scripts\Database_Drop.sql" />
     <Content Include="Web\Css\Images\closedBook.png" />
     <Content Include="Web\Css\Images\closedBook.svg" />
     <Content Include="Web\Css\Images\document.png" />
@@ -121,10 +130,10 @@
       <DependentUpon>FirstTimeViewInjectedScripts.html</DependentUpon>
     </Content>
     <Content Include="Web\JavaScript\DocMAHJavaScript.js" />
-    <Content Include="Data\Sql\Bullet_Install.txt" />
-    <Content Include="Data\Sql\Bullet_ReadAll.sql" />
-    <Content Include="Data\Sql\Page_Install.txt" />
-    <Content Include="Data\Sql\Page_ReadAll.sql" />
+    <Content Include="Data\Sql\Scripts\Bullet_Install.txt" />
+    <Content Include="Data\Sql\Scripts\Bullet_ReadAll.sql" />
+    <Content Include="Data\Sql\Scripts\Page_Install.txt" />
+    <Content Include="Data\Sql\Scripts\Page_ReadAll.sql" />
     <Content Include="Web\Css\Mixins.css">
       <DependentUpon>Mixins.less</DependentUpon>
     </Content>
@@ -137,14 +146,14 @@
     <Content Include="Web\Css\DocMAHStyles.min.css">
       <DependentUpon>DocMAHStyles.css</DependentUpon>
     </Content>
-    <Content Include="Data\Sql\Bullet_Delete.sql" />
-    <Content Include="Data\Sql\Bullet_DeleteByPageId.sql" />
-    <Content Include="Data\Sql\Bullet_ReadByPageId.sql" />
-    <Content Include="Data\Sql\Configuration_Update.sql" />
-    <Content Include="Data\Sql\PageUrl_DeleteByPageId.sql" />
-    <Content Include="Data\Sql\PageUrl_ReadByPageId.sql" />
-    <Content Include="Data\Sql\Page_Delete.sql" />
-    <Content Include="Data\Sql\Page_ReadById.sql" />
+    <Content Include="Data\Sql\Scripts\Bullet_Delete.sql" />
+    <Content Include="Data\Sql\Scripts\Bullet_DeleteByPageId.sql" />
+    <Content Include="Data\Sql\Scripts\Bullet_ReadByPageId.sql" />
+    <Content Include="Data\Sql\Scripts\Configuration_Update.sql" />
+    <Content Include="Data\Sql\Scripts\PageUrl_DeleteByPageId.sql" />
+    <Content Include="Data\Sql\Scripts\PageUrl_ReadByPageId.sql" />
+    <Content Include="Data\Sql\Scripts\Page_Delete.sql" />
+    <Content Include="Data\Sql\Scripts\Page_ReadById.sql" />
     <Content Include="Web\JavaScript\DocMAHJavaScript.min.js">
       <DependentUpon>DocMAHJavaScript.js</DependentUpon>
     </Content>
@@ -153,19 +162,19 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Sql\Page_ReadByParentId.sql" />
-    <EmbeddedResource Include="Data\Sql\PageUrl_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\Page_ReadTableOfContents.sql" />
-    <EmbeddedResource Include="Data\Sql\UserPageSettings_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\UserPageSettings_Update.sql" />
-    <EmbeddedResource Include="Data\Sql\UserPageSettings_ReadByUserAndPage.sql" />
-    <EmbeddedResource Include="Data\Sql\Bullet_Update.sql" />
-    <EmbeddedResource Include="Data\Sql\Page_Update.sql" />
-    <EmbeddedResource Include="Data\Sql\Page_ReadByUrl.sql" />
-    <EmbeddedResource Include="Data\Sql\Bullet_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\Page_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\Database_01.sql" />
-    <EmbeddedResource Include="Data\Sql\Configuration_Read.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadByParentId.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\PageUrl_Create.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadTableOfContents.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_Create.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_Update.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_ReadByUserAndPage.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Bullet_Update.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Page_Update.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadByUrl.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Bullet_Create.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Page_Create.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Database_Update_01.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\Configuration_Read.sql" />
     <EmbeddedResource Include="Web\Html\FirstTimeEdit.html" />
     <EmbeddedResource Include="Web\Html\FirstTimeEdit.min.html">
       <DependentUpon>FirstTimeEdit.html</DependentUpon>
@@ -178,6 +187,7 @@
       <DependentUpon>Documentation.html</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

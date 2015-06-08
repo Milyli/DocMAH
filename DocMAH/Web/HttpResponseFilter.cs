@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using DocMAH.Configuration;
 using DocMAH.Data;
+using DocMAH.Data.Sql;
 using DocMAH.Models;
 using DocMAH.Properties;
 
@@ -79,17 +80,17 @@ namespace DocMAH.Web
 		private string FormatHtmlViewHelp()
 		{
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
-			var database = new SqlDataStore();
-			var page = database.Page_ReadByUrl(requestUrl.Replace('*', '%'));
+			var dataStore = new SqlDataStore();
+			var page = dataStore.Page_ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
 
 			if (null != page)
 			{
-				page.Bullets = database.Bullet_ReadByPageId(page.Id);
+				page.Bullets = dataStore.Bullet_ReadByPageId(page.Id);
 				if (HttpContext.Current.Request.IsAuthenticated)
 				{
 					var userName = HttpContext.Current.User.Identity.Name;
-					userPageSettings = database.UserPageSettings_ReadByUserAndPage(userName, page.Id);
+					userPageSettings = dataStore.UserPageSettings_ReadByUserAndPage(userName, page.Id);
 				}
 			}
 

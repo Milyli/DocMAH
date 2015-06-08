@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Xml;
 using DocMAH.Configuration;
 using DocMAH.Data;
+using DocMAH.Data.Sql;
 using DocMAH.Extensions;
 using DocMAH.Models;
 using DocMAH.Properties;
@@ -216,7 +217,7 @@ namespace DocMAH.Web
 						// Create insert or update statements for all existing pages.
 						xmlWriter.WriteElementString(
 							XmlNodeNames.UpdateScriptElement,
-							string.Format(Resources.Sql_Page_Install,
+							string.Format(SqlScripts.Page_Install,
 								page.Id,
 								(int)page.PageType,
 								page.ParentPageId.ToNullableSqlValue(),
@@ -292,7 +293,7 @@ namespace DocMAH.Web
 						xmlWriter.WriteElementString(
 							XmlNodeNames.UpdateScriptElement,
 							string.Format(
-								Resources.Sql_Bullet_Install,
+								SqlScripts.Bullet_Install,
 								bullet.Id,
 								bullet.PageId,
 								bullet.Number,

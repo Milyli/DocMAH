@@ -9,6 +9,7 @@ using System.Web;
 using System.Linq;
 using System.Collections.Generic;
 using DocMAH.Models;
+using DocMAH.Data.Sql;
 
 namespace DocMAH.UnitTests.Data
 {
