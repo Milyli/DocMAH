@@ -28,7 +28,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Crud_Success()
 		{
 			var page = Models.CreatePage();
-			DataStore.Page_Create(page);
+			PageRepository.Create(page);
 			
 			var newBullet = Models.CreateBullet(page.Id);
 			Assert.AreEqual(0, newBullet.Id, "The bullet id should not be set until after data layer Bullet_Create method is called.");
@@ -57,9 +57,9 @@ namespace DocMAH.UnitTests.Data.Sql
 		{
 			// Arrange
 			var targetPage = Models.CreatePage();
-			DataStore.Page_Create(targetPage);
+			PageRepository.Create(targetPage);
 			var noisePage = Models.CreatePage();
-			DataStore.Page_Create(noisePage);
+			PageRepository.Create(noisePage);
 
 			var targetBullet1 = Models.CreateBullet(targetPage.Id);
 			BulletRepository.Create(targetBullet1);

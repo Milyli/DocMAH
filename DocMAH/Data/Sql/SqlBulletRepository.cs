@@ -8,26 +8,18 @@ using DocMAH.Models;
 
 namespace DocMAH.Data.Sql
 {
-	public class SqlBulletRepository : IBulletRepository
+	public class SqlBulletRepository : BaseSqlRepository, IBulletRepository
 	{
 		#region Constructors
 
 		public SqlBulletRepository()
-			: this(new SqlConnectionFactory())
 		{
-
 		}
 
-		public SqlBulletRepository(ISqlConnectionFactory connectionFactory)
+		public SqlBulletRepository(ISqlConnectionFactory sqlConnectionFactory)
+			: base(sqlConnectionFactory)
 		{
-			_connectionFactory = connectionFactory;
 		}
-
-		#endregion
-
-		#region Private Fields
-
-		private ISqlConnectionFactory _connectionFactory;
 
 		#endregion
 
@@ -80,11 +72,9 @@ namespace DocMAH.Data.Sql
 
 		#region Public Methods
 
-
-
 		public void Create(Bullet bullet)
 		{
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -98,7 +88,7 @@ namespace DocMAH.Data.Sql
 
 		public void Delete(int id)
 		{
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -112,7 +102,7 @@ namespace DocMAH.Data.Sql
 
 		public IEnumerable<Bullet> ReadAll()
 		{
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -127,7 +117,7 @@ namespace DocMAH.Data.Sql
 
 		public void DeleteByPageId(int pageId)
 		{
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -143,7 +133,7 @@ namespace DocMAH.Data.Sql
 		{
 			List<Bullet> result;
 
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -162,7 +152,7 @@ namespace DocMAH.Data.Sql
 
 		public void Update(Bullet bullet)
 		{
-			using (var connection = _connectionFactory.GetConnection())
+			using (var connection = SqlConnectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;

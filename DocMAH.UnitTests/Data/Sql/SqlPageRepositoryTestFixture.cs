@@ -1,81 +1,17 @@
 ﻿using System;
-using System.Configuration;
-using System.Data.SqlClient;
-using NUnit.Framework;
-using System.Data;
-using DocMAH.Data;
-using Moq;
-using System.Web;
-using System.Linq;
 using System.Collections.Generic;
-using DocMAH.Models;
-using DocMAH.Data.Sql;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace DocMAH.UnitTests.Data.Sql
 {
 	[TestFixture]
-	public class SqlDataStoreTestFixture
+	public class SqlPageRepositoryTestFixture : BaseSqlRepositoryTestFixture
 	{
-		#region Private Methods
-		
-		private int CountPages()
-		{
-			var pageCount = 0;
-			foreach (var page in _database.Page_ReadAll())
-				pageCount++;
-			return pageCount;
-		}
-
-		#endregion
-
-		#region Private Fields
-
-		private SqlDataStore _database;
-		private ModelFactory _models;
-
-		#endregion
-
-		#region SetUp / TearDown
-
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
-		{
-			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreSetUp();
-		}
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreTearDown();
-		}
-
-		[SetUp]
-		public void TestInitialize()
-		{
-			_database = new SqlDataStore();
-			_models = new ModelFactory();
-		}
-
-		[TearDown]
-		public void TestCleanup()
-		{
-			// Pages must be removed in reverse order because of self referencing foreign key.
-			var pages = new List<Page>();
-			foreach (var page in _database.Page_ReadAll())
-				pages.Insert(0, page);
-			foreach(var page in pages)
-				_database.Page_Delete(page.Id);
-
-			_models = null;
-			_database = null;
-		}
-
-		#endregion
-
 		#region Tests
-
+		
 		// I'm not normally a fan of testing multiple methods in a single test.
 		// However, in this case I would otherwise need to write a bunch of
 		// SQL just for the unit tests.
@@ -86,46 +22,45 @@ namespace DocMAH.UnitTests.Data.Sql
 		// consistent, which is good enough for the time being.
 		[Test]
 		[Description("Tests page create, read, update and delete methods.")]
-		public void Page_Crud()
+		public void Crud_Success()
 		{
-			Assert.AreEqual(0, CountPages(), "All tests should start with an empty database.");
-
-			var newPage = _models.CreatePage();
+			var newPage = Models.CreatePage();
 			Assert.AreEqual(0, newPage.Id, "The page id should not be set until after data layer Page_Create method is called.");
 
-			_database.Page_Create(newPage);
+			PageRepository.Create(newPage);
 			Assert.AreNotEqual(0, newPage.Id, "The page id should have been set by the data layer.");
-			Assert.AreEqual(1, CountPages(), "One page should now exist in the database.");
 
 			var oldTitle = newPage.Title;
 			newPage.Title = "New Page Title";
-			_database.Page_Update(newPage);
+			PageRepository.Update(newPage);
 
-			var existingPage = _database.Page_ReadById(newPage.Id);
+			var existingPage = PageRepository.Read(newPage.Id);
 			Assert.IsNotNull(existingPage, "The page should exist in the database.");
 			Assert.AreNotEqual(oldTitle, existingPage.Title, "The page's title should have been updated.");
 			Assert.AreEqual(newPage.Content, existingPage.Content, "The rest of the page instances' contents should be the same.");
 
-			_database.Page_Delete(newPage.Id);
-			Assert.AreEqual(0, CountPages(), "No pages should exist after the page is deleted.");
+			PageRepository.Delete(newPage.Id);
+
+			var deletedPage = PageRepository.Read(newPage.Id);
+			Assert.That(deletedPage, Is.Null, "The page should have been deleted from the database.");
 		}
 
 		[Test]
 		[Description("Reads pages by parent id.")]
-		public void Page_ReadByParentId()
+		public void ReadByParentId_Success()
 		{
 			// Arrange
-			var parentPage = _models.CreatePage();
-			_database.Page_Create(parentPage);
-			var childPage1 = _models.CreatePage(parentPage.Id);
-			_database.Page_Create(childPage1);
-			var childPage2 = _models.CreatePage(parentPage.Id);
-			_database.Page_Create(childPage2);
-			var noisePage = _models.CreatePage();
-			_database.Page_Create(noisePage);
+			var parentPage = Models.CreatePage();
+			PageRepository.Create(parentPage);
+			var childPage1 = Models.CreatePage(parentPage.Id);
+			PageRepository.Create(childPage1);
+			var childPage2 = Models.CreatePage(parentPage.Id);
+			PageRepository.Create(childPage2);
+			var noisePage = Models.CreatePage();
+			PageRepository.Create(noisePage);
 
 			// Act
-			var results = _database.Page_ReadByParentId(parentPage.Id);
+			var results = PageRepository.ReadByParentId(parentPage.Id);
 
 			// Assert
 			Assert.AreEqual(2, results.Count(), "Two child pages exist and should be returned.");
@@ -137,18 +72,18 @@ namespace DocMAH.UnitTests.Data.Sql
 
 		[Test]
 		[Description("Reads pages by URLs.")]
-		public void Page_ReadByUrl()
+		public void ReadByUrl_Success()
 		{
 			// Arrange
-			var targetPage = _models.CreatePage(matchUrls: "/Controller/Target /Controller/Target/*");
-			_database.Page_Create(targetPage);
-			var noisePage = _models.CreatePage(matchUrls: "/Controller/Noise /Controller/Target/Exact");
-			_database.Page_Create(noisePage);
+			var targetPage = Models.CreatePage(matchUrls: "/Controller/Target /Controller/Target/*");
+			PageRepository.Create(targetPage);
+			var noisePage = Models.CreatePage(matchUrls: "/Controller/Noise /Controller/Target/Exact");
+			PageRepository.Create(noisePage);
 
 			// Act
-			var targetShortUrlMatch = _database.Page_ReadByUrl("/Controller/Target");
-			var noiseExactMatch = _database.Page_ReadByUrl("/Controller/Target/Exact");
-			var targetWildCardMatch = _database.Page_ReadByUrl("/Controller/Target/WildCard");
+			var targetShortUrlMatch = PageRepository.ReadByUrl("/Controller/Target");
+			var noiseExactMatch = PageRepository.ReadByUrl("/Controller/Target/Exact");
+			var targetWildCardMatch = PageRepository.ReadByUrl("/Controller/Target/WildCard");
 
 			// Assert
 			Assert.IsNotNull(targetShortUrlMatch, "A value should be returned for the target short URL match.");
@@ -161,24 +96,24 @@ namespace DocMAH.UnitTests.Data.Sql
 
 		[Test]
 		[Description("Reads all table of contents as page models.")]
-		public void Page_ReadTableOfContents_All()
+		public void ReadTableOfContents_All()
 		{
 			// Arrange
-			var root_1 = _models.CreatePage(order: 1);
-			_database.Page_Create(root_1);
-			var child_1_1 = _models.CreatePage(parentPageId: root_1.Id, order: 1);
-			_database.Page_Create(child_1_1);
-			var child_1_1_1 = _models.CreatePage(parentPageId: child_1_1.Id, order: 1);
-			_database.Page_Create(child_1_1_1);
-			var child_1_2 = _models.CreatePage(parentPageId: root_1.Id, order: 2);
-			_database.Page_Create(child_1_2);
-			var root_2 = _models.CreatePage(order: 2);
-			_database.Page_Create(root_2);
-			var child_2_1 = _models.CreatePage(parentPageId: root_2.Id, order: 1);
-			_database.Page_Create(child_2_1);
+			var root_1 = Models.CreatePage(order: 1);
+			PageRepository.Create(root_1);
+			var child_1_1 = Models.CreatePage(parentPageId: root_1.Id, order: 1);
+			PageRepository.Create(child_1_1);
+			var child_1_1_1 = Models.CreatePage(parentPageId: child_1_1.Id, order: 1);
+			PageRepository.Create(child_1_1_1);
+			var child_1_2 = Models.CreatePage(parentPageId: root_1.Id, order: 2);
+			PageRepository.Create(child_1_2);
+			var root_2 = Models.CreatePage(order: 2);
+			PageRepository.Create(root_2);
+			var child_2_1 = Models.CreatePage(parentPageId: root_2.Id, order: 1);
+			PageRepository.Create(child_2_1);
 
 			// Act
-			var toc = _database.Page_ReadTableOfContents(true);
+			var toc = PageRepository.ReadTableOfContents(true);
 
 			// Assert
 			Assert.AreEqual(6, toc.Count(), "Six pages should be returned in the table of contents.");
@@ -196,18 +131,18 @@ namespace DocMAH.UnitTests.Data.Sql
 
 		[Test]
 		[Description("Reads only visible table of contents page models.")]
-		public void Page_ReadTableOfContents_Visible()
+		public void ReadTableOfContents_Visible()
 		{
 			// Arrange
-			var root = _models.CreatePage(order: 1, isHidden: false);
-			_database.Page_Create(root);
-			var child = _models.CreatePage(order: 1, parentPageId: root.Id, isHidden: true);
-			_database.Page_Create(child);
-			var grandchild = _models.CreatePage(order: 1, parentPageId: child.Id, isHidden: false);
-			_database.Page_Create(grandchild);
+			var root = Models.CreatePage(order: 1, isHidden: false);
+			PageRepository.Create(root);
+			var child = Models.CreatePage(order: 1, parentPageId: root.Id, isHidden: true);
+			PageRepository.Create(child);
+			var grandchild = Models.CreatePage(order: 1, parentPageId: child.Id, isHidden: false);
+			PageRepository.Create(grandchild);
 
 			// Act
-			var toc = _database.Page_ReadTableOfContents(false);
+			var toc = PageRepository.ReadTableOfContents(false);
 
 			// Assert
 			Assert.AreEqual(1, toc.Count(), "Only one page should be returned because all other pages are hidden or beneath hidden pages.");

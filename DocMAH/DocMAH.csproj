@@ -60,6 +60,8 @@
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
     <Compile Include="Data\IBulletRepository.cs" />
     <Compile Include="Data\IContentFileManager.cs" />
+    <Compile Include="Data\IPageRepository.cs" />
+    <Compile Include="Data\Sql\BaseSqlRepository.cs" />
     <Compile Include="Data\Sql\SqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\ISqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\SqlBulletRepository.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Data\ContentFileManager.cs" />
     <Compile Include="Data\IConfigurationService.cs" />
     <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
+    <Compile Include="Data\Sql\SqlPageRepository.cs" />
     <Compile Include="Data\Sql\SqlScripts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

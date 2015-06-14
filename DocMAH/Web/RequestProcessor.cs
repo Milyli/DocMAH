@@ -21,16 +21,25 @@ namespace DocMAH.Web
 		#region Constructors
 
 		public RequestProcessor()
-			: this(new SqlDataStore(), new SqlConfigurationService(), new SqlBulletRepository())
+			: this(
+				new SqlDataStore(), 
+				new SqlConfigurationService(), 
+				new SqlBulletRepository(),
+				new SqlPageRepository())
 		{
 
 		}
 
-		public RequestProcessor(IDataStore dataStore, IConfigurationService databaseConfiguration, IBulletRepository bulletRepository)
+		public RequestProcessor(
+			IDataStore dataStore, 
+			IConfigurationService databaseConfiguration, 
+			IBulletRepository bulletRepository,
+			IPageRepository pageRepository)
 		{
 			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
 			_bulletRepository = bulletRepository;
+			_pageRepository = pageRepository;
 		}
 
 		#endregion
@@ -44,6 +53,7 @@ namespace DocMAH.Web
 		private readonly IConfigurationService _databaseConfiguration;
 
 		private readonly IBulletRepository _bulletRepository;
+		private readonly IPageRepository _pageRepository;
 
 		#endregion
 
@@ -114,15 +124,15 @@ namespace DocMAH.Web
 				_bulletRepository.DeleteByPageId(pageId);
 
 				// Get the page so we have the parent id.
-				var page = _dataStore.Page_ReadById(pageId);
+				var page = _pageRepository.Read(pageId);
 
 				// Get its siblings and remove the page from the collection.
-				var siblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
+				var siblings = _pageRepository.ReadByParentId(page.ParentPageId);
 				page = siblings.Where(p => p.Id == pageId).First();
 				siblings.Remove(page);
 
 				// Insert deleted page's children in order at deleted page's location.
-				var children = _dataStore.Page_ReadByParentId(pageId);
+				var children = _pageRepository.ReadByParentId(pageId);
 				for (int i = children.Count - 1; i >= 0; i--)
 				{
 					siblings.Insert(page.Order, children[i]);
@@ -134,11 +144,11 @@ namespace DocMAH.Web
 					var sibling = siblings[i];
 					sibling.ParentPageId = page.ParentPageId;
 					sibling.Order = i;
-					_dataStore.Page_Update(sibling);
+					_pageRepository.Update(sibling);
 				}
 
 				// Delete page after all children have been moved.
-				_dataStore.Page_Delete(pageId);
+				_pageRepository.Delete(pageId);
 			}
 		}
 
@@ -215,7 +225,7 @@ namespace DocMAH.Web
 
 					var existingPageIds = new List<int>();
 					var pageUrlScripts = new List<string>();
-					foreach (var page in _dataStore.Page_ReadAll())
+					foreach (var page in _pageRepository.ReadAll())
 					{
 						// Create insert or update statements for all existing pages.
 						xmlWriter.WriteElementString(
@@ -383,7 +393,7 @@ namespace DocMAH.Web
 		{
 			var id = int.Parse(context.Request["id"]);
 
-			var page = _dataStore.Page_ReadById(id);
+			var page = _pageRepository.Read(id);
 			page.Bullets = _bulletRepository.ReadByPageId(id);
 
 			var serializer = new JavaScriptSerializer();
@@ -395,7 +405,7 @@ namespace DocMAH.Web
 		public void ProcessReadTableOfContentsRequest(HttpContextBase context)
 		{
 			var access = new Access(context);
-			var pages = _dataStore.Page_ReadTableOfContents(access.CanEdit);
+			var pages = _pageRepository.ReadTableOfContents(access.CanEdit);
 
 			var serializer = new JavaScriptSerializer();
 			var pagesJson = serializer.Serialize(pages);
@@ -415,11 +425,11 @@ namespace DocMAH.Web
 				if (page.Id > 0)	// For existing pages ...
 				{
 					// Validate that the parent and order are not changing on updates.
-					var originalPage = _dataStore.Page_ReadById(page.Id);
+					var originalPage = _pageRepository.Read(page.Id);
 					if (!(originalPage.Order == page.Order && originalPage.ParentPageId == page.ParentPageId))
 						throw new InvalidOperationException("Changing page order and parent id not supported by SavePage. Use MovePage instead.");
 
-					_dataStore.Page_Update(page);
+					_pageRepository.Update(page);
 
 					var existingBullets = _bulletRepository.ReadByPageId(page.Id);
 					// Process incoming bullets. If they exist update, otherwise create.
@@ -441,14 +451,14 @@ namespace DocMAH.Web
 				else // For new pages ...
 				{
 					// Push siblings after the starting at the new page's order up by one.
-					var siblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
+					var siblings = _pageRepository.ReadByParentId(page.ParentPageId);
 					for (int i = page.Order; i < siblings.Count; i++)
 					{
 						siblings[i].Order++;
-						_dataStore.Page_Update(siblings[i]);
+						_pageRepository.Update(siblings[i]);
 					}
 
-					_dataStore.Page_Create(page);
+					_pageRepository.Create(page);
 					page.Bullets.ForEach(bullet =>
 					{
 						bullet.PageId = page.Id;
@@ -502,8 +512,8 @@ namespace DocMAH.Web
 				var jsonSerializer = new JavaScriptSerializer();
 				var moveRequest = jsonSerializer.Deserialize<MoveTocRequest>(moveRequestJson);
 
-				var page = _dataStore.Page_ReadById(moveRequest.PageId);
-				var oldSiblings = _dataStore.Page_ReadByParentId(page.ParentPageId);
+				var page = _pageRepository.Read(moveRequest.PageId);
+				var oldSiblings = _pageRepository.ReadByParentId(page.ParentPageId);
 				List<Page> newSiblings;
 
 				int insertIndex, updateStartIndex, updateEndIndex;
@@ -517,11 +527,11 @@ namespace DocMAH.Web
 					for (int i = page.Order; i < oldSiblings.Count; i++)
 					{
 						oldSiblings[i].Order = i;
-						_dataStore.Page_Update(oldSiblings[i]);
+						_pageRepository.Update(oldSiblings[i]);
 					}
 
 					// Read new siblings and set update values.
-					newSiblings = _dataStore.Page_ReadByParentId(moveRequest.NewParentId);
+					newSiblings = _pageRepository.ReadByParentId(moveRequest.NewParentId);
 					insertIndex = moveRequest.NewPosition;
 					updateStartIndex = moveRequest.NewPosition;
 					updateEndIndex = newSiblings.Count;
@@ -552,7 +562,7 @@ namespace DocMAH.Web
 				for (int i = updateStartIndex; i <= updateEndIndex; i++)
 				{
 					newSiblings[i].Order = i;
-					_dataStore.Page_Update(newSiblings[i]);
+					_pageRepository.Update(newSiblings[i]);
 				}
 			}
 		}

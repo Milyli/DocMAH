@@ -24,6 +24,7 @@ namespace DocMAH.Web
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
 			_bulletRepository = new SqlBulletRepository();
+			_pageRepository = new SqlPageRepository();
 		}
 
 		#endregion
@@ -34,6 +35,7 @@ namespace DocMAH.Web
 		private readonly StreamWriter _writer; // Stream writer to write to response on.
 		private string _unprocessedContent; // Content from previous write that could not be added.
 		private readonly IBulletRepository _bulletRepository;
+		private readonly IPageRepository _pageRepository;
 
 		#endregion
 
@@ -83,7 +85,7 @@ namespace DocMAH.Web
 		{
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
 			var dataStore = new SqlDataStore();
-			var page = dataStore.Page_ReadByUrl(requestUrl.Replace('*', '%'));
+			var page = _pageRepository.ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
 
 			if (null != page)

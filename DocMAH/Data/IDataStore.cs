@@ -35,14 +35,6 @@ namespace DocMAH.Data
 		//void DataStore_Update();
 		void Database_RunScript(string sql);
 		void Database_Update();
-		void Page_Create(Page page);
-		void Page_Delete(int id);
-		IEnumerable<Page> Page_ReadAll();
-		Page Page_ReadById(int id);
-		List<Page> Page_ReadByParentId(int? parentId);
-		Page Page_ReadByUrl(string url);
-		List<Page> Page_ReadTableOfContents(bool includeHidden);
-		void Page_Update(Page page);
 		void UserPageSettings_Create(UserPageSettings userPageSettings);
 		UserPageSettings UserPageSettings_ReadByUserAndPage(string userName, int pageId);
 		void UserPageSettings_Update(UserPageSettings userPageSettings);

@@ -53,7 +53,7 @@ namespace DocMAH.IntegrationTests
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			context.SetupGet(c => c.Response.Cache).Returns(cachePolicy.Object);
 
-			var sqlAccess = new SqlDataStore();
+			var pageRepository = new SqlPageRepository();
 			var requestProcessor = new RequestProcessor();
 
 			var models = new ModelFactory();
@@ -62,14 +62,14 @@ namespace DocMAH.IntegrationTests
 			var recreatedPage = models.CreatePage();
 			var lastPage = models.CreatePage();
 
-			sqlAccess.Page_Create(firstPage);
+			pageRepository.Create(firstPage);
 			requestProcessor.ProcessGenerateInstallScriptRequest(context.Object);
-			sqlAccess.Page_Create(deletedPage);
-			sqlAccess.Page_Create(recreatedPage);
-			sqlAccess.Page_Create(lastPage);
-			sqlAccess.Page_Delete(recreatedPage.Id);
-			sqlAccess.Page_Create(recreatedPage);
-			sqlAccess.Page_Delete(deletedPage.Id);
+			pageRepository.Create(deletedPage);
+			pageRepository.Create(recreatedPage);
+			pageRepository.Create(lastPage);
+			pageRepository.Delete(recreatedPage.Id);
+			pageRepository.Create(recreatedPage);
+			pageRepository.Delete(deletedPage.Id);
 			requestProcessor.ProcessGenerateInstallScriptRequest(context.Object);
 
 			// Reset data store and exercise startup file.
@@ -78,12 +78,12 @@ namespace DocMAH.IntegrationTests
 			dataStoreManager.TestFixtureDataStoreSetUp();
 
 			// Validate model ids.
-			var newFirstPage = sqlAccess.Page_ReadById(firstPage.Id);
-			var deletedPageResult= sqlAccess.Page_ReadById(deletedPage.Id);
+			var newFirstPage = pageRepository.Read(firstPage.Id);
+			var deletedPageResult= pageRepository.Read(deletedPage.Id);
 			Assert.That(deletedPageResult, Is.Null, "The data layer should return null for non-existant pages.");
 
-			var newRecreatedPage = sqlAccess.Page_ReadById(recreatedPage.Id);
-			var newLastPage = sqlAccess.Page_ReadById(lastPage.Id);
+			var newRecreatedPage = pageRepository.Read(recreatedPage.Id);
+			var newLastPage = pageRepository.Read(lastPage.Id);
 
 			Assert.That(newFirstPage, Is.Not.Null, "First page should still exist.");
 			Assert.That(newFirstPage.Title, Is.EqualTo(firstPage.Title), "Old first page title should match new page with its id.");
@@ -99,22 +99,19 @@ namespace DocMAH.IntegrationTests
 		public void B36_PageUrlsDeletedOnPageReorder()
 		{
 			// Arrange
-
-			// Mock data.
-			var sqlAccess = new SqlDataStore();
+			var pageRepository = new SqlPageRepository();
 
 			var childMatchUrl = "/Pages/Child";
 			var movedMatchUrl = "/Pages/Moved";
 
 			var models = new ModelFactory();
 			var parentPage = models.CreatePage();
-			sqlAccess.Page_Create(parentPage);
+			pageRepository.Create(parentPage);
 			var childPage = models.CreatePage(parentPageId: parentPage.Id, matchUrls: childMatchUrl);
-			sqlAccess.Page_Create(childPage);
+			pageRepository.Create(childPage);
 			var pageToMove = models.CreatePage(matchUrls: movedMatchUrl);
-			sqlAccess.Page_Create(pageToMove);
-
-			// Mock request.
+			pageRepository.Create(pageToMove);
+			
 			var moveRequestModel = new MoveTocRequest()
 			{
 				NewParentId = parentPage.Id,
@@ -134,8 +131,8 @@ namespace DocMAH.IntegrationTests
 			requestProcessor.ProcessMovePageRequest(httpContext.Object);
 
 			// Assert
-			var movedPage = sqlAccess.Page_ReadById(pageToMove.Id);
-			var existingChildPage = sqlAccess.Page_ReadById(childPage.Id);
+			var movedPage = pageRepository.Read(pageToMove.Id);
+			var existingChildPage = pageRepository.Read(childPage.Id);
 
 			Assert.That(existingChildPage.MatchUrls, Is.EqualTo(childMatchUrl), "The original child page's match URL should remain the same."); // This is the bug.
 			Assert.That(movedPage.MatchUrls, Is.EqualTo(movedMatchUrl), "The moved page's match URL should remain the same.");					// This should not change.
