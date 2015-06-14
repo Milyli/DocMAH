@@ -17,12 +17,6 @@ namespace DocMAH.Data
 {
 	public interface IDataStore
 	{
-		void Bullet_Create(Bullet bullet);
-		void Bullet_Delete(int id);
-		IEnumerable<Bullet> Bullet_ReadAll();
-		void Bullet_DeleteByPageId(int pageId);
-		List<Bullet> Bullet_ReadByPageId(int pageId);
-		void Bullet_Update(Bullet bullet);
 		int Configuration_Read(string name);
 		void Configuration_Update(string name, int value);
 

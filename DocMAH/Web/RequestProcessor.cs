@@ -21,15 +21,16 @@ namespace DocMAH.Web
 		#region Constructors
 
 		public RequestProcessor()
-			: this(new SqlDataStore(), new SqlConfigurationService())
+			: this(new SqlDataStore(), new SqlConfigurationService(), new SqlBulletRepository())
 		{
 
 		}
 
-		public RequestProcessor(IDataStore dataStore, IConfigurationService databaseConfiguration)
+		public RequestProcessor(IDataStore dataStore, IConfigurationService databaseConfiguration, IBulletRepository bulletRepository)
 		{
 			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
+			_bulletRepository = bulletRepository;
 		}
 
 		#endregion
@@ -41,6 +42,8 @@ namespace DocMAH.Web
 
 		private readonly IDataStore _dataStore;
 		private readonly IConfigurationService _databaseConfiguration;
+
+		private readonly IBulletRepository _bulletRepository;
 
 		#endregion
 
@@ -108,7 +111,7 @@ namespace DocMAH.Web
 				var pageIdString = ReadPostData(context);
 				var pageId = int.Parse(pageIdString);
 
-				_dataStore.Bullet_DeleteByPageId(pageId);
+				_bulletRepository.DeleteByPageId(pageId);
 
 				// Get the page so we have the parent id.
 				var page = _dataStore.Page_ReadById(pageId);
@@ -288,7 +291,7 @@ namespace DocMAH.Web
 
 					// Create insert or update statements for bullets.
 					var existingBulletIds = new List<int>();
-					foreach (var bullet in _dataStore.Bullet_ReadAll())
+					foreach (var bullet in _bulletRepository.ReadAll())
 					{
 						xmlWriter.WriteElementString(
 							XmlNodeNames.UpdateScriptElement,
@@ -381,7 +384,7 @@ namespace DocMAH.Web
 			var id = int.Parse(context.Request["id"]);
 
 			var page = _dataStore.Page_ReadById(id);
-			page.Bullets = _dataStore.Bullet_ReadByPageId(id);
+			page.Bullets = _bulletRepository.ReadByPageId(id);
 
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);
@@ -418,21 +421,21 @@ namespace DocMAH.Web
 
 					_dataStore.Page_Update(page);
 
-					var existingBullets = _dataStore.Bullet_ReadByPageId(page.Id);
+					var existingBullets = _bulletRepository.ReadByPageId(page.Id);
 					// Process incoming bullets. If they exist update, otherwise create.
 					page.Bullets.ForEach(bullet =>
 					{
 						bullet.PageId = page.Id;
 						if (existingBullets.Any(existing => existing.Id == bullet.Id))
-							_dataStore.Bullet_Update(bullet);
+							_bulletRepository.Update(bullet);
 						else
-							_dataStore.Bullet_Create(bullet);
+							_bulletRepository.Create(bullet);
 					});
 					// Delete any existing bullets not included with incoming bullets.
 					existingBullets.ForEach(existing =>
 					{
 						if (!page.Bullets.Any(bullet => bullet.Id == existing.Id))
-							_dataStore.Bullet_Delete(existing.Id);
+							_bulletRepository.Delete(existing.Id);
 					});
 				}
 				else // For new pages ...
@@ -449,7 +452,7 @@ namespace DocMAH.Web
 					page.Bullets.ForEach(bullet =>
 					{
 						bullet.PageId = page.Id;
-						_dataStore.Bullet_Create(bullet);
+						_bulletRepository.Create(bullet);
 					});
 
 				}

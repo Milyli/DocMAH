@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <Choose>
@@ -74,12 +75,14 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\DatabaseUpdaterUnitTests.cs" />
-    <Compile Include="Data\DatabaseConfigurationUnitTests.cs" />
-    <Compile Include="Data\SqlDataStoreUnitTests.cs" />
-    <Compile Include="Extensions\Int32ExtensionsUnitTests.cs" />
-    <Compile Include="Extensions\ListExtensionsUnitTests.cs" />
-    <Compile Include="Extensions\StringExtensionUnitTests.cs" />
+    <Compile Include="Data\DatabaseUpdaterTestFixture.cs" />
+    <Compile Include="Data\DatabaseConfigurationTestFixture.cs" />
+    <Compile Include="Data\Sql\BaseSqlRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlBulletRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlDataStoreTestFixture.cs" />
+    <Compile Include="Extensions\Int32ExtensionsTestFixture.cs" />
+    <Compile Include="Extensions\ListExtensionsTestFixture.cs" />
+    <Compile Include="Extensions\StringExtensionTestFixture.cs" />
     <Compile Include="ModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestFixtureDataStoreManager.cs" />

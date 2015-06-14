@@ -11,21 +11,13 @@ using System.Collections.Generic;
 using DocMAH.Models;
 using DocMAH.Data.Sql;
 
-namespace DocMAH.UnitTests.Data
+namespace DocMAH.UnitTests.Data.Sql
 {
 	[TestFixture]
-	public class SqlDataStoreUnitTests
+	public class SqlDataStoreTestFixture
 	{
 		#region Private Methods
-
-		private int CountBullets()
-		{
-			var bulletCount = 0;
-			foreach (var bullet in _database.Bullet_ReadAll())
-				bulletCount++;
-			return bulletCount;
-		}
-
+		
 		private int CountPages()
 		{
 			var pageCount = 0;
@@ -69,10 +61,6 @@ namespace DocMAH.UnitTests.Data
 		[TearDown]
 		public void TestCleanup()
 		{
-			// Remove test artifacts from database.
-			foreach (var bullet in _database.Bullet_ReadAll())
-				_database.Bullet_Delete(bullet.Id);
-
 			// Pages must be removed in reverse order because of self referencing foreign key.
 			var pages = new List<Page>();
 			foreach (var page in _database.Page_ReadAll())
@@ -87,80 +75,6 @@ namespace DocMAH.UnitTests.Data
 		#endregion
 
 		#region Tests
-
-		// I'm not normally a fan of testing multiple methods in a single test.
-		// However, in this case I would otherwise need to write a bunch of
-		// SQL just for the unit tests.
-		// 
-		// As I'm feeling lazy I'm not going to spend time on that right now.
-		//
-		// This does verify that the data access layer is internally
-		// consistent, which is good enough for the time being.
-		[Test]
-		[Description("Tests bullet create, read, update and delete methods.")]
-		public void Bullet_Crud()
-		{
-			var page = _models.CreatePage();
-			_database.Page_Create(page);
-
-			Assert.AreEqual(0, CountBullets(), "All tests should start with an empty database.");
-
-			var newBullet = _models.CreateBullet(page.Id);
-			Assert.AreEqual(0, newBullet.Id, "The bullet id should not be set until after data layer Bullet_Create method is called.");
-
-			_database.Bullet_Create(newBullet);
-			Assert.AreNotEqual(0, newBullet.Id, "The bullet id should bave been set by the data layer.");
-			Assert.AreEqual(1, CountBullets(), "One bullet should now exist in the database.");
-
-			var oldText = newBullet.Text;
-			newBullet.Text = "New Bullet Text.";
-			_database.Bullet_Update(newBullet);
-
-			var existingBullet = _database.Bullet_ReadByPageId(page.Id).FirstOrDefault();
-			Assert.IsNotNull(existingBullet, "The bullet should still exist in the database.");
-			Assert.AreNotEqual(oldText, existingBullet.Text, "The bullet's text should have been updated.");
-			Assert.AreEqual(newBullet.VerticalOffset, existingBullet.VerticalOffset, "The rest of the bullet instances' properties should be the same.");
-
-			_database.Bullet_Delete(existingBullet.Id);
-			Assert.AreEqual(0, CountBullets(), "No bullets should exist after the bullet is deleted.");
-		}
-
-		[Test]
-		[Description("Tests reading and deleting bullets by page id.")]
-		public void Bullet_CrudByPage()
-		{
-			// Arrange
-			var targetPage = _models.CreatePage();
-			_database.Page_Create(targetPage);
-			var noisePage = _models.CreatePage();
-			_database.Page_Create(noisePage);
-
-			var targetBullet1 = _models.CreateBullet(targetPage.Id);
-			_database.Bullet_Create(targetBullet1);
-			var targetBullet2 = _models.CreateBullet(targetPage.Id);
-			_database.Bullet_Create(targetBullet2);
-			var noiseBullet = _models.CreateBullet(noisePage.Id);
-			_database.Bullet_Create(noiseBullet);
-			
-			// Act
-			var existingTargetBullets = _database.Bullet_ReadByPageId(targetPage.Id);
-			_database.Bullet_DeleteByPageId(targetPage.Id);
-			var deletedTargetBullets = _database.Bullet_ReadByPageId(targetPage.Id);
-			var noiseBullets = _database.Bullet_ReadByPageId(noisePage.Id);			
-
-			// Assert
-			Assert.AreEqual(2, existingTargetBullets.Count(), "Two bullets should exist before they are deleted.");
-			Assert.IsNotNull(existingTargetBullets.Where(b => b.Id == targetBullet1.Id).FirstOrDefault(), "The first target bullet should be included in the bullets read.");
-			Assert.IsNotNull(existingTargetBullets.Where(b => b.Id == targetBullet2.Id).FirstOrDefault(), "The second target bullet should be included in the bullets read.");
-			Assert.AreEqual(0, deletedTargetBullets.Count(), "Zero bullets should exist after they are deleted.");
-			Assert.AreEqual(1, noiseBullets.Count(), "One noise bullet should still exist in the database.");
-			Assert.IsNotNull(noiseBullets.Where(b => b.Id == noiseBullet.Id).FirstOrDefault(), "The noise bullet should exist in the noise bullets read.");
-		}
-
-		public void CreateDataStore_Success()
-		{
-
-		}
 
 		// I'm not normally a fan of testing multiple methods in a single test.
 		// However, in this case I would otherwise need to write a bunch of

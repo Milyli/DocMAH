@@ -6,7 +6,7 @@ using DocMAH.Data;
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
-	public class DatabaseConfigurationUnitTests
+	public class DatabaseConfigurationTestFixture
 	{
 		#region Tests
 

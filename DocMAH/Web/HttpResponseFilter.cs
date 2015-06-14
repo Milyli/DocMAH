@@ -23,6 +23,7 @@ namespace DocMAH.Web
 		{
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
+			_bulletRepository = new SqlBulletRepository();
 		}
 
 		#endregion
@@ -32,6 +33,7 @@ namespace DocMAH.Web
 		private readonly Stream _stream;
 		private readonly StreamWriter _writer; // Stream writer to write to response on.
 		private string _unprocessedContent; // Content from previous write that could not be added.
+		private readonly IBulletRepository _bulletRepository;
 
 		#endregion
 
@@ -86,7 +88,7 @@ namespace DocMAH.Web
 
 			if (null != page)
 			{
-				page.Bullets = dataStore.Bullet_ReadByPageId(page.Id);
+				page.Bullets = _bulletRepository.ReadByPageId(page.Id);
 				if (HttpContext.Current.Request.IsAuthenticated)
 				{
 					var userName = HttpContext.Current.User.Identity.Name;

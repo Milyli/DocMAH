@@ -5,7 +5,7 @@ using DocMAH.Extensions;
 namespace DocMAH.UnitTests.Extensions
 {
 	[TestFixture]
-	public class Int32ExtensionsUnitTests
+	public class Int32ExtensionsTestFixture
 	{
 		#region Tests
 

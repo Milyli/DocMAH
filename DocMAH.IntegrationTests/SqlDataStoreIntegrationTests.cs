@@ -44,7 +44,7 @@ namespace DocMAH.IntegrationTests
 
 		[Test]
 		[Description("Verify that Page ids remain consistent across content updates spanning missing updates.")]
-		public void PageIdConsistencyAcrossOccasionalUpdates()
+		public void PageIdConsistencyAcrossSchemaUpdates()
 		{
 			// Create installation file.
 			var cachePolicy = new Mock<HttpCachePolicyBase>();
@@ -94,7 +94,8 @@ namespace DocMAH.IntegrationTests
 		}
 
 		[Test]
-		[Description("Recreates a bug where page urls are deleted when pages are reordered.")]
+		[Category("Bug Reproduction")]
+		[Description("Recreates bug where page URLs are deleted when pages are reordered.")]
 		public void B36_PageUrlsDeletedOnPageReorder()
 		{
 			// Arrange

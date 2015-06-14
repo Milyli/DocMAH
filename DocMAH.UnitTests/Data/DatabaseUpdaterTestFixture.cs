@@ -10,7 +10,7 @@ using DocMAH.Data.Sql;
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
-	public class DatabaseUpdaterUnitTests
+	public class DatabaseUpdaterTestFixture
 	{
 		#region Private Fields
 

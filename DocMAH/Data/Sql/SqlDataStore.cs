@@ -26,87 +26,30 @@ namespace DocMAH.Data.Sql
 			_updateScripts.Add(SqlDataStoreVersions.Database_01, SqlScripts.Database_Update_01);
 		}
 
+		public SqlDataStore()
+			: this(new SqlConnectionFactory())
+		{
+
+		}
+
+		public SqlDataStore(ISqlConnectionFactory connectionFactory)
+		{
+			_connectionFactory = connectionFactory;
+		}
+
 		#endregion
 
 		#region Private Fields
 
 		private static Dictionary<SqlDataStoreVersions, string> _updateScripts;
 
+		private readonly ISqlConnectionFactory _connectionFactory;
+
 		#endregion
 
 		#region Private Methods
 
-		private static void Bullet_AddParameters(Bullet bullet, SqlCommand command)
-		{
-			command.Parameters.AddRange(new SqlParameter[] {
-						new SqlParameter("@pageId", bullet.PageId),
-						new SqlParameter("@number", bullet.Number),
-						new SqlParameter("@text", bullet.Text),
-						new SqlParameter("@verticalOffset", bullet.VerticalOffset),
-						new SqlParameter("@horizontalOffset", bullet.HorizontalOffset),
-						new SqlParameter("@offsetElementId", bullet.OffsetElementId),
-						new SqlParameter("@docVerticalOffset", (object)bullet.DocVerticalOffset ?? DBNull.Value),
-						new SqlParameter("@docHorizontalOffset", (object)bullet.DocHorizontalOffset ?? DBNull.Value),
-					});
-		}
-
-		private static SqlConnection GetConnection(string initialCatalog = null)
-		{
-			string connectionString = Configurator.ConnectionString;
-			if (string.IsNullOrEmpty(connectionString))
-			{
-				string connectionStringName = DocmahConfigurationSection.Current.ConnectionStringName;
-				try
-				{
-					connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-				}
-				catch (NullReferenceException ex)
-				{
-					throw new InvalidOperationException("The DocMAH connection string has not been set. Set the connection string using either the docmah element connectionStringName attribute in web.config, or in DocMAHConfig.Configure and call Configure from Application_Start in Global.asax.", ex);
-				}
-			}
-
-			// Override configuration values based on parameters.
-			if (!string.IsNullOrEmpty(initialCatalog))
-			{
-				var builder = new SqlConnectionStringBuilder(connectionString);
-				builder.InitialCatalog = initialCatalog;
-				connectionString = builder.ToString();
-			}
-
-			return new SqlConnection(connectionString);
-		}
-
-		private static IEnumerable<Bullet> HydrateBullets(SqlDataReader reader)
-		{
-			var idOrdinal = reader.GetOrdinal("Id");
-			var pageIdOrdinal = reader.GetOrdinal("PageId");
-			var numberOrdinal = reader.GetOrdinal("Number");
-			var textOrdinal = reader.GetOrdinal("Text");
-			var verticalOffsetOrdinal = reader.GetOrdinal("VerticalOffset");
-			var horizontalOffsetOrdinal = reader.GetOrdinal("HorizontalOffset");
-			var offsetElementIdOrdinal = reader.GetOrdinal("OffsetElementId");
-			var docVerticalOffsetOrdinal = reader.GetOrdinal("DocVerticalOffset");
-			var docHorizontalOffsetOrdinal = reader.GetOrdinal("DocHorizontalOffset");
-
-			while (reader.Read())
-			{
-				yield return new Bullet
-				{
-					Id = reader.GetInt32(idOrdinal),
-					PageId = reader.GetInt32(pageIdOrdinal),
-					Number = reader.GetInt32(numberOrdinal),
-					Text = reader.GetString(textOrdinal),
-					VerticalOffset = reader.GetInt32(verticalOffsetOrdinal),
-					HorizontalOffset = reader.GetInt32(horizontalOffsetOrdinal),
-					OffsetElementId = reader.GetString(offsetElementIdOrdinal),
-					DocVerticalOffset = reader.IsDBNull(docVerticalOffsetOrdinal) ? (int?)null : reader.GetInt32(docVerticalOffsetOrdinal),
-					DocHorizontalOffset = reader.IsDBNull(docHorizontalOffsetOrdinal) ? (int?)null : reader.GetInt32(docHorizontalOffsetOrdinal),
-				};
-			}
-		}
-
-		private static IEnumerable<Page> HydratePages(SqlDataReader reader)
+		private IEnumerable<Page> HydratePages(SqlDataReader reader)
 		{
 			var idOrdinal = reader.GetOrdinal("Id");
 			var pageTypeIdOrdinal = reader.GetOrdinal("PageTypeId");
@@ -125,7 +68,7 @@ namespace DocMAH.Data.Sql
 
 			while (reader.Read())
 			{
-				var result =  new Page
+				var result = new Page
 				{
 					Id = reader.GetInt32(idOrdinal),
 					PageType = (PageTypes)reader.GetInt32(pageTypeIdOrdinal),
@@ -171,13 +114,13 @@ namespace DocMAH.Data.Sql
 			return result;
 		}
 
-		private static void MatchUrls_CreateByPageId(int pageId, string matchUrls)
+		private void MatchUrls_CreateByPageId(int pageId, string matchUrls)
 		{
 			if (!string.IsNullOrEmpty(matchUrls))
 			{
 				var pageUrls = matchUrls.Trim().Split(' ');
 
-				using (var connection = GetConnection())
+				using (var connection = _connectionFactory.GetConnection())
 				{
 					connection.Open();
 					foreach (var pageUrl in pageUrls)
@@ -196,9 +139,9 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		private static void MatchUrls_DeleteByPageId(int pageId)
+		private void MatchUrls_DeleteByPageId(int pageId)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -210,11 +153,11 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		private static string MatchUrls_ReadByPageId(int pageId)
+		private string MatchUrls_ReadByPageId(int pageId)
 		{
 			var result = new StringBuilder();
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -269,102 +212,9 @@ namespace DocMAH.Data.Sql
 
 		#region Public Methods
 
-		public void Bullet_Create(Bullet bullet)
-		{
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_Create;
-				Bullet_AddParameters(bullet, command);
-
-				connection.Open();
-				bullet.Id = (int)command.ExecuteScalar();
-			}
-		}
-
-		public void Bullet_Delete(int id)
-		{
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_Delete;
-				command.Parameters.Add(new SqlParameter("@id", id));
-
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public IEnumerable<Bullet> Bullet_ReadAll()
-		{
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_ReadAll;
-
-				connection.Open();
-				var reader = command.ExecuteReader();
-				foreach (var bullet in HydrateBullets(reader))
-					yield return bullet;
-			}
-		}
-
-		public void Bullet_DeleteByPageId(int pageId)
-		{
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_DeleteByPageId;
-				command.Parameters.Add(new SqlParameter("@pageId", pageId));
-
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-		}
-
-		public List<Bullet> Bullet_ReadByPageId(int pageId)
-		{
-			List<Bullet> result;
-
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_ReadByPageId;
-				command.Parameters.Add(new SqlParameter("@pageId", pageId));
-
-				connection.Open();
-				using (var reader = command.ExecuteReader())
-				{
-					result = new List<Bullet>(HydrateBullets(reader));
-				}
-			}
-
-			return result;
-		}
-
-		public void Bullet_Update(Bullet bullet)
-		{
-			using (var connection = GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Bullet_Update;
-				Bullet_AddParameters(bullet, command);
-				command.Parameters.Add(new SqlParameter("@id", bullet.Id));
-
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-		}
-
 		public int Configuration_Read(string name)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -378,7 +228,7 @@ namespace DocMAH.Data.Sql
 
 		public void Configuration_Update(string name, int value)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -392,10 +242,10 @@ namespace DocMAH.Data.Sql
 
 		public void DataStore_Create()
 		{
-			using (var connection = GetConnection(initialCatalog: "master"))
+			using (var connection = _connectionFactory.GetConnection(initialCatalog: "master"))
 			using (var command = connection.CreateCommand())
 			{
-				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
+				var builder = new SqlConnectionStringBuilder { ConnectionString = _connectionFactory.GetConnection().ConnectionString };
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Database_Create.Replace("CatalogName", builder.InitialCatalog);
 				connection.Open();
@@ -405,10 +255,10 @@ namespace DocMAH.Data.Sql
 
 		public void DataStore_Drop()
 		{
-			using (var connection = GetConnection(initialCatalog: "master"))
+			using (var connection = _connectionFactory.GetConnection(initialCatalog: "master"))
 			using (var command = connection.CreateCommand())
 			{
-				var builder = new SqlConnectionStringBuilder { ConnectionString = GetConnection().ConnectionString };
+				var builder = new SqlConnectionStringBuilder { ConnectionString = _connectionFactory.GetConnection().ConnectionString };
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Database_Drop.Replace("CatalogName", builder.InitialCatalog);
 				connection.Open();
@@ -421,11 +271,11 @@ namespace DocMAH.Data.Sql
 			var currentDataStoreVersion = Configuration_Read(SqlConfigurationService.DatabaseSchemaVersionKey);
 
 			var allDataStoreVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			{
 				foreach (SqlDataStoreVersions dataStoreVersion in allDataStoreVersions)
 				{
-					
+
 					if (currentDataStoreVersion < (int)dataStoreVersion)
 					{
 						using (var command = connection.CreateCommand())
@@ -442,7 +292,7 @@ namespace DocMAH.Data.Sql
 
 		public void Database_RunScript(string sql)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -454,7 +304,7 @@ namespace DocMAH.Data.Sql
 
 		public void Page_Create(Page page)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -472,7 +322,7 @@ namespace DocMAH.Data.Sql
 		{
 			MatchUrls_DeleteByPageId(id);
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -486,7 +336,7 @@ namespace DocMAH.Data.Sql
 
 		public IEnumerable<Page> Page_ReadAll()
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -505,7 +355,7 @@ namespace DocMAH.Data.Sql
 		{
 			Page result = null;
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -526,7 +376,7 @@ namespace DocMAH.Data.Sql
 		{
 			List<Page> result = null;
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -547,7 +397,7 @@ namespace DocMAH.Data.Sql
 		{
 			Page result = null;
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -568,7 +418,7 @@ namespace DocMAH.Data.Sql
 		{
 			var result = new List<Page>();
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -603,7 +453,7 @@ namespace DocMAH.Data.Sql
 
 		public void Page_Update(Page page)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			{
 				using (var command = connection.CreateCommand())
 				{
@@ -623,7 +473,7 @@ namespace DocMAH.Data.Sql
 
 		public void UserPageSettings_Create(UserPageSettings userPageSettings)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -639,7 +489,7 @@ namespace DocMAH.Data.Sql
 		{
 			UserPageSettings result = null;
 
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
@@ -661,7 +511,7 @@ namespace DocMAH.Data.Sql
 
 		public void UserPageSettings_Update(UserPageSettings userPageSettings)
 		{
-			using (var connection = GetConnection())
+			using (var connection = _connectionFactory.GetConnection())
 			using (var command = connection.CreateCommand())
 			{
 				command.CommandType = CommandType.Text;
