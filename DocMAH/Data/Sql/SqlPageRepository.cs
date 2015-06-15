@@ -134,7 +134,7 @@ namespace DocMAH.Data.Sql
 			return result.ToString().Trim().Replace('%', '*');
 		}
 
-		private static void Page_AddParameters(Page page, SqlCommand command)
+		private static void AddParameters(Page page, SqlCommand command)
 		{
 			command.Parameters.AddRange(new SqlParameter[] {
 				new SqlParameter("@pageTypeId", page.PageType),
@@ -164,7 +164,7 @@ namespace DocMAH.Data.Sql
 			{
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Page_Create;
-				Page_AddParameters(page, command);
+				AddParameters(page, command);
 
 				connection.Open();
 				page.Id = (int)command.ExecuteScalar();
@@ -314,7 +314,7 @@ namespace DocMAH.Data.Sql
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = SqlScripts.Page_Update;
-					Page_AddParameters(page, command);
+					AddParameters(page, command);
 					command.Parameters.Add(new SqlParameter("@id", page.Id));
 
 					connection.Open();

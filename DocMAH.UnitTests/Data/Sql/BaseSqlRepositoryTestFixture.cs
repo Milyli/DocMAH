@@ -26,6 +26,8 @@ namespace DocMAH.UnitTests.Data.Sql
 		protected SqlBulletRepository BulletRepository { get; set; }
 		protected SqlConfigurationRepository ConfigurationRepository { get; set; }
 		protected SqlPageRepository PageRepository { get; set; }
+		protected SqlUserPageSettingsRepository UserPageSettingsRepository { get; set; }
+
 
 		#endregion
 		
@@ -55,6 +57,7 @@ namespace DocMAH.UnitTests.Data.Sql
 			BulletRepository = new SqlBulletRepository();
 			ConfigurationRepository = new SqlConfigurationRepository();
 			PageRepository = new SqlPageRepository();
+			UserPageSettingsRepository = new SqlUserPageSettingsRepository();
 
 			_transactionScope = new TransactionScope();
 		}

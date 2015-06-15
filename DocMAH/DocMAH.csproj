@@ -62,6 +62,7 @@
     <Compile Include="Data\IConfigurationRepository.cs" />
     <Compile Include="Data\IContentFileManager.cs" />
     <Compile Include="Data\IPageRepository.cs" />
+    <Compile Include="Data\IUserPageSettingsRepository.cs" />
     <Compile Include="Data\Sql\BaseSqlRepository.cs" />
     <Compile Include="Data\Sql\SqlConfigurationRepository.cs" />
     <Compile Include="Data\Sql\SqlConnectionFactory.cs" />
@@ -77,6 +78,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SqlScripts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Data\Sql\SqlUserPageSettingsRepository.cs" />
     <Compile Include="Data\XmlNodeNames.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\Int32Extensions.cs" />

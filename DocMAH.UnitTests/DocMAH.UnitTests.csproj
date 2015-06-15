@@ -81,6 +81,7 @@
     <Compile Include="Data\Sql\SqlBulletRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlConfigurationRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlPageRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlUserPageSettingsRepositoryTestFixture.cs" />
     <Compile Include="Extensions\Int32ExtensionsTestFixture.cs" />
     <Compile Include="Extensions\ListExtensionsTestFixture.cs" />
     <Compile Include="Extensions\StringExtensionTestFixture.cs" />

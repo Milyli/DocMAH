@@ -25,6 +25,7 @@ namespace DocMAH.Web
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
 			_bulletRepository = new SqlBulletRepository();
 			_pageRepository = new SqlPageRepository();
+			_userPageSettingsRepository = new SqlUserPageSettingsRepository();
 		}
 
 		#endregion
@@ -36,6 +37,7 @@ namespace DocMAH.Web
 		private string _unprocessedContent; // Content from previous write that could not be added.
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IPageRepository _pageRepository;
+		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
 
@@ -84,7 +86,6 @@ namespace DocMAH.Web
 		private string FormatHtmlViewHelp()
 		{
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
-			var dataStore = new SqlDataStore();
 			var page = _pageRepository.ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
 
@@ -94,7 +95,7 @@ namespace DocMAH.Web
 				if (HttpContext.Current.Request.IsAuthenticated)
 				{
 					var userName = HttpContext.Current.User.Identity.Name;
-					userPageSettings = dataStore.UserPageSettings_ReadByUserAndPage(userName, page.Id);
+					userPageSettings = _userPageSettingsRepository.Read(userName, page.Id);
 				}
 			}
 

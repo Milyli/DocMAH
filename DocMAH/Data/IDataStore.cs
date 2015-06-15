@@ -29,7 +29,7 @@ namespace DocMAH.Data
 		void DataStore_Drop();
 
 		/// <summary>
-		/// Will be replaced with model specific data store calls when data file is updated.
+		/// This will be replaced with model specific data store calls when data file is updated.
 		/// This will likely be a breaking change.
 		/// </summary>
 		/// <param name="sql"></param>
@@ -40,9 +40,5 @@ namespace DocMAH.Data
 		/// </summary>
 		void DataStore_Update();
 
-
-		void UserPageSettings_Create(UserPageSettings userPageSettings);
-		UserPageSettings UserPageSettings_ReadByUserAndPage(string userName, int pageId);
-		void UserPageSettings_Update(UserPageSettings userPageSettings);
 	}
 }

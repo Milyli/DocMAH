@@ -52,37 +52,6 @@ namespace DocMAH.Data.Sql
 
 		#region Private Methods
 
-		private static List<UserPageSettings> HydrateUserPageSettings(SqlDataReader reader)
-		{
-			var idOrdinal = reader.GetOrdinal("Id");
-			var pageIdOrdinal = reader.GetOrdinal("PageId");
-			var hidePageOrdinal = reader.GetOrdinal("HidePage");
-			var userNameOrdinal = reader.GetOrdinal("UserName");
-
-			var result = new List<UserPageSettings>();
-
-			while (reader.Read())
-			{
-				result.Add(new UserPageSettings
-				{
-					Id = reader.GetInt32(idOrdinal),
-					PageId = reader.GetInt32(pageIdOrdinal),
-					HidePage = reader.GetBoolean(hidePageOrdinal),
-					UserName = reader.GetString(userNameOrdinal),
-				});
-			}
-
-			return result;
-		}
-
-		private static void UserPageSettings_AddParameters(UserPageSettings userPageSettings, SqlCommand command)
-		{
-			command.Parameters.AddRange(new SqlParameter[]{
-				new SqlParameter("@pageId", userPageSettings.PageId),
-				new SqlParameter("@hidePage", userPageSettings.HidePage),
-				new SqlParameter("@userName", userPageSettings.UserName),	
-			});
-		}
 
 		#endregion
 
@@ -146,60 +115,6 @@ namespace DocMAH.Data.Sql
 				command.CommandText = sql;
 				connection.Open();
 				command.ExecuteNonQuery();
-			}
-		}
-
-		public void UserPageSettings_Create(UserPageSettings userPageSettings)
-		{
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.UserPageSettings_Create;
-				UserPageSettings_AddParameters(userPageSettings, command);
-
-				connection.Open();
-				userPageSettings.Id = (int)command.ExecuteScalar();
-			}
-		}
-
-		public UserPageSettings UserPageSettings_ReadByUserAndPage(string userName, int pageId)
-		{
-			UserPageSettings result = null;
-
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.UserPageSettings_ReadByUserAndPage;
-				command.Parameters.AddRange(new SqlParameter[]{
-					new SqlParameter("@userName", userName),
-					new SqlParameter("@pageId", pageId)
-				});
-
-				connection.Open();
-				using (var reader = command.ExecuteReader())
-				{
-					result = HydrateUserPageSettings(reader).FirstOrDefault();
-				}
-			}
-
-			return result;
-		}
-
-		public void UserPageSettings_Update(UserPageSettings userPageSettings)
-		{
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.UserPageSettings_Update;
-				UserPageSettings_AddParameters(userPageSettings, command);
-				command.Parameters.Add(new SqlParameter("@id", userPageSettings.Id));
-
-				connection.Open();
-				command.ExecuteNonQuery();
-
 			}
 		}
 

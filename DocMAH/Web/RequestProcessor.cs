@@ -25,7 +25,8 @@ namespace DocMAH.Web
 				new SqlDataStore(), 
 				new ConfigurationService(), 
 				new SqlBulletRepository(),
-				new SqlPageRepository())
+				new SqlPageRepository(),
+				new SqlUserPageSettingsRepository())
 		{
 
 		}
@@ -34,7 +35,8 @@ namespace DocMAH.Web
 			IDataStore dataStore, 
 			IConfigurationService databaseConfiguration, 
 			IBulletRepository bulletRepository,
-			IPageRepository pageRepository)
+			IPageRepository pageRepository,
+			IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_dataStore = dataStore;
 			_configurationService = databaseConfiguration;
@@ -54,6 +56,7 @@ namespace DocMAH.Web
 
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IPageRepository _pageRepository;
+		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
 
@@ -487,17 +490,17 @@ namespace DocMAH.Web
 				var jsonSerializer = new JavaScriptSerializer();
 				var clientUserPageSettings = jsonSerializer.Deserialize<UserPageSettings>(jsonString);
 
-				var databaseUserPageSettings = _dataStore.UserPageSettings_ReadByUserAndPage(userName, clientUserPageSettings.PageId);
+				var databaseUserPageSettings = _userPageSettingsRepository.Read(userName, clientUserPageSettings.PageId);
 
 				if (null == databaseUserPageSettings)
 				{
 					clientUserPageSettings.UserName = userName;
-					_dataStore.UserPageSettings_Create(clientUserPageSettings);
+					_userPageSettingsRepository.Create(clientUserPageSettings);
 				}
 				else
 				{
 					databaseUserPageSettings.HidePage = clientUserPageSettings.HidePage;
-					_dataStore.UserPageSettings_Update(databaseUserPageSettings);
+					_userPageSettingsRepository.Update(databaseUserPageSettings);
 				}
 			}
 			WriteResponse(context, "text/html", "Success");

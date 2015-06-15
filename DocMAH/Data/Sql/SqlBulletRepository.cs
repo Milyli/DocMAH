@@ -25,7 +25,7 @@ namespace DocMAH.Data.Sql
 
 		#region Private Methods
 
-		private static void Bullet_AddParameters(Bullet bullet, SqlCommand command)
+		private static void AddParameters(Bullet bullet, SqlCommand command)
 		{
 			command.Parameters.AddRange(new SqlParameter[] {
 						new SqlParameter("@pageId", bullet.PageId),
@@ -79,7 +79,7 @@ namespace DocMAH.Data.Sql
 			{
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Bullet_Create;
-				Bullet_AddParameters(bullet, command);
+				AddParameters(bullet, command);
 
 				connection.Open();
 				bullet.Id = (int)command.ExecuteScalar();
@@ -157,7 +157,7 @@ namespace DocMAH.Data.Sql
 			{
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Bullet_Update;
-				Bullet_AddParameters(bullet, command);
+				AddParameters(bullet, command);
 				command.Parameters.Add(new SqlParameter("@id", bullet.Id));
 
 				connection.Open();
