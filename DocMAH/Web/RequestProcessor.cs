@@ -23,7 +23,7 @@ namespace DocMAH.Web
 		public RequestProcessor()
 			: this(
 				new SqlDataStore(), 
-				new SqlConfigurationService(), 
+				new ConfigurationService(), 
 				new SqlBulletRepository(),
 				new SqlPageRepository())
 		{
@@ -37,7 +37,7 @@ namespace DocMAH.Web
 			IPageRepository pageRepository)
 		{
 			_dataStore = dataStore;
-			_databaseConfiguration = databaseConfiguration;
+			_configurationService = databaseConfiguration;
 			_bulletRepository = bulletRepository;
 			_pageRepository = pageRepository;
 		}
@@ -50,7 +50,7 @@ namespace DocMAH.Web
 		private const string CssLinkFormat = "<link href='{0}' rel='stylesheet'/>";
 
 		private readonly IDataStore _dataStore;
-		private readonly IConfigurationService _databaseConfiguration;
+		private readonly IConfigurationService _configurationService;
 
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IPageRepository _pageRepository;
@@ -218,9 +218,9 @@ namespace DocMAH.Web
 				using (var xmlWriter = XmlWriter.Create(stream, settings))
 				{
 					xmlWriter.WriteStartElement(XmlNodeNames.UpdateScriptsElement);
-					xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _databaseConfiguration.DatabaseSchemaVersion.ToString());
+					xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _configurationService.DataStoreSchemaVersion.ToString());
 
-					var nextHelpVersion = _dataStore.Configuration_Read(SqlConfigurationService.DatabaseHelpVersionKey) + 1;
+					var nextHelpVersion = _configurationService.HelpContentVersion + 1;
 					xmlWriter.WriteAttributeString(XmlNodeNames.FileHelpVersionAttribute, nextHelpVersion.ToString());
 
 					var existingPageIds = new List<int>();
@@ -333,7 +333,7 @@ namespace DocMAH.Web
 					// Update help version
 					xmlWriter.WriteElementString(
 						XmlNodeNames.UpdateScriptElement,
-						string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, SqlConfigurationService.DatabaseHelpVersionKey, Environment.NewLine)
+						string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, ConfigurationService.HelpContentVersionKey, Environment.NewLine)
 					);
 
 					xmlWriter.Flush();

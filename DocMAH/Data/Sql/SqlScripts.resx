@@ -154,6 +154,9 @@
   <data name="Database_Update_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\database_update_01.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-16</value>
   </data>
+  <data name="Database_Update_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\database_update_02.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="PageUrl_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\pageurl_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

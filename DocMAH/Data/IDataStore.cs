@@ -17,9 +17,6 @@ namespace DocMAH.Data
 {
 	public interface IDataStore
 	{
-		int Configuration_Read(string name);
-		void Configuration_Update(string name, int value);
-
 		/// <summary>
 		/// Creates a new DocMAH data store if one does not exist.
 		/// </summary>
@@ -31,10 +28,19 @@ namespace DocMAH.Data
 		/// </summary>
 		void DataStore_Drop();
 
-		
-		//void DataStore_Update();
+		/// <summary>
+		/// Will be replaced with model specific data store calls when data file is updated.
+		/// This will likely be a breaking change.
+		/// </summary>
+		/// <param name="sql"></param>
 		void Database_RunScript(string sql);
-		void Database_Update();
+
+		/// <summary>
+		/// Updates the data store to the version used by this version of the DocMAH library.
+		/// </summary>
+		void DataStore_Update();
+
+
 		void UserPageSettings_Create(UserPageSettings userPageSettings);
 		UserPageSettings UserPageSettings_ReadByUserAndPage(string userName, int pageId);
 		void UserPageSettings_Update(UserPageSettings userPageSettings);

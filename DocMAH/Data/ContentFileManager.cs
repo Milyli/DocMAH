@@ -16,7 +16,7 @@ namespace DocMAH.Data
 		}
 
 		public ContentFileManager(HttpContextBase httpContext)
-			: this(httpContext, new SqlDataStore(), new SqlConfigurationService())
+			: this(httpContext, new SqlDataStore(), new ConfigurationService())
 		{
 		}
 
@@ -51,7 +51,7 @@ namespace DocMAH.Data
 			{
 				// TODO: Remove datastore update call from ContentFileManager. Move to Application Start
 				// Update data store as needed.
-				_dataStore.Database_Update();
+				_dataStore.DataStore_Update();
 
 				// Find help installation script. Read and execute it if it exists.
 				var versionChecks = false;
@@ -68,14 +68,14 @@ namespace DocMAH.Data
 								if (xmlReader.LocalName == XmlNodeNames.UpdateScriptsElement)
 								{
 									var fileSchemaVersion = int.Parse(xmlReader.GetAttribute(XmlNodeNames.FileSchemaVersionAttribute));
-									if (fileSchemaVersion > _databaseConfiguration.DatabaseSchemaVersion)
+									if (fileSchemaVersion > _databaseConfiguration.DataStoreSchemaVersion)
 										throw new InvalidOperationException(string.Format(
 											"Unable to update help content. Current database version is {0}. Help install script generated for schema version {1}.",
-											_databaseConfiguration.DatabaseSchemaVersion,
+											_databaseConfiguration.DataStoreSchemaVersion,
 											fileSchemaVersion));
 
 									var fileHelpVersion = int.Parse(xmlReader.GetAttribute(XmlNodeNames.FileHelpVersionAttribute));
-									if (fileHelpVersion <= _databaseConfiguration.DatabaseHelpVersion)
+									if (fileHelpVersion <= _databaseConfiguration.HelpContentVersion)
 									{
 										break;	// Database is already up to date.
 									}

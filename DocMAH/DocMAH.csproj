@@ -59,13 +59,15 @@
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
     <Compile Include="Data\IBulletRepository.cs" />
+    <Compile Include="Data\IConfigurationRepository.cs" />
     <Compile Include="Data\IContentFileManager.cs" />
     <Compile Include="Data\IPageRepository.cs" />
     <Compile Include="Data\Sql\BaseSqlRepository.cs" />
+    <Compile Include="Data\Sql\SqlConfigurationRepository.cs" />
     <Compile Include="Data\Sql\SqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\ISqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\SqlBulletRepository.cs" />
-    <Compile Include="Data\Sql\SqlConfigurationService.cs" />
+    <Compile Include="Data\ConfigurationService.cs" />
     <Compile Include="Data\ContentFileManager.cs" />
     <Compile Include="Data\IConfigurationService.cs" />
     <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
@@ -76,6 +78,7 @@
       <DependentUpon>SqlScripts.resx</DependentUpon>
     </Compile>
     <Compile Include="Data\XmlNodeNames.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -125,6 +128,7 @@
   <ItemGroup>
     <Content Include="Data\Sql\Scripts\Database_Create.sql" />
     <Content Include="Data\Sql\Scripts\Database_Drop.sql" />
+    <Content Include="Data\Sql\Scripts\Database_Update_02.sql" />
     <Content Include="Web\Css\Images\closedBook.png" />
     <Content Include="Web\Css\Images\closedBook.svg" />
     <Content Include="Web\Css\Images\document.png" />

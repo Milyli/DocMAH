@@ -76,9 +76,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Data\DatabaseUpdaterTestFixture.cs" />
-    <Compile Include="Data\DatabaseConfigurationTestFixture.cs" />
+    <Compile Include="Data\ConfigurationServiceTestFixture.cs" />
     <Compile Include="Data\Sql\BaseSqlRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlBulletRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlConfigurationRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlPageRepositoryTestFixture.cs" />
     <Compile Include="Extensions\Int32ExtensionsTestFixture.cs" />
     <Compile Include="Extensions\ListExtensionsTestFixture.cs" />

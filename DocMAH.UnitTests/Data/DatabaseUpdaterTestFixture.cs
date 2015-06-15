@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Moq;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
+using DocMAH.Extensions;
 
 namespace DocMAH.UnitTests.Data
 {
@@ -44,8 +45,7 @@ namespace DocMAH.UnitTests.Data
 		public void Update_HelpUpdateOnly()
 		{
 			// Arrange
-			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
-			var lastVersion = databaseVersions.Length;
+			var lastVersion = EnumExtensions.GetMaxValue<SqlDataStoreVersions, int>();
 
 			var updateScript = "Update Script";
 			using (var tempFile = File.Create(_installFileName))
@@ -63,12 +63,12 @@ namespace DocMAH.UnitTests.Data
 				tempFile.Close();
 			}
 
-			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
-			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion);
-			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
+			var configurationService = new Mock<IConfigurationService>(MockBehavior.Strict);
+			configurationService.SetupGet(c => c.DataStoreSchemaVersion).Returns(lastVersion);
+			configurationService.SetupGet(c => c.HelpContentVersion).Returns(0);
 
 			var dataStore = new Mock<IDataStore>(MockBehavior.Strict);
-			dataStore.Setup(d => d.Database_Update());
+			dataStore.Setup(d => d.DataStore_Update());
 			dataStore.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
@@ -76,13 +76,13 @@ namespace DocMAH.UnitTests.Data
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
 			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
 
-			var updater = new ContentFileManager(httpContext.Object, dataStore.Object, databaseConfiguration.Object);
+			var updater = new ContentFileManager(httpContext.Object, dataStore.Object, configurationService.Object);
 
 			// Act
 			updater.Update();
 
 			// Assert
-			databaseConfiguration.VerifyAll();
+			configurationService.VerifyAll();
 			dataStore.VerifyAll();
 		}
 
@@ -90,9 +90,8 @@ namespace DocMAH.UnitTests.Data
 		[Description("Tests that the help content is updated the first time update is called.")]
 		public void Update_FirstTime()
 		{
-			// Arrange			
-			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
-			var lastVersion = databaseVersions.Length;
+			// Arrange		
+			var lastVersion = EnumExtensions.GetMaxValue<SqlDataStoreVersions, int>();
 
 			var updateScript = "Update Script";
 			using (var tempFile = File.Create(_installFileName))
@@ -111,11 +110,11 @@ namespace DocMAH.UnitTests.Data
 			}
 
 			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
-			databaseConfiguration.SetupGet(c => c.DatabaseSchemaVersion).Returns(lastVersion);
-			databaseConfiguration.SetupGet(c => c.DatabaseHelpVersion).Returns(0);
+			databaseConfiguration.SetupGet(c => c.DataStoreSchemaVersion).Returns(lastVersion);
+			databaseConfiguration.SetupGet(c => c.HelpContentVersion).Returns(0);
 
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(a => a.Database_Update());
+			databaseAccess.Setup(a => a.DataStore_Update());
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
@@ -138,12 +137,10 @@ namespace DocMAH.UnitTests.Data
 		public void Update_SchemaOnly()
 		{
 			// Arrange
-			var databaseVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
-			var lastVersion = databaseVersions.Length;
 			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
 
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
-			databaseAccess.Setup(a => a.Database_Update());
+			databaseAccess.Setup(a => a.DataStore_Update());
 
 			var httpContext = new Mock<HttpContextBase>();
 			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);

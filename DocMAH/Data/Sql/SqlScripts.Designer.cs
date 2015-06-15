@@ -263,6 +263,17 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UPDATE DocmahConfiguration
+        ///SET [Name] = &apos;HelpContentVersion&apos;
+        ///WHERE [Name] = &apos;DatabaseHelpVersion&apos;.
+        /// </summary>
+        internal static string Database_Update_02 {
+            get {
+                return ResourceManager.GetString("Database_Update_02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Need to fake identity column so that Ids generated when writing documentation
         ///-- are used in production so that installation scripts can update help 
         ///-- without invalidating user settings.

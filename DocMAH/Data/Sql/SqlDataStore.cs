@@ -24,16 +24,18 @@ namespace DocMAH.Data.Sql
 		{
 			_updateScripts = new Dictionary<SqlDataStoreVersions, string>();
 			_updateScripts.Add(SqlDataStoreVersions.Database_01, SqlScripts.Database_Update_01);
+			_updateScripts.Add(SqlDataStoreVersions.Database_02, SqlScripts.Database_Update_02);
 		}
 
 		public SqlDataStore()
-			: this(new SqlConnectionFactory())
+			: this(new ConfigurationService(), new SqlConnectionFactory())
 		{
 
 		}
 
-		public SqlDataStore(ISqlConnectionFactory connectionFactory)
+		public SqlDataStore(IConfigurationService configurationService, ISqlConnectionFactory connectionFactory)
 		{
+			_configurationService = configurationService;
 			_connectionFactory = connectionFactory;
 		}
 
@@ -44,6 +46,7 @@ namespace DocMAH.Data.Sql
 		private static Dictionary<SqlDataStoreVersions, string> _updateScripts;
 
 		private readonly ISqlConnectionFactory _connectionFactory;
+		private readonly IConfigurationService _configurationService;
 
 		#endregion
 
@@ -85,34 +88,6 @@ namespace DocMAH.Data.Sql
 
 		#region Public Methods
 
-		public int Configuration_Read(string name)
-		{
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Configuration_Read;
-				command.Parameters.Add(new SqlParameter("@name", name));
-				connection.Open();
-				var result = command.ExecuteScalar();
-				return (int)result;
-			}
-		}
-
-		public void Configuration_Update(string name, int value)
-		{
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = SqlScripts.Configuration_Update;
-				command.Parameters.Add(new SqlParameter("@name", name));
-				command.Parameters.Add(new SqlParameter("@value", value));
-				connection.Open();
-				command.ExecuteNonQuery();
-			}
-		}
-
 		public void DataStore_Create()
 		{
 			using (var connection = _connectionFactory.GetConnection(initialCatalog: "master"))
@@ -139,23 +114,22 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		public void Database_Update()
+		public void DataStore_Update()
 		{
-			var currentDataStoreVersion = Configuration_Read(SqlConfigurationService.DatabaseSchemaVersionKey);
+			var currentDataStoreVersion = _configurationService.DataStoreSchemaVersion;
 
 			var allDataStoreVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			using (var connection = _connectionFactory.GetConnection())
 			{
+				connection.Open();
 				foreach (SqlDataStoreVersions dataStoreVersion in allDataStoreVersions)
 				{
-
 					if (currentDataStoreVersion < (int)dataStoreVersion)
 					{
 						using (var command = connection.CreateCommand())
 						{
 							command.CommandType = CommandType.Text;
 							command.CommandText = _updateScripts[dataStoreVersion];
-							connection.Open();
 							command.ExecuteNonQuery();
 						}
 					}

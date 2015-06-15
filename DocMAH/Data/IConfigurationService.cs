@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Data
 {
+	/// <summary>
+	/// Data store agnostic accessors of named configuration values residing in data store.
+	/// </summary>
 	public interface IConfigurationService
 	{
-		int DatabaseHelpVersion { get; set; }
-		int DatabaseSchemaVersion { get; set; }
+		int HelpContentVersion { get; set; }
+		int DataStoreSchemaVersion { get; set; }
 	}
 }
