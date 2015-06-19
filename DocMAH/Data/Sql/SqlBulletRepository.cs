@@ -12,10 +12,6 @@ namespace DocMAH.Data.Sql
 	{
 		#region Constructors
 
-		public SqlBulletRepository()
-		{
-		}
-
 		public SqlBulletRepository(ISqlConnectionFactory sqlConnectionFactory)
 			: base(sqlConnectionFactory)
 		{

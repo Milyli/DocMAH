@@ -6,12 +6,6 @@ namespace DocMAH.Data
 	{
 		#region Constructors
 
-		public ConfigurationService()
-			: this(new SqlConfigurationRepository())
-		{
-
-		}
-
 		public ConfigurationService(IConfigurationRepository configurationRepository)
 		{
 			_configurationRepository = configurationRepository;

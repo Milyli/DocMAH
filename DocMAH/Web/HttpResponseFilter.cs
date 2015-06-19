@@ -12,6 +12,7 @@ using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Models;
 using DocMAH.Properties;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web
 {
@@ -19,13 +20,16 @@ namespace DocMAH.Web
 	{
 		#region Constructors
 
-		public HttpResponseFilter(Stream stream)
+		public HttpResponseFilter(Stream stream, IBulletRepository bulletRepository, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
-			_bulletRepository = new SqlBulletRepository();
-			_pageRepository = new SqlPageRepository();
-			_userPageSettingsRepository = new SqlUserPageSettingsRepository();
+
+			_editAuthorizer = new EditAuthorizer();
+
+			_bulletRepository = bulletRepository;
+			_pageRepository = pageRepository;
+			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
 		#endregion
@@ -35,6 +39,9 @@ namespace DocMAH.Web
 		private readonly Stream _stream;
 		private readonly StreamWriter _writer; // Stream writer to write to response on.
 		private string _unprocessedContent; // Content from previous write that could not be added.
+
+		private readonly IEditAuthorizer _editAuthorizer;
+
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IPageRepository _pageRepository;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
@@ -53,8 +60,6 @@ namespace DocMAH.Web
 			// TODO: break out documentation link script and only write first time view script if page is present or user can edit.
 			if (!string.IsNullOrEmpty(content))
 			{
-				var access = new Access(new HttpContextWrapper(HttpContext.Current));
-
 				// Look for complete beginning of head tag.
 				// Inject CSS links after opening head tag so that styles may be overridden by site specific CSS.
 				// Inject edit links instead of providing them programmatically so that the URLs are not exposed to users without permission.
@@ -73,7 +78,7 @@ namespace DocMAH.Web
 				{
 					_writer.Write(content.Remove(endBodyIndex));
 					_writer.Write(FormatHtmlViewHelp());
-					if (access.CanEdit)
+					if (_editAuthorizer.Authorize())
 					{
 						_writer.Write(ResourcesExtensions.Minify(Resources.Html_FirstTimeEdit, Resources.Html_FirstTimeEdit_min));
 					}
@@ -126,8 +131,7 @@ namespace DocMAH.Web
 			var userPageSettingsJson = serializer.Serialize(userPageSettings);
 			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
-			var access = new Access(new HttpContextWrapper(HttpContext.Current));
-			var applicationSettings = new ApplicationSettings { CanEdit = access.CanEdit };
+			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize() };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
 			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
 

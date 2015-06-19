@@ -27,12 +27,6 @@ namespace DocMAH.Data.Sql
 			_updateScripts.Add(SqlDataStoreVersions.Database_02, SqlScripts.Database_Update_02);
 		}
 
-		public SqlDataStore()
-			: this(new ConfigurationService(), new SqlConnectionFactory())
-		{
-
-		}
-
 		public SqlDataStore(IConfigurationService configurationService, ISqlConnectionFactory connectionFactory)
 		{
 			_configurationService = configurationService;

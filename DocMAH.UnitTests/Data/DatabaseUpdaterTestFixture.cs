@@ -72,14 +72,14 @@ namespace DocMAH.UnitTests.Data
 			dataStore.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
-			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
+			httpContext.SetupSet(c => c.Application[HelpContentManager.DocmahInitializedKey] = true);
 
-			var updater = new ContentFileManager(httpContext.Object, dataStore.Object, configurationService.Object);
+			var updater = new HelpContentManager(httpContext.Object, dataStore.Object, configurationService.Object);
 
 			// Act
-			updater.Update();
+			updater.UpdateDataStoreContent();
 
 			// Assert
 			configurationService.VerifyAll();
@@ -118,14 +118,14 @@ namespace DocMAH.UnitTests.Data
 			databaseAccess.Setup(a => a.Database_RunScript(updateScript));
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
-			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
+			httpContext.SetupSet(c => c.Application[HelpContentManager.DocmahInitializedKey] = true);
 
-			var updater = new ContentFileManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
+			var updater = new HelpContentManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
 			// Act
-			updater.Update();
+			updater.UpdateDataStoreContent();
 
 			// Assert
 			databaseConfiguration.VerifyAll();
@@ -143,14 +143,14 @@ namespace DocMAH.UnitTests.Data
 			databaseAccess.Setup(a => a.DataStore_Update());
 
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(null);
+			httpContext.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(null);
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
-			httpContext.SetupSet(c => c.Application[ContentFileManager.DocmahInitializedKey] = true);
+			httpContext.SetupSet(c => c.Application[HelpContentManager.DocmahInitializedKey] = true);
 
-			var updater = new ContentFileManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
+			var updater = new HelpContentManager(httpContext.Object, databaseAccess.Object, databaseConfiguration.Object);
 
 			// Act
-			updater.Update();
+			updater.UpdateDataStoreContent();
 
 			// Assert
 			databaseConfiguration.VerifyAll();
@@ -166,12 +166,12 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var httpContext = new Mock<HttpContextBase>();
-			httpContext.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(true);
+			httpContext.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(true);
 
-			var updater = new ContentFileManager(httpContext.Object, null, null);
+			var updater = new HelpContentManager(httpContext.Object, null, null);
 
 			// Act
-			updater.Update();
+			updater.UpdateDataStoreContent();
 
 			// Assert
 			// Should not access other dependencies. If the code does so, a null reference exception will be thrown.

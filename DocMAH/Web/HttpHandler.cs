@@ -12,6 +12,9 @@ using DocMAH.Models;
 using DocMAH.Properties;
 using DocMAH.Extensions;
 using DocMAH.Data;
+using DocMAH.Web.Requests;
+using DocMAH.Web.Authorization;
+using DocMAH.Dependencies;
 
 namespace DocMAH.Web
 {
@@ -19,21 +22,63 @@ namespace DocMAH.Web
 	{
 		#region Constructors
 
+		/// <summary>
+		/// Runtime constructor.
+		/// The handler is instantiated by the framework so I can't change this.
+		/// </summary>
 		public HttpHandler()
-			: this(new RequestProcessor())
 		{
+			var container = (IContainer)HttpContext.Current.Items[HttpModule.ContextKey];
+			_editAuthorizer = container.CreateInstance<IEditAuthorizer>();
+			_requestProcessorFactory = container.CreateInstance<IRequestProcessorFactory>();
 		}
 
-		public HttpHandler(IRequestProcessor requestProcessor)
+		/// <summary>
+		/// Test constructor.
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="editAuthorizer"></param>
+		/// <param name="requestProcessorFactory"></param>
+		public HttpHandler(IEditAuthorizer editAuthorizer, IRequestProcessorFactory requestProcessorFactory)
 		{
-			_requestProcessor = requestProcessor;
+			_editAuthorizer = editAuthorizer;
+			_requestProcessorFactory = requestProcessorFactory;
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private IRequestProcessor _requestProcessor;
+		private readonly IRequestProcessorFactory _requestProcessorFactory;
+		private readonly IEditAuthorizer _editAuthorizer;
+
+		#endregion
+
+		#region Private Methods
+
+		private static string ReadPostData(HttpContextBase context)
+		{
+			var result = string.Empty;
+			using (var reader = new StreamReader(context.Request.InputStream))
+			{
+				result = reader.ReadToEnd();
+			}
+			return result;
+		}
+
+		private static void WriteResponse(HttpContextBase context, ResponseState responseState)
+		{
+			context.Response.Cache.SetNoStore();
+			context.Response.ContentType = responseState.ContentType;
+			context.Response.StatusCode = (int)responseState.StatusCode;
+			if (!string.IsNullOrEmpty(responseState.Disposition))
+				context.Response.AddHeader("Content-Disposition", responseState.Disposition);
+			context.Response.Cache.SetNoStore();
+			context.Response.Write(responseState.Content);
+			context.Response.Flush();
+			context.Response.End();
+		}
+
 
 		#endregion
 
@@ -46,36 +91,29 @@ namespace DocMAH.Web
 
 		public void ProcessRequest(HttpContext context)
 		{
-			var requestProcessor = new RequestProcessor();
 			var wrapper = new HttpContextWrapper(context);
+			ProcessWrappedRequest(wrapper);
+		}
 
+		public void ProcessWrappedRequest(HttpContextBase context)
+		{
+			// Read post data or request parameters
+			var data = ReadPostData(context);
+			if (string.IsNullOrEmpty(data))
+				data = context.Request["id"];
+
+			// Get the processor for the request and check authorization.
 			var method = context.Request["m"];
-			if (method == "DeletePage")
-				requestProcessor.ProcessDeletePageRequest(wrapper);
-			else if (method == "CSS")
-				requestProcessor.ProcessCssRequest(wrapper);
-				else if (method=="DocumentationPage")
-				requestProcessor.ProcessDocumentationPageRequest(wrapper);
-			else if (method=="GenerateInstallScript")
-				requestProcessor.ProcessGenerateInstallScriptRequest(wrapper);
-			else if (method=="JavaScript")
-				requestProcessor.ProcessJavaScriptRequest(wrapper);
-			else if (method=="MovePage")
-				requestProcessor.ProcessMovePageRequest(wrapper);
-			else if (method=="NotFound")
-				requestProcessor.ProcessNotFound(wrapper);
-			else if (method=="ReadApplicationSettings")
-				requestProcessor.ProcessReadApplicationSettingsRequest(wrapper);
-			else if (method=="ReadPage")
-				requestProcessor.ProcessReadPageRequest(wrapper);
-			else if (method=="ReadTableOfContents")
-				requestProcessor.ProcessReadTableOfContentsRequest(wrapper);
-			else if (method=="SavePage")
-				requestProcessor.ProcessSaveHelpRequest(wrapper);
-			else if (method=="SaveUserPageSettings")
-				requestProcessor.ProcessSaveUserPageSettingsRequest(wrapper);
-			else
-				requestProcessor.ProcessNotFound(wrapper);
+			var requestProcessor = _requestProcessorFactory.Create(method);
+			if (requestProcessor.RequiresEditAuthorization && !_editAuthorizer.Authorize())
+			{
+				// If authorization fails, replace the processor with the unauthorized processor.
+				requestProcessor = _requestProcessorFactory.Create(RequestTypes.Unauthorized);
+			}
+
+			// Process the request and return the response.
+			var response = requestProcessor.Process(data);
+			WriteResponse(context, response);
 		}
 
 		#endregion

@@ -9,6 +9,15 @@ namespace DocMAH.Data.Sql
 {
 	public class SqlConfigurationRepository : BaseSqlRepository, IConfigurationRepository
 	{
+		#region Constructors
+
+		public SqlConfigurationRepository(ISqlConnectionFactory sqlConnectionFactory)
+			: base(sqlConnectionFactory)
+		{
+		}
+
+		#endregion
+
 		#region Public Methods
 		
 		public int Read(string name)

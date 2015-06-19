@@ -12,11 +12,6 @@ namespace DocMAH.Data.Sql
 	{
 		#region Constructors
 		
-		public SqlUserPageSettingsRepository()
-		{
-
-		}
-
 		public SqlUserPageSettingsRepository(ISqlConnectionFactory sqlConnectionFactory)
 			: base(sqlConnectionFactory)
 		{

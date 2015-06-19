@@ -48,13 +48,13 @@ namespace DocMAH.IntegrationTests
 		{
 			// Create installation file.
 			var cachePolicy = new Mock<HttpCachePolicyBase>();
-			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application[ContentFileManager.DocmahInitializedKey]).Returns(false);
-			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
-			context.SetupGet(c => c.Response.Cache).Returns(cachePolicy.Object);
+			var httpContext = new Mock<HttpContextBase>();
+			httpContext.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(false);
+			httpContext.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
+			httpContext.SetupGet(c => c.Response.Cache).Returns(cachePolicy.Object);
 
 			var pageRepository = new SqlPageRepository();
-			var requestProcessor = new RequestProcessor();
+			var handler = new HttpHandler();
 
 			var models = new ModelFactory();
 			var firstPage = models.CreatePage();
@@ -63,14 +63,14 @@ namespace DocMAH.IntegrationTests
 			var lastPage = models.CreatePage();
 
 			pageRepository.Create(firstPage);
-			requestProcessor.ProcessGenerateInstallScriptRequest(context.Object);
+			handler.ProcessWrappedRequest(httpContext.Object);
 			pageRepository.Create(deletedPage);
 			pageRepository.Create(recreatedPage);
 			pageRepository.Create(lastPage);
 			pageRepository.Delete(recreatedPage.Id);
 			pageRepository.Create(recreatedPage);
 			pageRepository.Delete(deletedPage.Id);
-			requestProcessor.ProcessGenerateInstallScriptRequest(context.Object);
+			handler.ProcessWrappedRequest(httpContext.Object);
 
 			// Reset data store and exercise startup file.
 			var dataStoreManager = new TestFixtureDataStoreManager();
@@ -125,10 +125,10 @@ namespace DocMAH.IntegrationTests
 			var httpContext = new Mock<HttpContextBase>();
 			httpContext.SetupGet(c => c.Request.InputStream).Returns(moveRequestStream);
 
-			var requestProcessor = new RequestProcessor();
+			var handler = new HttpHandler();
 
 			// Act
-			requestProcessor.ProcessMovePageRequest(httpContext.Object);
+			handler.ProcessWrappedRequest(httpContext.Object);
 
 			// Assert
 			var movedPage = pageRepository.Read(pageToMove.Id);

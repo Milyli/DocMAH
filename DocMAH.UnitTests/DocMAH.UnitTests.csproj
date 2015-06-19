@@ -82,11 +82,27 @@
     <Compile Include="Data\Sql\SqlConfigurationRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlPageRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlUserPageSettingsRepositoryTestFixture.cs" />
+    <Compile Include="Dependencies\ContainerTestFixture.cs" />
     <Compile Include="Extensions\Int32ExtensionsTestFixture.cs" />
     <Compile Include="Extensions\ListExtensionsTestFixture.cs" />
     <Compile Include="Extensions\StringExtensionTestFixture.cs" />
     <Compile Include="ModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\HttpHandlerTestFixture.cs" />
+    <Compile Include="Web\HttpModuleTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\CssRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\DeletePageRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\DocumentationPageRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\GenerateInstallScriptRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\JavaScriptRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\NotFoundRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\ReadApplicationSettingsRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\ReadPageRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\ReadTableOfContentsRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\SaveHelpRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\SaveUserPageSettingsRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\UnauthorizedRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\RequestProcessorFactoryTestFixture.cs" />
     <Compile Include="TestFixtureDataStoreManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +115,7 @@
       <Name>DocMAH</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -8,8 +8,11 @@ using System.Web;
 
 namespace DocMAH.Data
 {
-	public interface IContentFileManager
+	/// <summary>
+	/// Manages the help content file.
+	/// </summary>
+	public interface IHelpContentManager
 	{
-		void Update();
+		void UpdateDataStoreContent();
 	}
 }

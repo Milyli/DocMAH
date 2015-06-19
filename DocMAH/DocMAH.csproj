@@ -58,9 +58,10 @@
     <Compile Include="Configuration\DocumentationElement.cs" />
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
+    <Compile Include="Dependencies\Container.cs" />
     <Compile Include="Data\IBulletRepository.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
-    <Compile Include="Data\IContentFileManager.cs" />
+    <Compile Include="Data\IHelpContentManager.cs" />
     <Compile Include="Data\IPageRepository.cs" />
     <Compile Include="Data\IUserPageSettingsRepository.cs" />
     <Compile Include="Data\Sql\BaseSqlRepository.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Data\Sql\ISqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\SqlBulletRepository.cs" />
     <Compile Include="Data\ConfigurationService.cs" />
-    <Compile Include="Data\ContentFileManager.cs" />
+    <Compile Include="Data\HelpContentManager.cs" />
     <Compile Include="Data\IConfigurationService.cs" />
     <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
     <Compile Include="Data\Sql\SqlPageRepository.cs" />
@@ -80,6 +81,8 @@
     </Compile>
     <Compile Include="Data\Sql\SqlUserPageSettingsRepository.cs" />
     <Compile Include="Data\XmlNodeNames.cs" />
+    <Compile Include="Dependencies\IContainer.cs" />
+    <Compile Include="Dependencies\Registrar.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -89,10 +92,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Web\Authorization\EditAuthorizer.cs" />
+    <Compile Include="Web\Authorization\IEditAuthorizer.cs" />
     <Compile Include="Web\HttpModule.cs" />
     <Compile Include="Web\HttpResponseFilter.cs" />
     <Compile Include="Web\HttpHandler.cs" />
-    <Compile Include="Access.cs" />
     <Compile Include="Data\IDataStore.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\Bullet.cs" />
@@ -104,8 +108,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ResourcesExtensions.cs" />
     <Compile Include="Data\Sql\SqlDataStore.cs" />
-    <Compile Include="Web\IRequestProcessor.cs" />
-    <Compile Include="Web\RequestProcessor.cs" />
+    <Compile Include="Web\Requests\LinkFormats.cs" />
+    <Compile Include="Web\Requests\Processors\CssRequestProcessor.cs" />
+    <Compile Include="Web\Requests\IRequestProcessor.cs" />
+    <Compile Include="Web\Requests\IRequestProcessorFactory.cs" />
+    <Compile Include="Web\Requests\Processors\DeletePageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\DocumentationPageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\GenerateInstallScriptRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\JavaScriptRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\MovePageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\NotFoundRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\ReadApplicationSettingsRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\ReadPageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\ReadTableOfContentsRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\SaveHelpRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\SaveUserPageSettingsRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\UnauthorizedRequestProcessor.cs" />
+    <Compile Include="Web\Requests\RequestProcessorFactory.cs" />
+    <Compile Include="Web\Requests\RequestTypes.cs" />
+    <Compile Include="Web\Requests\ContentTypes.cs" />
+    <Compile Include="Web\Requests\ResponseState.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Sql\SqlScripts.resx">

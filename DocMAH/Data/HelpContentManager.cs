@@ -6,21 +6,11 @@ using DocMAH.Data.Sql;
 
 namespace DocMAH.Data
 {
-	public class ContentFileManager : IContentFileManager
+	public class HelpContentManager : IHelpContentManager
 	{
 		#region Constructors
 
-		public ContentFileManager()
-			: this(new HttpContextWrapper(HttpContext.Current))
-		{
-		}
-
-		public ContentFileManager(HttpContextBase httpContext)
-			: this(httpContext, new SqlDataStore(), new ConfigurationService())
-		{
-		}
-
-		public ContentFileManager(HttpContextBase httpContext, IDataStore dataStore, IConfigurationService databaseConfiguration)
+		public HelpContentManager(HttpContextBase httpContext, IDataStore dataStore, IConfigurationService databaseConfiguration)
 		{
 			_dataStore = dataStore;
 			_databaseConfiguration = databaseConfiguration;
@@ -45,7 +35,7 @@ namespace DocMAH.Data
 
 		#region Public Methods
 
-		public void Update()
+		public void UpdateDataStoreContent()
 		{
 			if (!(bool)(_httpContext.Application[DocmahInitializedKey] ?? false))
 			{
