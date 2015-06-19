@@ -13,12 +13,6 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public SaveHelpRequestProcessor()
-			: this(new SqlBulletRepository(), new SqlPageRepository())
-		{
-
-		}
-
 		public SaveHelpRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository)
 		{
 			_bulletRepository = bulletRepository;

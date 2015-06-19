@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using DocMAH.Data;
 using DocMAH.Data.Sql;
 using NUnit.Framework;
 
@@ -51,13 +52,18 @@ namespace DocMAH.UnitTests.Data.Sql
 		[SetUp]
 		public virtual void SetUp()
 		{
-			DataStore = new SqlDataStore();
+
 			Models = new ModelFactory();
 
-			BulletRepository = new SqlBulletRepository();
-			ConfigurationRepository = new SqlConfigurationRepository();
-			PageRepository = new SqlPageRepository();
-			UserPageSettingsRepository = new SqlUserPageSettingsRepository();
+			var connectionFactory = new SqlConnectionFactory();
+			BulletRepository = new SqlBulletRepository(connectionFactory);
+			ConfigurationRepository = new SqlConfigurationRepository(connectionFactory);
+			PageRepository = new SqlPageRepository(connectionFactory);
+			UserPageSettingsRepository = new SqlUserPageSettingsRepository(connectionFactory);
+
+			var configurationService = new ConfigurationService(ConfigurationRepository);
+
+			DataStore = new SqlDataStore(configurationService, connectionFactory);
 
 			_transactionScope = new TransactionScope();
 		}

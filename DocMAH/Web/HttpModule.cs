@@ -64,10 +64,10 @@ namespace DocMAH.Web
 		{
 			_container = Registrar.Initialize();
 
-			_dataStore = _container.CreateInstance<IDataStore>();
+			_dataStore = _container.ResolveInstance<IDataStore>();
 			_dataStore.DataStore_Update();
 
-			_helpContentManager = _container.CreateInstance<IHelpContentManager>();
+			_helpContentManager = _container.ResolveInstance<IHelpContentManager>();
 			_helpContentManager.UpdateDataStoreContent();
 
 			application.PreSendRequestHeaders += AttachFilterEventHandler;
@@ -89,9 +89,9 @@ namespace DocMAH.Web
 				if (response.ContentType == "text/html")
 					response.Filter = new HttpResponseFilter(
 						response.Filter, 
-						_container.CreateInstance<IBulletRepository>(), 
-						_container.CreateInstance<IPageRepository>(), 
-						_container.CreateInstance<IUserPageSettingsRepository>());
+						_container.ResolveInstance<IBulletRepository>(), 
+						_container.ResolveInstance<IPageRepository>(), 
+						_container.ResolveInstance<IUserPageSettingsRepository>());
 				context.Items.Add(ContextKey, _container);
 			}
 		}

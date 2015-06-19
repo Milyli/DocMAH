@@ -13,12 +13,6 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public ReadTableOfContentsRequestProcessor()
-			: this(new EditAuthorizer(), new SqlPageRepository())
-		{
-
-		}
-
 		public ReadTableOfContentsRequestProcessor(IEditAuthorizer editAuthorizer, IPageRepository pageRepository)
 		{
 			_editAuthorizer = editAuthorizer;

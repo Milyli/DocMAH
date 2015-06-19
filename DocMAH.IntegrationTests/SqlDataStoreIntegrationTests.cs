@@ -53,7 +53,8 @@ namespace DocMAH.IntegrationTests
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			httpContext.SetupGet(c => c.Response.Cache).Returns(cachePolicy.Object);
 
-			var pageRepository = new SqlPageRepository();
+			var connectionFactory = new SqlConnectionFactory();
+			var pageRepository = new SqlPageRepository(connectionFactory);
 			var handler = new HttpHandler();
 
 			var models = new ModelFactory();
@@ -99,7 +100,8 @@ namespace DocMAH.IntegrationTests
 		public void B36_PageUrlsDeletedOnPageReorder()
 		{
 			// Arrange
-			var pageRepository = new SqlPageRepository();
+			var connectionFactory = new SqlConnectionFactory();
+			var pageRepository = new SqlPageRepository(connectionFactory);
 
 			var childMatchUrl = "/Pages/Child";
 			var movedMatchUrl = "/Pages/Moved";

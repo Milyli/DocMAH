@@ -10,10 +10,10 @@ namespace DocMAH.Data
 	{
 		#region Constructors
 
-		public HelpContentManager(HttpContextBase httpContext, IDataStore dataStore, IConfigurationService databaseConfiguration)
+		public HelpContentManager(HttpContextBase httpContext, IDataStore dataStore, IConfigurationService configurationService)
 		{
 			_dataStore = dataStore;
-			_databaseConfiguration = databaseConfiguration;
+			_configurationService = configurationService;
 			_httpContext = httpContext;
 		}
 
@@ -27,9 +27,9 @@ namespace DocMAH.Data
 
 		#region Private Fields
 
-		private IDataStore _dataStore;
-		private IConfigurationService _databaseConfiguration; 
-		private HttpContextBase _httpContext;
+		private readonly IDataStore _dataStore;
+		private readonly IConfigurationService _configurationService; 
+		private readonly HttpContextBase _httpContext;
 
 		#endregion
 
@@ -58,14 +58,14 @@ namespace DocMAH.Data
 								if (xmlReader.LocalName == XmlNodeNames.UpdateScriptsElement)
 								{
 									var fileSchemaVersion = int.Parse(xmlReader.GetAttribute(XmlNodeNames.FileSchemaVersionAttribute));
-									if (fileSchemaVersion > _databaseConfiguration.DataStoreSchemaVersion)
+									if (fileSchemaVersion > _configurationService.DataStoreSchemaVersion)
 										throw new InvalidOperationException(string.Format(
 											"Unable to update help content. Current database version is {0}. Help install script generated for schema version {1}.",
-											_databaseConfiguration.DataStoreSchemaVersion,
+											_configurationService.DataStoreSchemaVersion,
 											fileSchemaVersion));
 
 									var fileHelpVersion = int.Parse(xmlReader.GetAttribute(XmlNodeNames.FileHelpVersionAttribute));
-									if (fileHelpVersion <= _databaseConfiguration.HelpContentVersion)
+									if (fileHelpVersion <= _configurationService.HelpContentVersion)
 									{
 										break;	// Database is already up to date.
 									}

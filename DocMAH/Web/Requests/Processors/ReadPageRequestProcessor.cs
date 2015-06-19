@@ -12,12 +12,6 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public ReadPageRequestProcessor()
-			: this(new SqlBulletRepository(), new SqlPageRepository())
-		{
-
-		}
-
 		public ReadPageRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository)
 		{
 			_bulletRepository = bulletRepository;

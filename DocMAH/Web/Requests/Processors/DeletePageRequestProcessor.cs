@@ -11,12 +11,6 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public DeletePageRequestProcessor()
-			: this(new SqlBulletRepository(), new SqlPageRepository())
-		{
-
-		}
-
 		public DeletePageRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository)
 		{
 			_bulletRepository = bulletRepository;

@@ -35,20 +35,26 @@ namespace DocMAH.UnitTests
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			
 			// Create data store for unit tests.
-			var dataStore = new SqlDataStore();
+			var connectionFactory = new SqlConnectionFactory();
+			var configurationRepository = new SqlConfigurationRepository(connectionFactory);
+			var configurationService = new ConfigurationService(configurationRepository);
+			var dataStore = new SqlDataStore(configurationService, connectionFactory);
 			dataStore.DataStore_Create();
 
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
 			//	other tests will work if this doesn't.
-			var databaseUpdater = new HelpContentManager(context.Object);
+			var databaseUpdater = new HelpContentManager(context.Object, dataStore, configurationService);
 			databaseUpdater.UpdateDataStoreContent();
 		}
 
 		public void TestFixtureDataStoreTearDown()
 		{
 			// Clean up the data store when tests are done.
-			var dataStore = new SqlDataStore();
+			var connectionFactory = new SqlConnectionFactory();
+			var configurationRepository = new SqlConfigurationRepository(connectionFactory);
+			var configurationService = new ConfigurationService(configurationRepository);
+			var dataStore = new SqlDataStore(configurationService, connectionFactory);
 			dataStore.DataStore_Drop();
 		}
 	}

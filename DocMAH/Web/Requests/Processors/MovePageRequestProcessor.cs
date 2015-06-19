@@ -13,12 +13,6 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public MovePageRequestProcessor()
-			: this(new SqlPageRepository())
-		{
-
-		}
-
 		public MovePageRequestProcessor(IPageRepository pageRepository)
 		{
 			_pageRepository = pageRepository;

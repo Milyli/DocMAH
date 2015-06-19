@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using DocMAH.Dependencies;
 using DocMAH.Web.Requests.Processors;
 
 namespace DocMAH.Web.Requests
@@ -11,28 +12,16 @@ namespace DocMAH.Web.Requests
 	{
 		#region Constructors
 
-		static RequestProcessorFactory()
+		public RequestProcessorFactory(IContainer container)
 		{
-			_processorTypes = new Dictionary<string, Type>();
-
-			// Build dictionary of request types and the processor that handlers them.
-			var assembly = Assembly.GetExecutingAssembly();
-			var allTypes = assembly.GetTypes();
-			foreach(var type in allTypes)
-			{
-				if (type.IsSubclassOf(typeof(IRequestProcessor)))
-				{
-					var processor = (IRequestProcessor)Activator.CreateInstance(type);
-					_processorTypes.Add(processor.RequestType, type);
-				}
-			}
+			_container = container;
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private static Dictionary<string, Type> _processorTypes;
+		private readonly IContainer _container;
 
 		#endregion
 
@@ -40,15 +29,7 @@ namespace DocMAH.Web.Requests
 
 		public IRequestProcessor Create(string requestType)
 		{
-			IRequestProcessor result;
-
-			var resultType = _processorTypes[requestType];
-			if (null == resultType)
-				resultType = _processorTypes[RequestTypes.NotFound];
-
-			result = (IRequestProcessor)Activator.CreateInstance(resultType);
-
-			return result;
+			return _container.ResolveNamedInstance<IRequestProcessor>(requestType);
 		}
 
 		#endregion

@@ -12,13 +12,7 @@ namespace DocMAH.Web.Requests.Processors
 	public class SaveUserPageSettingsRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
-
-		public SaveUserPageSettingsRequestProcessor()
-			: this(new HttpContextWrapper(HttpContext.Current))
-		{
-
-		}
-
+		
 		public SaveUserPageSettingsRequestProcessor(HttpContextBase httpContext)
 		{
 			_httpContext = httpContext;

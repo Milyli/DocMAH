@@ -37,10 +37,10 @@ namespace DocMAH.Dependencies
 
 		public void RegisterCreator<T>(Creator creator)
 		{
-			RegisterNamedCreator<T>(creator, DefaultKey);
+			RegisterNamedCreator<T>(DefaultKey, creator);
 		}
 
-		public void RegisterNamedCreator<T>(Creator creator, string name)
+		public void RegisterNamedCreator<T>(string name, Creator creator)
 		{
 			var namedCreators = typeCreators[typeof(T)];
 			if (null == namedCreators)
@@ -52,12 +52,12 @@ namespace DocMAH.Dependencies
 			namedCreators[name] = creator;
 		}
 
-		public T CreateInstance<T>()
+		public T ResolveInstance<T>()
 		{
-			return CreateNamedInstance<T>(DefaultKey);
+			return ResolveNamedInstance<T>(DefaultKey);
 		}
 
-		public T CreateNamedInstance<T>(string name)
+		public T ResolveNamedInstance<T>(string name)
 		{
 			var namedCreators = typeCreators[typeof(T)];
 			if (null == namedCreators)

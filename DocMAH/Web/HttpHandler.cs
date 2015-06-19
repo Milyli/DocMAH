@@ -29,8 +29,8 @@ namespace DocMAH.Web
 		public HttpHandler()
 		{
 			var container = (IContainer)HttpContext.Current.Items[HttpModule.ContextKey];
-			_editAuthorizer = container.CreateInstance<IEditAuthorizer>();
-			_requestProcessorFactory = container.CreateInstance<IRequestProcessorFactory>();
+			_editAuthorizer = container.ResolveInstance<IEditAuthorizer>();
+			_requestProcessorFactory = container.ResolveInstance<IRequestProcessorFactory>();
 		}
 
 		/// <summary>
