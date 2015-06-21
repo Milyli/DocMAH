@@ -73,7 +73,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="SqlDataStoreIntegrationTests.cs" />
+    <Compile Include="Tests\BaseIntegrationTestFixture.cs" />
+    <Compile Include="Tests\HttpHandlerIntegrationTests.cs" />
+    <Compile Include="MockHttpContext.cs" />
+    <Compile Include="Tests\SqlDataStoreIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

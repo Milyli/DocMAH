@@ -25,41 +25,45 @@ namespace DocMAH.Dependencies
 					_container = new Container();
 
 					// Self registration.
-					_container.RegisterCreator<IContainer>(c => _container);
+					_container.RegisterResolver<IContainer>(c => _container);
 
 					// Request Process registration.
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor());
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.ResolveInstance<HttpContextBase>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IConfigurationService>(), c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor());
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.NotFound, c => new NotFoundRequestProcessor());
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.ReadApplicationSettings, c => new ReadApplicationSettingsRequestProcessor(c.ResolveInstance<IEditAuthorizer>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.ReadPage, c => new ReadPageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.ReadTableOfContents, c => new ReadTableOfContentsRequestProcessor(c.ResolveInstance<IEditAuthorizer>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.SavePage, c => new SaveHelpRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.ResolveInstance<HttpContextBase>()));
-					_container.RegisterNamedCreator<IRequestProcessor>(RequestTypes.Unauthorized, c => new UnauthorizedRequestProcessor());
+					_container.RegisterResolver<IRequestProcessorFactory>(c => new RequestProcessorFactory(c));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor());
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.ResolveInstance<HttpContextBase>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IConfigurationService>(), c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor());
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.NotFound, c => new NotFoundRequestProcessor());
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadApplicationSettings, c => new ReadApplicationSettingsRequestProcessor(c.ResolveInstance<IEditAuthorizer>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadPage, c => new ReadPageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadTableOfContents, c => new ReadTableOfContentsRequestProcessor(c.ResolveInstance<IEditAuthorizer>(), c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.SavePage, c => new SaveHelpRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.ResolveInstance<HttpContextBase>()));
+					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.Unauthorized, c => new UnauthorizedRequestProcessor());
 
 					// DataStore registration.
-					_container.RegisterCreator<IBulletRepository>(c => new SqlBulletRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterCreator<IConfigurationRepository>(c => new SqlConfigurationRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterCreator<IDataStore>(c => new SqlDataStore(c.ResolveInstance<IConfigurationService>(), c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterCreator<IPageRepository>(c => new SqlPageRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterCreator<IUserPageSettingsRepository>(c => new SqlUserPageSettingsRepository(c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.RegisterResolver<IBulletRepository>(c => new SqlBulletRepository(c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.RegisterResolver<IConfigurationRepository>(c => new SqlConfigurationRepository(c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.RegisterResolver<IDataStore>(c => new SqlDataStore(c.ResolveInstance<IConfigurationService>(), c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.RegisterResolver<IPageRepository>(c => new SqlPageRepository(c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.RegisterResolver<IUserPageSettingsRepository>(c => new SqlUserPageSettingsRepository(c.ResolveInstance<ISqlConnectionFactory>()));
 
 					// Service registration.
-					_container.RegisterCreator<IConfigurationService>(c => new ConfigurationService(c.ResolveInstance<IConfigurationRepository>()));
+					_container.RegisterResolver<IConfigurationService>(c => new ConfigurationService(c.ResolveInstance<IConfigurationRepository>()));
 
 					// SqlDataStore registration.
-					_container.RegisterCreator<ISqlConnectionFactory>(c => new SqlConnectionFactory());
+					_container.RegisterResolver<ISqlConnectionFactory>(c => new SqlConnectionFactory());
 
 					// Authorization registration.
-					_container.RegisterCreator<IEditAuthorizer>(c => new EditAuthorizer(c.ResolveInstance<HttpContextBase>()));
+					_container.RegisterResolver<IEditAuthorizer>(c => new EditAuthorizer(c.ResolveInstance<HttpContextBase>()));
 
 					// HttpContext registration.
-					_container.RegisterCreator<HttpContextBase>(c => new HttpContextWrapper(HttpContext.Current));
+
+					//// **************** Need to make this an expression so that it doesn't evaluate during registration
+
+					_container.RegisterResolver<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
 				}
 			}
 

@@ -27,22 +27,18 @@ namespace DocMAH.Web
 		/// The handler is instantiated by the framework so I can't change this.
 		/// </summary>
 		public HttpHandler()
+			: this((IContainer)HttpContext.Current.Items[HttpModule.ContextKey])
 		{
-			var container = (IContainer)HttpContext.Current.Items[HttpModule.ContextKey];
-			_editAuthorizer = container.ResolveInstance<IEditAuthorizer>();
-			_requestProcessorFactory = container.ResolveInstance<IRequestProcessorFactory>();
 		}
 
 		/// <summary>
 		/// Test constructor.
 		/// </summary>
 		/// <param name="container"></param>
-		/// <param name="editAuthorizer"></param>
-		/// <param name="requestProcessorFactory"></param>
-		public HttpHandler(IEditAuthorizer editAuthorizer, IRequestProcessorFactory requestProcessorFactory)
+		public HttpHandler(IContainer container)
 		{
-			_editAuthorizer = editAuthorizer;
-			_requestProcessorFactory = requestProcessorFactory;
+			_editAuthorizer = container.ResolveInstance<IEditAuthorizer>();
+			_requestProcessorFactory = container.ResolveInstance<IRequestProcessorFactory>();
 		}
 
 		#endregion

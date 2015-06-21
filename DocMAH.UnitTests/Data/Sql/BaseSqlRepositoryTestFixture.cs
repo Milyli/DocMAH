@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace DocMAH.UnitTests.Data.Sql
 {
 	[TestFixture]
-	public class BaseSqlRepositoryTestFixture
+	public class BaseSqlRepositoryTestFixture : BaseTestFixture
 	{
 		#region Private Fields
 
@@ -20,10 +20,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		#endregion
 
 		#region Protected Properties
-
-		protected SqlDataStore DataStore { get; set; } // To be deleted... eventually.
-		protected ModelFactory Models { get; set; }
-
+		
 		protected SqlBulletRepository BulletRepository { get; set; }
 		protected SqlConfigurationRepository ConfigurationRepository { get; set; }
 		protected SqlPageRepository PageRepository { get; set; }
@@ -36,40 +33,33 @@ namespace DocMAH.UnitTests.Data.Sql
 		#region SetUp / TearDown
 
 		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
+		public void BaseSqlRepositoryTestFixtureSetUp()
 		{
 			var dataStoreManager = new TestFixtureDataStoreManager();
 			dataStoreManager.TestFixtureDataStoreSetUp();
 		}
 
 		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
+		public void BaseSqlRepositoryTestFixtureTearDown()
 		{
 			var dataStoreManager = new TestFixtureDataStoreManager();
 			dataStoreManager.TestFixtureDataStoreTearDown();
 		}
 
 		[SetUp]
-		public virtual void SetUp()
+		public void BaseSqlRepositorySetUp()
 		{
-
-			Models = new ModelFactory();
-
 			var connectionFactory = new SqlConnectionFactory();
 			BulletRepository = new SqlBulletRepository(connectionFactory);
 			ConfigurationRepository = new SqlConfigurationRepository(connectionFactory);
 			PageRepository = new SqlPageRepository(connectionFactory);
 			UserPageSettingsRepository = new SqlUserPageSettingsRepository(connectionFactory);
 
-			var configurationService = new ConfigurationService(ConfigurationRepository);
-
-			DataStore = new SqlDataStore(configurationService, connectionFactory);
-
 			_transactionScope = new TransactionScope();
 		}
 
 		[TearDown]
-		public virtual void TearDown()
+		public void BaseSqlRepositoryTearDown()
 		{
 			_transactionScope.Dispose();
 			_transactionScope = null;

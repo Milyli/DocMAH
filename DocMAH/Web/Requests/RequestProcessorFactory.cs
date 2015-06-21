@@ -29,6 +29,9 @@ namespace DocMAH.Web.Requests
 
 		public IRequestProcessor Create(string requestType)
 		{
+			if (string.IsNullOrEmpty(requestType))
+				throw new ArgumentNullException("requestType", "The requestType must be provided to create the correct processor.");
+
 			return _container.ResolveNamedInstance<IRequestProcessor>(requestType);
 		}
 

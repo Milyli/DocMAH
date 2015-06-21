@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DocMAH.Dependencies
@@ -11,19 +12,13 @@ namespace DocMAH.Dependencies
 
 		private readonly Dictionary<string, object> configuration
 					   = new Dictionary<string, object>();
-		private readonly Dictionary<Type, Dictionary<string, Creator>> typeCreators
-					   = new Dictionary<Type, Dictionary<string, Creator>>();
+		private readonly Dictionary<Type, Dictionary<string, object>> typeCreators
+					   = new Dictionary<Type, Dictionary<string, object>>();
 
 		private const string DefaultKey = "default";
 
 		#endregion
-
-		#region Delegation
-
-		public delegate object Creator(Container container);
-
-		#endregion
-
+		
 		#region Public Properties
 
 		public Dictionary<string, object> Configuration
@@ -35,39 +30,46 @@ namespace DocMAH.Dependencies
 
 		#region Public Methods
 
-		public void RegisterCreator<T>(Creator creator)
+		public void RegisterResolver<TDependency>(Func<Container, TDependency> resolver)
 		{
-			RegisterNamedCreator<T>(DefaultKey, creator);
+			RegisterNamedResolver<TDependency>(DefaultKey, resolver);
 		}
 
-		public void RegisterNamedCreator<T>(string name, Creator creator)
+		public void RegisterNamedResolver<TDependency>(string name, Func<Container, TDependency> resolver)
 		{
-			var namedCreators = typeCreators[typeof(T)];
-			if (null == namedCreators)
-			{
-				namedCreators = new Dictionary<string, Creator>();
-				typeCreators.Add(typeof(T), namedCreators);
-			}
+			if (string.IsNullOrEmpty(name))
+				throw new ArgumentNullException("name", "The name of the resolver is required.");
+			if (null == resolver)
+				throw new ArgumentNullException("resolver", "A resolver is required to create the desired instance.");
 
-			namedCreators[name] = creator;
+			var dependencyType = typeof(TDependency);
+			if (!typeCreators.ContainsKey(dependencyType))
+				typeCreators.Add(dependencyType, new Dictionary<string, object>());
+
+			var namedCreators = typeCreators[dependencyType];
+
+			namedCreators[name] = resolver;
 		}
 
-		public T ResolveInstance<T>()
+		public TDependency ResolveInstance<TDependency>()
 		{
-			return ResolveNamedInstance<T>(DefaultKey);
+			return ResolveNamedInstance<TDependency>(DefaultKey);
 		}
 
-		public T ResolveNamedInstance<T>(string name)
+		public TDependency ResolveNamedInstance<TDependency>(string name)
 		{
-			var namedCreators = typeCreators[typeof(T)];
-			if (null == namedCreators)
-				throw new InvalidOperationException(string.Format("Dependency creator not registered for type '{0}'.", typeof(T).FullName));
+			if (string.IsNullOrEmpty(name))
+				throw new ArgumentNullException("name", "A name must be provided to resolve a named dependency.");
 
+			if (!typeCreators.ContainsKey(typeof(TDependency)))
+				throw new InvalidOperationException(string.Format("Dependency creator not registered for type '{0}'.", typeof(TDependency).FullName));
+			var namedCreators = typeCreators[typeof(TDependency)];
+
+			if (!namedCreators.ContainsKey(name))
+				throw new InvalidOperationException(string.Format("Dependency creator not registered for type '{0}' with name '{1}'.", typeof(TDependency).FullName, name));
 			var creator = namedCreators[name];
-			if (null == creator)
-				throw new InvalidOperationException(string.Format("Dependency creator not registered for type '{0}' with name '{1}'.", typeof(T).FullName, name));
 
-			return (T)creator(this);
+			return ((Func<Container, TDependency>)creator)(this);
 		}
 
 		public T GetConfiguration<T>(string name)

@@ -75,6 +75,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Data\DatabaseUpdaterTestFixture.cs" />
     <Compile Include="Data\ConfigurationServiceTestFixture.cs" />
     <Compile Include="Data\Sql\BaseSqlRepositoryTestFixture.cs" />

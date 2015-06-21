@@ -8,12 +8,12 @@ namespace DocMAH.Dependencies
 	{
 		Dictionary<string, object> Configuration { get; }
 
-		T GetConfiguration<T>(string name);
+		TValue GetConfiguration<TValue>(string name);
 
-		void RegisterCreator<T>(Container.Creator creator);
-		void RegisterNamedCreator<T>(string name, Container.Creator creator);
+		void RegisterResolver<TDependency>(Func<Container, TDependency> resolver);
+		void RegisterNamedResolver<TDependency>(string name, Func<Container, TDependency> resolver);
 
-		T ResolveInstance<T>();
-		T ResolveNamedInstance<T>(string name);
+		TDependency ResolveInstance<TDependency>();
+		TDependency ResolveNamedInstance<TDependency>(string name);
 	}
 }
