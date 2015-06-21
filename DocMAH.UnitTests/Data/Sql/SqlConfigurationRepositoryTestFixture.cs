@@ -19,11 +19,11 @@ namespace DocMAH.UnitTests.Data.Sql
 		[Description("Exercises any existing configuration table CRUD.")]
 		public void Crud_Success()
 		{
-			var helpVersion = ConfigurationRepository.Read(ConfigurationService.DataStoreSchemaVersionKey);
+			var helpVersion = ConfigurationRepository.Read(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey);
 			Assert.That(helpVersion, Is.EqualTo(EnumExtensions.GetMaxValue<SqlDataStoreVersions, int>()), "Current version should match the update script.");
 
-			ConfigurationRepository.Update(ConfigurationService.DataStoreSchemaVersionKey, int.MaxValue);
-			helpVersion = ConfigurationRepository.Read(ConfigurationService.DataStoreSchemaVersionKey);
+			ConfigurationRepository.Update(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey, int.MaxValue);
+			helpVersion = ConfigurationRepository.Read(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey);
 			Assert.That(helpVersion, Is.EqualTo(int.MaxValue), "Version should have been updated to the max int value.");
 		}
 		

@@ -8,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using DocMAH.Configuration;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
+using DocMAH.Dependencies;
 using Moq;
 using NUnit.Framework;
 
@@ -17,6 +19,24 @@ namespace DocMAH.UnitTests
 {
 	public class TestFixtureDataStoreManager
 	{
+		#region Constructors
+
+		public TestFixtureDataStoreManager()
+		{
+			// Initialize a private container so that modifications do not interfere with tests.
+			_container = Registrar.Initialize();
+		}
+
+		#endregion
+
+		#region Private Fields
+
+		private readonly IContainer _container;
+
+		#endregion
+
+		#region Public Methods
+
 		public void DeleteInstallFile()
 		{
 			// Ensure clean environment.
@@ -33,29 +53,28 @@ namespace DocMAH.UnitTests
 			var context = new Mock<HttpContextBase>();
 			context.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(false);
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
+
+			// Create custom container to use mock http context.
+			_container.RegisterResolver<HttpContextBase>(c => context.Object);
 			
 			// Create data store for unit tests.
-			var connectionFactory = new SqlConnectionFactory();
-			var configurationRepository = new SqlConfigurationRepository(connectionFactory);
-			var configurationService = new ConfigurationService(configurationRepository);
-			var dataStore = new SqlDataStore(configurationService, connectionFactory);
+			var dataStore = _container.ResolveInstance<IDataStore>();
 			dataStore.DataStore_Create();
 
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
 			//	other tests will work if this doesn't.
-			var databaseUpdater = new HelpContentManager(context.Object, dataStore, configurationService);
-			databaseUpdater.UpdateDataStoreContent();
+			var helpContentManager = _container.ResolveInstance<IHelpContentManager>();
+			helpContentManager.UpdateDataStoreContent();
 		}
 
 		public void TestFixtureDataStoreTearDown()
 		{
 			// Clean up the data store when tests are done.
-			var connectionFactory = new SqlConnectionFactory();
-			var configurationRepository = new SqlConfigurationRepository(connectionFactory);
-			var configurationService = new ConfigurationService(configurationRepository);
-			var dataStore = new SqlDataStore(configurationService, connectionFactory);
+			var dataStore = _container.ResolveInstance<IDataStore>();
 			dataStore.DataStore_Drop();
-		}
+		}		
+
+		#endregion
 	}
 }

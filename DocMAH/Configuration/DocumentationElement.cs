@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Configuration
 {
-	public class DocumentationElement : ConfigurationElement
+	public class DocumentationElement : ConfigurationElement, IDocumentationConfiguration
 	{
 		[ConfigurationProperty("pageTitle", DefaultValue = "Documentation")]
 		public string PageTitle

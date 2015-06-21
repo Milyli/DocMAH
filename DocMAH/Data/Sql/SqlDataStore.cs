@@ -27,9 +27,9 @@ namespace DocMAH.Data.Sql
 			_updateScripts.Add(SqlDataStoreVersions.Database_02, SqlScripts.Database_Update_02);
 		}
 
-		public SqlDataStore(IConfigurationService configurationService, ISqlConnectionFactory connectionFactory)
+		public SqlDataStore(IDataStoreConfiguration dataStoreConfiguration, ISqlConnectionFactory connectionFactory)
 		{
-			_configurationService = configurationService;
+			_dataStoreConfiguration = dataStoreConfiguration;
 			_connectionFactory = connectionFactory;
 		}
 
@@ -40,7 +40,7 @@ namespace DocMAH.Data.Sql
 		private static Dictionary<SqlDataStoreVersions, string> _updateScripts;
 
 		private readonly ISqlConnectionFactory _connectionFactory;
-		private readonly IConfigurationService _configurationService;
+		private readonly IDataStoreConfiguration _dataStoreConfiguration;
 
 		#endregion
 
@@ -79,7 +79,7 @@ namespace DocMAH.Data.Sql
 
 		public void DataStore_Update()
 		{
-			var currentDataStoreVersion = _configurationService.DataStoreSchemaVersion;
+			var currentDataStoreVersion = _dataStoreConfiguration.DataStoreSchemaVersion;
 
 			var allDataStoreVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
 			using (var connection = _connectionFactory.GetConnection())

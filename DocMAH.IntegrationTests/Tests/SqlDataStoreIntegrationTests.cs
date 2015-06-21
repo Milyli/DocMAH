@@ -36,8 +36,7 @@ namespace DocMAH.IntegrationTests.Tests
 			HttpContext.SetRequestParameter("m", RequestTypes.GenerateInstallScript);
 			Container.RegisterResolver<HttpContextBase>(c => HttpContext.Object);
 
-			var connectionFactory = new SqlConnectionFactory();
-			var pageRepository = new SqlPageRepository(connectionFactory);
+			var pageRepository = Container.ResolveInstance<IPageRepository>();
 			var handler = new HttpHandler(Container);
 
 			var models = new ModelFactory();

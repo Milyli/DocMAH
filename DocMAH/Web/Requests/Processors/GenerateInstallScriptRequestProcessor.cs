@@ -9,6 +9,7 @@ using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Extensions;
 using System.Net;
+using DocMAH.Configuration;
 namespace DocMAH.Web.Requests.Processors
 {
 	public class GenerateInstallScriptRequestProcessor : IRequestProcessor
@@ -17,12 +18,12 @@ namespace DocMAH.Web.Requests.Processors
 
 		public GenerateInstallScriptRequestProcessor(
 			IBulletRepository bulletRepository,
-			IConfigurationService configurationService,
+			IDataStoreConfiguration dataStoreConfiguration,
 			HttpContextBase httpContext,
 			IPageRepository pageRepository)
 		{
 			_bulletRepository = bulletRepository;
-			_configurationService = configurationService;
+			_dataStoreConfiguration = dataStoreConfiguration;
 			_httpContext = httpContext;
 			_pageRepository = pageRepository;
 		}
@@ -32,7 +33,7 @@ namespace DocMAH.Web.Requests.Processors
 		#region Private Fields
 
 		private readonly IBulletRepository _bulletRepository;
-		private readonly IConfigurationService _configurationService;
+		private readonly IDataStoreConfiguration _dataStoreConfiguration;
 		private readonly HttpContextBase _httpContext;
 		private readonly IPageRepository _pageRepository;
 
@@ -57,9 +58,9 @@ namespace DocMAH.Web.Requests.Processors
 			using (var xmlWriter = XmlWriter.Create(stream, settings))
 			{
 				xmlWriter.WriteStartElement(XmlNodeNames.UpdateScriptsElement);
-				xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _configurationService.DataStoreSchemaVersion.ToString());
+				xmlWriter.WriteAttributeString(XmlNodeNames.FileSchemaVersionAttribute, _dataStoreConfiguration.DataStoreSchemaVersion.ToString());
 
-				var nextHelpVersion = _configurationService.HelpContentVersion + 1;
+				var nextHelpVersion = _dataStoreConfiguration.HelpContentVersion + 1;
 				xmlWriter.WriteAttributeString(XmlNodeNames.FileHelpVersionAttribute, nextHelpVersion.ToString());
 
 				var existingPageIds = new List<int>();
@@ -172,7 +173,7 @@ namespace DocMAH.Web.Requests.Processors
 				// Update help version
 				xmlWriter.WriteElementString(
 					XmlNodeNames.UpdateScriptElement,
-					string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, ConfigurationService.HelpContentVersionKey, Environment.NewLine)
+					string.Format("UPDATE DocmahConfiguration SET [Value] = {0} WHERE [Name] = '{1}';{2}", nextHelpVersion, DocMAH.Configuration.DataStoreConfiguration.HelpContentVersionKey, Environment.NewLine)
 				);
 
 				xmlWriter.Flush();

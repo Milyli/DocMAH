@@ -7,7 +7,7 @@ using Moq;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Extensions;
-
+using DocMAH.Configuration;
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
@@ -63,9 +63,9 @@ namespace DocMAH.UnitTests.Data
 				tempFile.Close();
 			}
 
-			var configurationService = new Mock<IConfigurationService>(MockBehavior.Strict);
-			configurationService.SetupGet(c => c.DataStoreSchemaVersion).Returns(lastVersion);
-			configurationService.SetupGet(c => c.HelpContentVersion).Returns(0);
+			var dataStoreConfiguration = new Mock<IDataStoreConfiguration>(MockBehavior.Strict);
+			dataStoreConfiguration.SetupGet(c => c.DataStoreSchemaVersion).Returns(lastVersion);
+			dataStoreConfiguration.SetupGet(c => c.HelpContentVersion).Returns(0);
 
 			var dataStore = new Mock<IDataStore>(MockBehavior.Strict);
 			dataStore.Setup(d => d.DataStore_Update());
@@ -76,13 +76,13 @@ namespace DocMAH.UnitTests.Data
 			httpContext.Setup(c => c.Server.MapPath("~")).Returns(_tempPath);
 			httpContext.SetupSet(c => c.Application[HelpContentManager.DocmahInitializedKey] = true);
 
-			var updater = new HelpContentManager(httpContext.Object, dataStore.Object, configurationService.Object);
+			var updater = new HelpContentManager(httpContext.Object, dataStore.Object, dataStoreConfiguration.Object);
 
 			// Act
 			updater.UpdateDataStoreContent();
 
 			// Assert
-			configurationService.VerifyAll();
+			dataStoreConfiguration.VerifyAll();
 			dataStore.VerifyAll();
 		}
 
@@ -109,7 +109,7 @@ namespace DocMAH.UnitTests.Data
 				tempFile.Close();
 			}
 
-			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
+			var databaseConfiguration = new Mock<IDataStoreConfiguration>(MockBehavior.Strict);
 			databaseConfiguration.SetupGet(c => c.DataStoreSchemaVersion).Returns(lastVersion);
 			databaseConfiguration.SetupGet(c => c.HelpContentVersion).Returns(0);
 
@@ -137,7 +137,7 @@ namespace DocMAH.UnitTests.Data
 		public void Update_SchemaOnly()
 		{
 			// Arrange
-			var databaseConfiguration = new Mock<IConfigurationService>(MockBehavior.Strict);
+			var databaseConfiguration = new Mock<IDataStoreConfiguration>(MockBehavior.Strict);
 
 			var databaseAccess = new Mock<IDataStore>(MockBehavior.Strict);
 			databaseAccess.Setup(a => a.DataStore_Update());

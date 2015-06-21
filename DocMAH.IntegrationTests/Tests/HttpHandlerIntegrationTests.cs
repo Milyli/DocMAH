@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
+using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Models;
 using DocMAH.UnitTests;
@@ -31,8 +32,7 @@ namespace DocMAH.IntegrationTests.Tests
 		public void MovePage_Success()
 		{
 			// Arrange
-			var connectionFactory = new SqlConnectionFactory();
-			var pageRepository = new SqlPageRepository(connectionFactory);
+			var pageRepository = Container.ResolveInstance<IPageRepository>();
 
 			var childMatchUrl = "/Pages/Child";
 			var movedMatchUrl = "/Pages/Moved";

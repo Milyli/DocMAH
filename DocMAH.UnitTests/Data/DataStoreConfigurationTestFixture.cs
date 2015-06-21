@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using Moq;
 using DocMAH.Data;
-
+using DocMAH.Configuration;
 namespace DocMAH.UnitTests.Data
 {
 	[TestFixture]
-	public class ConfigurationServiceTestFixture
+	public class DataStoreConfigurationTestFixture
 	{
 		#region Tests
 
@@ -16,9 +16,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var configurationRepository = new Mock<IConfigurationRepository>(MockBehavior.Strict);
-			configurationRepository.Setup(r => r.Read(DocMAH.Data.ConfigurationService.DataStoreSchemaVersionKey)).Returns(int.MaxValue);
+			configurationRepository.Setup(r => r.Read(DataStoreConfiguration.DataStoreSchemaVersionKey)).Returns(int.MaxValue);
 
-			var configuration = new ConfigurationService(configurationRepository.Object);
+			var configuration = new DataStoreConfiguration(configurationRepository.Object);
 
 			// Act
 			var result = configuration.DataStoreSchemaVersion;
@@ -35,9 +35,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var configurationRepository = new Mock<IConfigurationRepository>(MockBehavior.Strict);
-			configurationRepository.Setup(r => r.Update(ConfigurationService.DataStoreSchemaVersionKey, int.MaxValue));
+			configurationRepository.Setup(r => r.Update(DataStoreConfiguration.DataStoreSchemaVersionKey, int.MaxValue));
 
-			var configuration = new ConfigurationService(configurationRepository.Object);
+			var configuration = new DataStoreConfiguration(configurationRepository.Object);
 
 			// Act
 			configuration.DataStoreSchemaVersion = int.MaxValue;
@@ -52,10 +52,10 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var configurationRepository = new Mock<IConfigurationRepository>(MockBehavior.Strict);
-			configurationRepository.Setup(r => r.Read(DocMAH.Data.ConfigurationService.HelpContentVersionKey)).Returns(int.MaxValue);
+			configurationRepository.Setup(r => r.Read(DataStoreConfiguration.HelpContentVersionKey)).Returns(int.MaxValue);
 
-			var configuration = new ConfigurationService(configurationRepository.Object);
-			
+			var configuration = new DataStoreConfiguration(configurationRepository.Object);
+
 			// Act
 			var result = configuration.HelpContentVersion;
 
@@ -70,9 +70,9 @@ namespace DocMAH.UnitTests.Data
 		{
 			// Arrange
 			var configurationRepository = new Mock<IConfigurationRepository>(MockBehavior.Strict);
-			configurationRepository.Setup(r => r.Update(ConfigurationService.HelpContentVersionKey, int.MaxValue));
+			configurationRepository.Setup(r => r.Update(DataStoreConfiguration.HelpContentVersionKey, int.MaxValue));
 
-			var configuration = new ConfigurationService(configurationRepository.Object);
+			var configuration = new DataStoreConfiguration(configurationRepository.Object);
 
 			// Act
 			configuration.HelpContentVersion = int.MaxValue;

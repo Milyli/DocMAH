@@ -58,6 +58,9 @@
     <Compile Include="Configuration\DocumentationElement.cs" />
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
+    <Compile Include="Configuration\IContentConfiguration.cs" />
+    <Compile Include="Configuration\IDocumentationConfiguration.cs" />
+    <Compile Include="Configuration\IEditHelpConfiguration.cs" />
     <Compile Include="Dependencies\Container.cs" />
     <Compile Include="Data\IBulletRepository.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
@@ -69,9 +72,9 @@
     <Compile Include="Data\Sql\SqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\ISqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\SqlBulletRepository.cs" />
-    <Compile Include="Data\ConfigurationService.cs" />
+    <Compile Include="Configuration\DataStoreConfiguration.cs" />
     <Compile Include="Data\HelpContentManager.cs" />
-    <Compile Include="Data\IConfigurationService.cs" />
+    <Compile Include="Configuration\IDataStoreConfiguration.cs" />
     <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
     <Compile Include="Data\Sql\SqlPageRepository.cs" />
     <Compile Include="Data\Sql\SqlScripts.Designer.cs">

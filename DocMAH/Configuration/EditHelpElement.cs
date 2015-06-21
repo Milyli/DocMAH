@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Configuration
 {
-	public class EditHelpElement : ConfigurationElement
+	public class EditHelpElement : ConfigurationElement, IEditHelpConfiguration
 	{
 		[ConfigurationProperty("requireAuthentication", DefaultValue = true)]
 		public bool RequireAuthentication

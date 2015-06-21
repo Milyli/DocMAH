@@ -11,16 +11,18 @@ namespace DocMAH.Web.Authorization
 	{
 		#region Constructors
 
-		public EditAuthorizer(HttpContextBase httpContext)
+		public EditAuthorizer(HttpContextBase httpContext, IEditHelpConfiguration editHelpConfiguration)
 		{
 			_httpContext = httpContext;
+			_editHelpConfiguration = editHelpConfiguration;
 		}
 
 		#endregion
 
 		#region Private Fields
-
-		private HttpContextBase _httpContext;
+				
+		private readonly HttpContextBase _httpContext;
+		private readonly IEditHelpConfiguration _editHelpConfiguration;
 
 		#endregion
 
@@ -30,13 +32,13 @@ namespace DocMAH.Web.Authorization
 		{
 			var request = _httpContext.Request;
 
-			if (DocmahConfigurationSection.Current.EditHelp.IsDisabled)
+			if (_editHelpConfiguration.IsDisabled)
 				return false;
 
-			if (DocmahConfigurationSection.Current.EditHelp.RequireAuthentication && (request == null || !request.IsAuthenticated))
+			if (_editHelpConfiguration.RequireAuthentication && (request == null || !request.IsAuthenticated))
 				return false;
 
-			if (DocmahConfigurationSection.Current.EditHelp.RequireLocalConnection && (request == null || !request.IsLocal))
+			if (_editHelpConfiguration.RequireLocalConnection && (request == null || !request.IsLocal))
 				return false;
 
 			return true;

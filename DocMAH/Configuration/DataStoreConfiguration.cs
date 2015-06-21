@@ -1,12 +1,13 @@
 ﻿using DocMAH.Data.Sql;
 
-namespace DocMAH.Data
+namespace DocMAH.Configuration
 {
-	public class ConfigurationService : IConfigurationService
+	using DocMAH.Data;
+	public class DataStoreConfiguration : IDataStoreConfiguration
 	{
 		#region Constructors
 
-		public ConfigurationService(IConfigurationRepository configurationRepository)
+		public DataStoreConfiguration(IConfigurationRepository configurationRepository)
 		{
 			_configurationRepository = configurationRepository;
 		}

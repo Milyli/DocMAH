@@ -10,6 +10,21 @@ namespace DocMAH.Data.Sql
 {
 	public class SqlConnectionFactory : ISqlConnectionFactory
 	{
+		#region Constructors
+
+		public SqlConnectionFactory(IContentConfiguration contentConfiguration)
+		{
+			_contentConfiguration = contentConfiguration;
+		}
+
+		#endregion
+
+		#region Private Fields
+
+		private readonly IContentConfiguration _contentConfiguration;
+
+		#endregion
+
 		#region Public Methods
 		
 		public SqlConnection GetConnection(string initialCatalog = null)
@@ -17,7 +32,7 @@ namespace DocMAH.Data.Sql
 			string connectionString = Configurator.ConnectionString;
 			if (string.IsNullOrEmpty(connectionString))
 			{
-				string connectionStringName = DocmahConfigurationSection.Current.ConnectionStringName;
+				string connectionStringName = _contentConfiguration.ConnectionStringName;
 				try
 				{
 					connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;

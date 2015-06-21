@@ -20,14 +20,13 @@ namespace DocMAH.Web
 	{
 		#region Constructors
 
-		public HttpResponseFilter(Stream stream, IBulletRepository bulletRepository, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
+		public HttpResponseFilter(Stream stream, IBulletRepository bulletRepository, IEditAuthorizer editAuthorizer, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
-
-			_editAuthorizer = new EditAuthorizer();
-
+			
 			_bulletRepository = bulletRepository;
+			_editAuthorizer = editAuthorizer;
 			_pageRepository = pageRepository;
 			_userPageSettingsRepository = userPageSettingsRepository;
 		}

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
+using DocMAH.Dependencies;
 using NUnit.Framework;
 
 namespace DocMAH.UnitTests.Data.Sql
@@ -49,7 +50,9 @@ namespace DocMAH.UnitTests.Data.Sql
 		[SetUp]
 		public void BaseSqlRepositorySetUp()
 		{
-			var connectionFactory = new SqlConnectionFactory();
+			var container = Registrar.Initialize();
+			var connectionFactory = container.ResolveInstance<ISqlConnectionFactory>();
+
 			BulletRepository = new SqlBulletRepository(connectionFactory);
 			ConfigurationRepository = new SqlConfigurationRepository(connectionFactory);
 			PageRepository = new SqlPageRepository(connectionFactory);

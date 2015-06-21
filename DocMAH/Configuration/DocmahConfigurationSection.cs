@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Configuration
 {
-	public class DocmahConfigurationSection : ConfigurationSection
+	public class DocmahConfigurationSection : ConfigurationSection, IContentConfiguration
 	{
 		#region Public Properties
 
@@ -18,7 +18,7 @@ namespace DocMAH.Configuration
 				return (DocmahConfigurationSection)ConfigurationManager.GetSection("docmah");
 			}
 		}
-
+		
 		[ConfigurationProperty("connectionStringName", DefaultValue = null)]
 		public string ConnectionStringName
 		{
@@ -41,14 +41,14 @@ namespace DocMAH.Configuration
 		}
 
 		[ConfigurationProperty("documentation")]
-		public DocumentationElement Documentation
+		public DocumentationElement DocumentationConfiguration
 		{
 			get { return (DocumentationElement)this["documentation"]; }
 			set { this["documentation"] = value; }
 		}
 
 		[ConfigurationProperty("editHelp")]
-		public EditHelpElement EditHelp
+		public EditHelpElement EditHelpConfiguration
 		{
 			get { return (EditHelpElement)this["editHelp"]; }
 			set { this["editHelp"] = value; }

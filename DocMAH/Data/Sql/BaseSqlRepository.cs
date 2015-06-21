@@ -9,12 +9,6 @@ namespace DocMAH.Data.Sql
 	{
 		#region Constructors
 
-		public BaseSqlRepository()
-			: this(new SqlConnectionFactory())
-		{
-
-		}
-
 		public BaseSqlRepository(ISqlConnectionFactory sqlConnectionFactory)
 		{
 			SqlConnectionFactory = sqlConnectionFactory;

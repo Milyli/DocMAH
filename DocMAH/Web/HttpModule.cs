@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using DocMAH.Data;
 using DocMAH.Dependencies;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web
 {
@@ -89,7 +90,8 @@ namespace DocMAH.Web
 				if (response.ContentType == "text/html")
 					response.Filter = new HttpResponseFilter(
 						response.Filter, 
-						_container.ResolveInstance<IBulletRepository>(), 
+						_container.ResolveInstance<IBulletRepository>(),
+						_container.ResolveInstance<IEditAuthorizer>(),
 						_container.ResolveInstance<IPageRepository>(), 
 						_container.ResolveInstance<IUserPageSettingsRepository>());
 				context.Items.Add(ContextKey, _container);
