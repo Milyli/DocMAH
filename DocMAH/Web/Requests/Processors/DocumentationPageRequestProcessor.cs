@@ -13,11 +13,16 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 		
-		public DocumentationPageRequestProcessor(HttpContextBase httpContext, IContentConfiguration contentConfiguration, IDocumentationConfiguration documentationConfiguration)
+		public DocumentationPageRequestProcessor(
+			HttpContextBase httpContext, 
+			IContentConfiguration contentConfiguration, 
+			IDocumentationConfiguration documentationConfiguration, 
+			IMinifier minifier)
 		{
 			_httpContext = httpContext;
 			_contentConfiguration = contentConfiguration;
 			_documentationConfiguration = documentationConfiguration;
+			_minifier = minifier;
 		}
 
 		#endregion
@@ -27,6 +32,7 @@ namespace DocMAH.Web.Requests.Processors
 		private readonly HttpContextBase _httpContext;
 		private readonly IContentConfiguration _contentConfiguration;
 		private readonly IDocumentationConfiguration _documentationConfiguration;
+		private readonly IMinifier _minifier;
 
 		#endregion
 
@@ -53,7 +59,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		public ResponseState Process(string data)
 		{
-			var documentationHtml = ResourcesExtensions.Minify(Resources.Html_Documentation, Resources.Html_Documentation_min);
+			var documentationHtml = _minifier.Minify(Resources.Html_Documentation, Resources.Html_Documentation_min);
 
 			documentationHtml = documentationHtml.Replace("[TITLE]", _documentationConfiguration.PageTitle);
 
@@ -83,7 +89,7 @@ namespace DocMAH.Web.Requests.Processors
 			documentationHtml = documentationHtml.Replace("[JSTREEURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJsTree));
 
 			documentationHtml = documentationHtml.Replace("[firstTimeViewHTML]",
-				ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min)
+				_minifier.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min)
 			);
 
 			// Set return values.
@@ -92,11 +98,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = documentationHtml,
 				ContentType = ContentTypes.Html,
 			};
-		}
-
-		public string RequestType
-		{
-			get { return RequestTypes.DocumentationPage; }
 		}
 
 		public bool RequiresEditAuthorization

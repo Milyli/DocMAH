@@ -45,8 +45,8 @@ namespace DocMAH.UnitTests.Web
 			requestProcessorFactory.Setup(f => f.Create(methodName)).Returns(requestProcessor.Object);
 
 			var container = Mocks.Create<IContainer>();			
-			container.Setup(c => c.ResolveInstance<IRequestProcessorFactory>()).Returns(requestProcessorFactory.Object);
-			container.Setup(c => c.ResolveInstance<IEditAuthorizer>()).Returns(editAuthorizer.Object);
+			container.Setup(c => c.Resolve<IRequestProcessorFactory>()).Returns(requestProcessorFactory.Object);
+			container.Setup(c => c.Resolve<IEditAuthorizer>()).Returns(editAuthorizer.Object);
 
 			var handler = new HttpHandler(container.Object);
 

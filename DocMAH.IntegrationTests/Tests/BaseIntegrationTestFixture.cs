@@ -27,7 +27,7 @@ namespace DocMAH.IntegrationTests.Tests
 		public void BaseIntegrationSetUp()
 		{
 			HttpContext = new MockHttpContext();
-			Container.RegisterResolver<HttpContextBase>(c => HttpContext.Object);
+			Container.Register<HttpContextBase>(c => HttpContext.Object);
 		}
 
 		

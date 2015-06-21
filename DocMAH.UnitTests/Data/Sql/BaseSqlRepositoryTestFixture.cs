@@ -51,7 +51,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void BaseSqlRepositorySetUp()
 		{
 			var container = Registrar.Initialize();
-			var connectionFactory = container.ResolveInstance<ISqlConnectionFactory>();
+			var connectionFactory = container.Resolve<ISqlConnectionFactory>();
 
 			BulletRepository = new SqlBulletRepository(connectionFactory);
 			ConfigurationRepository = new SqlConfigurationRepository(connectionFactory);

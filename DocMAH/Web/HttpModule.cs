@@ -7,6 +7,7 @@ using System.Web;
 using DocMAH.Data;
 using DocMAH.Dependencies;
 using DocMAH.Web.Authorization;
+using DocMAH.Web.Requests;
 
 namespace DocMAH.Web
 {
@@ -41,7 +42,7 @@ namespace DocMAH.Web
 
 		#region Private Fields
 
-		private HttpContextBase _httpContext;
+		private readonly HttpContextBase _httpContext;
 		private IContainer _container;
 		private IDataStore _dataStore;
 		private IHelpContentManager _helpContentManager;
@@ -65,10 +66,10 @@ namespace DocMAH.Web
 		{
 			_container = Registrar.Initialize();
 
-			_dataStore = _container.ResolveInstance<IDataStore>();
+			_dataStore = _container.Resolve<IDataStore>();
 			_dataStore.DataStore_Update();
 
-			_helpContentManager = _container.ResolveInstance<IHelpContentManager>();
+			_helpContentManager = _container.Resolve<IHelpContentManager>();
 			_helpContentManager.UpdateDataStoreContent();
 
 			application.PreSendRequestHeaders += AttachFilterEventHandler;
@@ -89,11 +90,12 @@ namespace DocMAH.Web
 				var response = context.Response;
 				if (response.ContentType == "text/html")
 					response.Filter = new HttpResponseFilter(
-						response.Filter, 
-						_container.ResolveInstance<IBulletRepository>(),
-						_container.ResolveInstance<IEditAuthorizer>(),
-						_container.ResolveInstance<IPageRepository>(), 
-						_container.ResolveInstance<IUserPageSettingsRepository>());
+						response.Filter,
+						_container.Resolve<IBulletRepository>(),
+						_container.Resolve<IEditAuthorizer>(),
+						_container.Resolve<IMinifier>(),
+						_container.Resolve<IPageRepository>(), 
+						_container.Resolve<IUserPageSettingsRepository>());
 				context.Items.Add(ContextKey, _container);
 			}
 		}

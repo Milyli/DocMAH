@@ -190,11 +190,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.GenerateInstallScript; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return true; }

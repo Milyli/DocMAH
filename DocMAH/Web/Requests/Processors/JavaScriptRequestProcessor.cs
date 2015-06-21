@@ -8,20 +8,30 @@ namespace DocMAH.Web.Requests.Processors
 {
 	public class JavaScriptRequestProcessor : IRequestProcessor
 	{
+		#region Constructors
+
+		public JavaScriptRequestProcessor(IMinifier minifier)
+		{
+			_minifier = minifier;
+		}
+
+		#endregion
+
+		#region Private Fields
+
+		private readonly IMinifier _minifier;
+
+		#endregion
+
 		#region IRequestProcessor Members
 
 		public ResponseState Process(string data)
 		{
 			return new ResponseState
 			{
-				Content = ResourcesExtensions.Minify(Resources.DocMAHJavaScript, Resources.DocMAHJavaScript_min),
+				Content = _minifier.Minify(Resources.DocMAHJavaScript, Resources.DocMAHJavaScript_min),
 				ContentType = ContentTypes.JavaScript,
 			};
-		}
-
-		public string RequestType
-		{
-			get { return RequestTypes.JavaScript; }
 		}
 
 		public bool RequiresEditAuthorization

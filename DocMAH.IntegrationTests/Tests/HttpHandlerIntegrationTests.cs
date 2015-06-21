@@ -32,7 +32,7 @@ namespace DocMAH.IntegrationTests.Tests
 		public void MovePage_Success()
 		{
 			// Arrange
-			var pageRepository = Container.ResolveInstance<IPageRepository>();
+			var pageRepository = Container.Resolve<IPageRepository>();
 
 			var childMatchUrl = "/Pages/Child";
 			var movedMatchUrl = "/Pages/Moved";

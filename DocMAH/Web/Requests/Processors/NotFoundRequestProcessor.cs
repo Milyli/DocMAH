@@ -19,11 +19,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.NotFound; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return false; }

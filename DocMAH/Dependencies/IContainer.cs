@@ -10,10 +10,10 @@ namespace DocMAH.Dependencies
 
 		TValue GetConfiguration<TValue>(string name);
 
-		void RegisterResolver<TDependency>(Func<Container, TDependency> resolver);
-		void RegisterNamedResolver<TDependency>(string name, Func<Container, TDependency> resolver);
+		void Register<TDependency>(Func<Container, TDependency> resolver);
+		void Register<TDependency>(string name, Func<Container, TDependency> resolver);
 
-		TDependency ResolveInstance<TDependency>();
-		TDependency ResolveNamedInstance<TDependency>(string name);
+		TDependency Resolve<TDependency>();
+		TDependency Resolve<TDependency>(string name);
 	}
 }

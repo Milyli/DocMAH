@@ -38,7 +38,7 @@ namespace DocMAH.UnitTests.Web.Requests
 			var requestType = "TestRequestType";
 			var processor = Mocks.Create<IRequestProcessor>();
 			var container = Mocks.Create<IContainer>();
-			container.Setup(c => c.ResolveNamedInstance<IRequestProcessor>(requestType)).Returns(processor.Object);
+			container.Setup(c => c.Resolve<IRequestProcessor>(requestType)).Returns(processor.Object);
 			var factory = new RequestProcessorFactory(container.Object);
 
 			// Act

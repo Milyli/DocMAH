@@ -44,11 +44,6 @@ namespace DocMAH.Web.Requests.Processors
 			};				
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.ReadTableOfContents; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return false; }

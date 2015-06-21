@@ -13,6 +13,7 @@ using DocMAH.Data.Sql;
 using DocMAH.Models;
 using DocMAH.Properties;
 using DocMAH.Web.Authorization;
+using DocMAH.Web.Requests;
 
 namespace DocMAH.Web
 {
@@ -20,13 +21,20 @@ namespace DocMAH.Web
 	{
 		#region Constructors
 
-		public HttpResponseFilter(Stream stream, IBulletRepository bulletRepository, IEditAuthorizer editAuthorizer, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
+		public HttpResponseFilter(
+			Stream stream, 
+			IBulletRepository bulletRepository, 
+			IEditAuthorizer editAuthorizer, 
+			IMinifier minifier,
+			IPageRepository pageRepository, 
+			IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
 			
 			_bulletRepository = bulletRepository;
 			_editAuthorizer = editAuthorizer;
+			_minifier = minifier;
 			_pageRepository = pageRepository;
 			_userPageSettingsRepository = userPageSettingsRepository;
 		}
@@ -38,10 +46,10 @@ namespace DocMAH.Web
 		private readonly Stream _stream;
 		private readonly StreamWriter _writer; // Stream writer to write to response on.
 		private string _unprocessedContent; // Content from previous write that could not be added.
-
-		private readonly IEditAuthorizer _editAuthorizer;
-
+		
 		private readonly IBulletRepository _bulletRepository;
+		private readonly IEditAuthorizer _editAuthorizer;
+		private readonly IMinifier _minifier;
 		private readonly IPageRepository _pageRepository;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
@@ -79,7 +87,7 @@ namespace DocMAH.Web
 					_writer.Write(FormatHtmlViewHelp());
 					if (_editAuthorizer.Authorize())
 					{
-						_writer.Write(ResourcesExtensions.Minify(Resources.Html_FirstTimeEdit, Resources.Html_FirstTimeEdit_min));
+						_writer.Write(_minifier.Minify(Resources.Html_FirstTimeEdit, Resources.Html_FirstTimeEdit_min));
 					}
 					content = content.Substring(endBodyIndex);
 				}
@@ -107,7 +115,7 @@ namespace DocMAH.Web
 
 			// The HTML is reused on the documentation page.
 			// When injecting into other requests, the initialization scripts must be included.
-			result += ResourcesExtensions.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
+			result += _minifier.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
 
 			// TODO: Iron out javascript reference injection for first time help in base site pages.
 			// Attach jQueryUi CDN locations if not configured.
@@ -119,7 +127,7 @@ namespace DocMAH.Web
 				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
 			}
 
-			result += ResourcesExtensions.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
+			result += _minifier.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
 
 			// TODO: Cache the non-dynamic portion of the first time HTML for faster loading.
 			

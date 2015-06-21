@@ -34,9 +34,9 @@ namespace DocMAH.IntegrationTests.Tests
 			HttpContext.SetMapPath("~", NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			HttpContext.AddApplicationState(HelpContentManager.DocmahInitializedKey, false);
 			HttpContext.SetRequestParameter("m", RequestTypes.GenerateInstallScript);
-			Container.RegisterResolver<HttpContextBase>(c => HttpContext.Object);
+			Container.Register<HttpContextBase>(c => HttpContext.Object);
 
-			var pageRepository = Container.ResolveInstance<IPageRepository>();
+			var pageRepository = Container.Resolve<IPageRepository>();
 			var handler = new HttpHandler(Container);
 
 			var models = new ModelFactory();

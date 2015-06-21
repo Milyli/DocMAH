@@ -37,8 +37,8 @@ namespace DocMAH.Web
 		/// <param name="container"></param>
 		public HttpHandler(IContainer container)
 		{
-			_editAuthorizer = container.ResolveInstance<IEditAuthorizer>();
-			_requestProcessorFactory = container.ResolveInstance<IRequestProcessorFactory>();
+			_editAuthorizer = container.Resolve<IEditAuthorizer>();
+			_requestProcessorFactory = container.Resolve<IRequestProcessorFactory>();
 		}
 
 		#endregion

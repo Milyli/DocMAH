@@ -30,12 +30,12 @@ namespace DocMAH.Dependencies
 
 		#region Public Methods
 
-		public void RegisterResolver<TDependency>(Func<Container, TDependency> resolver)
+		public void Register<TDependency>(Func<Container, TDependency> resolver)
 		{
-			RegisterNamedResolver<TDependency>(DefaultKey, resolver);
+			Register<TDependency>(DefaultKey, resolver);
 		}
 
-		public void RegisterNamedResolver<TDependency>(string name, Func<Container, TDependency> resolver)
+		public void Register<TDependency>(string name, Func<Container, TDependency> resolver)
 		{
 			if (string.IsNullOrEmpty(name))
 				throw new ArgumentNullException("name", "The name of the resolver is required.");
@@ -51,12 +51,12 @@ namespace DocMAH.Dependencies
 			namedCreators[name] = resolver;
 		}
 
-		public TDependency ResolveInstance<TDependency>()
+		public TDependency Resolve<TDependency>()
 		{
-			return ResolveNamedInstance<TDependency>(DefaultKey);
+			return Resolve<TDependency>(DefaultKey);
 		}
 
-		public TDependency ResolveNamedInstance<TDependency>(string name)
+		public TDependency Resolve<TDependency>(string name)
 		{
 			if (string.IsNullOrEmpty(name))
 				throw new ArgumentNullException("name", "A name must be provided to resolve a named dependency.");

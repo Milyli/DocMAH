@@ -88,12 +88,7 @@ namespace DocMAH.Web.Requests.Processors
 				ContentType = ContentTypes.Json,
 			};
 		}
-
-		public string RequestType
-		{
-			get { return RequestTypes.SavePage; }
-		}
-
+		
 		public bool RequiresEditAuthorization
 		{
 			get { return true; }

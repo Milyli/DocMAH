@@ -32,7 +32,7 @@ namespace DocMAH.Web.Requests
 			if (string.IsNullOrEmpty(requestType))
 				throw new ArgumentNullException("requestType", "The requestType must be provided to create the correct processor.");
 
-			return _container.ResolveNamedInstance<IRequestProcessor>(requestType);
+			return _container.Resolve<IRequestProcessor>(requestType);
 		}
 
 		#endregion

@@ -46,11 +46,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.ReadPage; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return false; }

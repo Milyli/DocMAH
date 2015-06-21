@@ -56,11 +56,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.SaveUserPageSettings; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return true; }

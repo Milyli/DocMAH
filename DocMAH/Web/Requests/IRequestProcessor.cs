@@ -20,11 +20,6 @@ namespace DocMAH.Web.Requests
 		ResponseState Process(string data);
 
 		/// <summary>
-		/// DocMAH.Web.Requests.RequestTypes value this processor handles.
-		/// </summary>
-		string RequestType { get; }
-
-		/// <summary>
 		/// Returns true if the request should only respond to authorized users.
 		/// </summary>
 		bool RequiresEditAuthorization { get; }

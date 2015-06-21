@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Web;
+using DocMAH.Adapters;
 using DocMAH.Configuration;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
@@ -33,48 +34,52 @@ namespace DocMAH.Dependencies
 					_container = new Container();
 
 					// Self registration.
-					_container.RegisterResolver<IContainer>(c => _container);
+					_container.Register<IContainer>(c => _container);
+
+					// Adapter registration.
+					_container.Register<IDebugger>(c => new DebuggerAdapter());
 
 					// Request Process registration.
-					_container.RegisterResolver<IRequestProcessorFactory>(c => new RequestProcessorFactory(c.ResolveInstance<IContainer>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor());
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IContentConfiguration>(), c.ResolveInstance<IDocumentationConfiguration>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<DocMAH.Configuration.IDataStoreConfiguration>(), c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor());
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.NotFound, c => new NotFoundRequestProcessor());
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadApplicationSettings, c => new ReadApplicationSettingsRequestProcessor(c.ResolveInstance<IEditAuthorizer>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadPage, c => new ReadPageRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.ReadTableOfContents, c => new ReadTableOfContentsRequestProcessor(c.ResolveInstance<IEditAuthorizer>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.SavePage, c => new SaveHelpRequestProcessor(c.ResolveInstance<IBulletRepository>(), c.ResolveInstance<IPageRepository>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.ResolveInstance<HttpContextBase>()));
-					_container.RegisterNamedResolver<IRequestProcessor>(RequestTypes.Unauthorized, c => new UnauthorizedRequestProcessor());
+					_container.Register<IRequestProcessorFactory>(c => new RequestProcessorFactory(c.Resolve<IContainer>()));
+					_container.Register<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor(c.Resolve<IMinifier>()));
+					_container.Register<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.Resolve<HttpContextBase>(), c.Resolve<IContentConfiguration>(), c.Resolve<IDocumentationConfiguration>(), c.Resolve<IMinifier>()));
+					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<DocMAH.Configuration.IDataStoreConfiguration>(), c.Resolve<HttpContextBase>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor(c.Resolve<IMinifier>()));
+					_container.Register<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.NotFound, c => new NotFoundRequestProcessor());
+					_container.Register<IRequestProcessor>(RequestTypes.ReadApplicationSettings, c => new ReadApplicationSettingsRequestProcessor(c.Resolve<IEditAuthorizer>()));
+					_container.Register<IRequestProcessor>(RequestTypes.ReadPage, c => new ReadPageRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.ReadTableOfContents, c => new ReadTableOfContentsRequestProcessor(c.Resolve<IEditAuthorizer>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.SavePage, c => new SaveHelpRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.Resolve<HttpContextBase>()));
+					_container.Register<IRequestProcessor>(RequestTypes.Unauthorized, c => new UnauthorizedRequestProcessor());
 
 					// DataStore registration.
-					_container.RegisterResolver<IBulletRepository>(c => new SqlBulletRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterResolver<IConfigurationRepository>(c => new SqlConfigurationRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterResolver<IDataStore>(c => new SqlDataStore(c.ResolveInstance<DocMAH.Configuration.IDataStoreConfiguration>(), c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterResolver<IPageRepository>(c => new SqlPageRepository(c.ResolveInstance<ISqlConnectionFactory>()));
-					_container.RegisterResolver<IUserPageSettingsRepository>(c => new SqlUserPageSettingsRepository(c.ResolveInstance<ISqlConnectionFactory>()));
+					_container.Register<IBulletRepository>(c => new SqlBulletRepository(c.Resolve<ISqlConnectionFactory>()));
+					_container.Register<IConfigurationRepository>(c => new SqlConfigurationRepository(c.Resolve<ISqlConnectionFactory>()));
+					_container.Register<IDataStore>(c => new SqlDataStore(c.Resolve<DocMAH.Configuration.IDataStoreConfiguration>(), c.Resolve<ISqlConnectionFactory>()));
+					_container.Register<IPageRepository>(c => new SqlPageRepository(c.Resolve<ISqlConnectionFactory>()));
+					_container.Register<IUserPageSettingsRepository>(c => new SqlUserPageSettingsRepository(c.Resolve<ISqlConnectionFactory>()));
 
 					// Content manager registration.
-					_container.RegisterResolver<IHelpContentManager>(c => new HelpContentManager(c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IDataStore>(), c.ResolveInstance<IDataStoreConfiguration>()));
+					_container.Register<IHelpContentManager>(c => new HelpContentManager(c.Resolve<HttpContextBase>(), c.Resolve<IDataStore>(), c.Resolve<IDataStoreConfiguration>()));
 
 					// Configuration registration.
-					_container.RegisterResolver<IContentConfiguration>(c => DocmahConfigurationSection.Current);
-					_container.RegisterResolver<IDataStoreConfiguration>(c => new DataStoreConfiguration(c.ResolveInstance<IConfigurationRepository>()));
-					_container.RegisterResolver<IDocumentationConfiguration>(c => DocmahConfigurationSection.Current.DocumentationConfiguration);
-					_container.RegisterResolver<IEditHelpConfiguration>(c => DocmahConfigurationSection.Current.EditHelpConfiguration);
+					_container.Register<IContentConfiguration>(c => DocmahConfigurationSection.Current);
+					_container.Register<IDataStoreConfiguration>(c => new DataStoreConfiguration(c.Resolve<IConfigurationRepository>()));
+					_container.Register<IDocumentationConfiguration>(c => DocmahConfigurationSection.Current.DocumentationConfiguration);
+					_container.Register<IEditHelpConfiguration>(c => DocmahConfigurationSection.Current.EditHelpConfiguration);
 
 					// SqlDataStore registration.
-					_container.RegisterResolver<ISqlConnectionFactory>(c => new SqlConnectionFactory(c.ResolveInstance<IContentConfiguration>()));
+					_container.Register<ISqlConnectionFactory>(c => new SqlConnectionFactory(c.Resolve<IContentConfiguration>()));
 
 					// Authorization registration.
-					_container.RegisterResolver<IEditAuthorizer>(c => new EditAuthorizer(c.ResolveInstance<HttpContextBase>(), c.ResolveInstance<IEditHelpConfiguration>()));
+					_container.Register<IEditAuthorizer>(c => new EditAuthorizer(c.Resolve<HttpContextBase>(), c.Resolve<IEditHelpConfiguration>()));
 
-					// HttpContext registration.
-					_container.RegisterResolver<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
+					// Other web registration.
+					_container.Register<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
+					//_container.RegisterResolver<IMinifier
 				}
 			}
 

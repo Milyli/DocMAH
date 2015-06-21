@@ -68,11 +68,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public string RequestType
-		{
-			get { return RequestTypes.DeletePage; }
-		}
-
 		public bool RequiresEditAuthorization
 		{
 			get { return true; }

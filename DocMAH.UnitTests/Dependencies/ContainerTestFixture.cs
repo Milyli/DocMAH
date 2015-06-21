@@ -22,7 +22,7 @@ namespace DocMAH.UnitTests.Dependencies
 			var container = new Container();
 
 			// Act
-			container.RegisterNamedResolver<IContainer>(string.Empty, c => container);
+			container.Register<IContainer>(string.Empty, c => container);
 
 			// Assert
 			Assert.Fail("An ArgumentNullException should have been thrown.");
@@ -37,7 +37,7 @@ namespace DocMAH.UnitTests.Dependencies
 			var container = new Container();
 
 			// Act
-			container.RegisterNamedResolver<IContainer>("Container", null);
+			container.Register<IContainer>("Container", null);
 
 			// Assert
 			Assert.Fail("An ArgumentNullException should have been thrown.");
@@ -49,10 +49,10 @@ namespace DocMAH.UnitTests.Dependencies
 		{
 			// Arrange
 			var container = new Container();
-			container.RegisterResolver<IContainer>(c => container);
+			container.Register<IContainer>(c => container);
 
 			// Act
-			var result = container.ResolveInstance<IContainer>();
+			var result = container.Resolve<IContainer>();
 
 			// Assert
 			Assert.That(result, Is.Not.Null, "An instance should have been resolved.");
@@ -66,10 +66,10 @@ namespace DocMAH.UnitTests.Dependencies
 		{
 			// Arrange
 			var container = new Container();
-			container.RegisterNamedResolver<IContainer>("NotDefault", c => container);
+			container.Register<IContainer>("NotDefault", c => container);
 
 			// Act
-			container.ResolveNamedInstance<IContainer>("Default");
+			container.Resolve<IContainer>("Default");
 
 			// Assert
 			Assert.Fail("An InvalidOperationException should have been thrown.");
@@ -83,10 +83,10 @@ namespace DocMAH.UnitTests.Dependencies
 		{
 			// Arrange
 			var container = new Container();
-			container.RegisterNamedResolver<IContainer>("Container", c => container);
+			container.Register<IContainer>("Container", c => container);
 						
 			// Act
-			container.ResolveNamedInstance<IContainer>(null);
+			container.Resolve<IContainer>(null);
 
 			// Assert
 			Assert.Fail("An ArgumentNullException should have been thrown.");
@@ -99,10 +99,10 @@ namespace DocMAH.UnitTests.Dependencies
 			// Arrange
 			var creatorName = "NamedContainer";
 			var container = new Container();
-			container.RegisterNamedResolver<IContainer>(creatorName, c => container);
+			container.Register<IContainer>(creatorName, c => container);
 
 			// Act
-			var result = container.ResolveNamedInstance<IContainer>(creatorName);
+			var result = container.Resolve<IContainer>(creatorName);
 
 			// Assert
 			Assert.That(result, Is.Not.Null, "An instance should have been resolved.");
@@ -118,7 +118,7 @@ namespace DocMAH.UnitTests.Dependencies
 			var container = new Container();
 
 			// Act
-			container.ResolveNamedInstance<IContainer>("default");
+			container.Resolve<IContainer>("default");
 
 			// Assert
 			Assert.Fail("An InvalidOperationException should be thrown.");

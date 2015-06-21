@@ -55,23 +55,23 @@ namespace DocMAH.UnitTests
 			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 
 			// Create custom container to use mock http context.
-			_container.RegisterResolver<HttpContextBase>(c => context.Object);
+			_container.Register<HttpContextBase>(c => context.Object);
 			
 			// Create data store for unit tests.
-			var dataStore = _container.ResolveInstance<IDataStore>();
+			var dataStore = _container.Resolve<IDataStore>();
 			dataStore.DataStore_Create();
 
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
 			//	other tests will work if this doesn't.
-			var helpContentManager = _container.ResolveInstance<IHelpContentManager>();
+			var helpContentManager = _container.Resolve<IHelpContentManager>();
 			helpContentManager.UpdateDataStoreContent();
 		}
 
 		public void TestFixtureDataStoreTearDown()
 		{
 			// Clean up the data store when tests are done.
-			var dataStore = _container.ResolveInstance<IDataStore>();
+			var dataStore = _container.Resolve<IDataStore>();
 			dataStore.DataStore_Drop();
 		}		
 
