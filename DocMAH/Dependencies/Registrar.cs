@@ -60,9 +60,6 @@ namespace DocMAH.Dependencies
 					_container.RegisterResolver<IEditAuthorizer>(c => new EditAuthorizer(c.ResolveInstance<HttpContextBase>()));
 
 					// HttpContext registration.
-
-					//// **************** Need to make this an expression so that it doesn't evaluate during registration
-
 					_container.RegisterResolver<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
 				}
 			}

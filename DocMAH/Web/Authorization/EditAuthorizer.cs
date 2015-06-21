@@ -11,12 +11,6 @@ namespace DocMAH.Web.Authorization
 	{
 		#region Constructors
 
-		public EditAuthorizer()
-			: this(new HttpContextWrapper(HttpContext.Current))
-		{
-
-		}
-
 		public EditAuthorizer(HttpContextBase httpContext)
 		{
 			_httpContext = httpContext;

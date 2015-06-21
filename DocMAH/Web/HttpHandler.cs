@@ -69,7 +69,6 @@ namespace DocMAH.Web
 			context.Response.StatusCode = (int)responseState.StatusCode;
 			if (!string.IsNullOrEmpty(responseState.Disposition))
 				context.Response.AddHeader("Content-Disposition", responseState.Disposition);
-			context.Response.Cache.SetNoStore();
 			context.Response.Write(responseState.Content);
 			context.Response.Flush();
 			context.Response.End();
