@@ -52,7 +52,7 @@ namespace DocMAH.Dependencies
 					_container.Register<IRequestProcessor>(RequestTypes.ReadPage, c => new ReadPageRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
 					_container.Register<IRequestProcessor>(RequestTypes.ReadTableOfContents, c => new ReadTableOfContentsRequestProcessor(c.Resolve<IEditAuthorizer>(), c.Resolve<IPageRepository>()));
 					_container.Register<IRequestProcessor>(RequestTypes.SavePage, c => new SaveHelpRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
-					_container.Register<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.Resolve<HttpContextBase>()));
+					_container.Register<IRequestProcessor>(RequestTypes.SaveUserPageSettings, c => new SaveUserPageSettingsRequestProcessor(c.Resolve<HttpContextBase>(), c.Resolve<IUserPageSettingsRepository>()));
 					_container.Register<IRequestProcessor>(RequestTypes.Unauthorized, c => new UnauthorizedRequestProcessor());
 
 					// DataStore registration.
@@ -79,7 +79,7 @@ namespace DocMAH.Dependencies
 
 					// Other web registration.
 					_container.Register<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
-					//_container.RegisterResolver<IMinifier
+					_container.Register<IMinifier>(c => new Minifier(c.Resolve<IDebugger>(), c.Resolve<HttpContextBase>()));
 				}
 			}
 

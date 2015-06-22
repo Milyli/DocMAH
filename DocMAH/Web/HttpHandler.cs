@@ -13,8 +13,8 @@ using DocMAH.Properties;
 using DocMAH.Extensions;
 using DocMAH.Data;
 using DocMAH.Web.Requests;
-using DocMAH.Web.Authorization;
 using DocMAH.Dependencies;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web
 {
@@ -27,7 +27,7 @@ namespace DocMAH.Web
 		/// The handler is instantiated by the framework so I can't change this.
 		/// </summary>
 		public HttpHandler()
-			: this((IContainer)HttpContext.Current.Items[HttpModule.ContextKey])
+			: this(Registrar.Initialize())
 		{
 		}
 
@@ -59,6 +59,17 @@ namespace DocMAH.Web
 			{
 				result = reader.ReadToEnd();
 			}
+			return result;
+		}
+
+		private bool IsAuthorized(IRequestProcessor processor)
+		{
+			var result = true;
+
+			var attribute = (EditAuthorizationAttribute)processor.GetType().GetCustomAttributes(typeof(EditAuthorizationAttribute), false).FirstOrDefault();
+			if (null != attribute && attribute.RequiresAuthorization)
+				result = _editAuthorizer.Authorize();
+
 			return result;
 		}
 
@@ -100,7 +111,7 @@ namespace DocMAH.Web
 			// Get the processor for the request and check authorization.
 			var method = context.Request["m"];
 			var requestProcessor = _requestProcessorFactory.Create(method);
-			if (requestProcessor.RequiresEditAuthorization && !_editAuthorizer.Authorize())
+			if (!IsAuthorized(requestProcessor))
 			{
 				// If authorization fails, replace the processor with the unauthorized processor.
 				requestProcessor = _requestProcessorFactory.Create(RequestTypes.Unauthorized);

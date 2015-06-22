@@ -15,7 +15,7 @@ using DocMAH.Models;
 using System.Web.Script.Serialization;
 using DocMAH.Data.Sql;
 using DocMAH.Dependencies;
-using DocMAH.Web.Authorization;
+
 using DocMAH.Web.Requests;
 
 namespace DocMAH.IntegrationTests.Tests

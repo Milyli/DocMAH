@@ -16,13 +16,7 @@ namespace DocMAH.Web.Requests.Processors
 			{
 				Content = "<html><body><h2>Unauthorized</h2></body></html>",
 				StatusCode = HttpStatusCode.Unauthorized,
-
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return false; }
 		}
 
 		#endregion

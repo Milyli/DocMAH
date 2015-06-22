@@ -6,9 +6,11 @@ using System.Web.Script.Serialization;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Models;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web.Requests.Processors
 {
+	[EditAuthorization]
 	public class MovePageRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
@@ -91,11 +93,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = "Success",
 				ContentType = ContentTypes.Html,
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return true; }
 		}
 
 		#endregion

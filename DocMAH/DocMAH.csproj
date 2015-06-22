@@ -97,6 +97,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Web\Authorization\EditAuthorizationAttribute.cs" />
     <Compile Include="Web\Authorization\EditAuthorizer.cs" />
     <Compile Include="Web\Authorization\IEditAuthorizer.cs" />
     <Compile Include="Web\HttpModule.cs" />

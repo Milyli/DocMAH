@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web.Requests.Processors
 {
-	class DeletePageRequestProcessor : IRequestProcessor
+	[EditAuthorization]
+	public class DeletePageRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
 
@@ -66,11 +68,6 @@ namespace DocMAH.Web.Requests.Processors
 			{
 				ContentType = ContentTypes.Html,
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return true; }
 		}
 
 		#endregion

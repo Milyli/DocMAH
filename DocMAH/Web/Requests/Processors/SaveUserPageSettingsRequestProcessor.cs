@@ -6,16 +6,19 @@ using System.Web;
 using System.Web.Script.Serialization;
 using DocMAH.Data;
 using DocMAH.Models;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web.Requests.Processors
 {
+	[EditAuthorization]
 	public class SaveUserPageSettingsRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
 		
-		public SaveUserPageSettingsRequestProcessor(HttpContextBase httpContext)
+		public SaveUserPageSettingsRequestProcessor(HttpContextBase httpContext, IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_httpContext = httpContext;
+			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
 		#endregion
@@ -54,11 +57,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = "Success",
 				ContentType = ContentTypes.Html,
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return true; }
 		}
 
 		#endregion

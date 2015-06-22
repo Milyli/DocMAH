@@ -18,10 +18,5 @@ namespace DocMAH.Web.Requests
 		/// <param name="responseState">Various response state values to override.</param>
 		/// <returns>Data that should be written to the response stream.</returns>
 		ResponseState Process(string data);
-
-		/// <summary>
-		/// Returns true if the request should only respond to authorized users.
-		/// </summary>
-		bool RequiresEditAuthorization { get; }
 	}
 }

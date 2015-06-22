@@ -100,11 +100,6 @@ namespace DocMAH.Web.Requests.Processors
 			};
 		}
 
-		public bool RequiresEditAuthorization
-		{
-			get { return false; }
-		}
-
 		#endregion
 	}
 }

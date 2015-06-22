@@ -10,8 +10,10 @@ using DocMAH.Data.Sql;
 using DocMAH.Extensions;
 using System.Net;
 using DocMAH.Configuration;
+using DocMAH.Web.Authorization;
 namespace DocMAH.Web.Requests.Processors
 {
+	[EditAuthorization]
 	public class GenerateInstallScriptRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
@@ -188,11 +190,6 @@ namespace DocMAH.Web.Requests.Processors
 				ContentType = ContentTypes.Text,
 				Disposition = "attachment;filename=ApplicationHelpInstall.xml"
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return true; }
 		}
 
 		#endregion

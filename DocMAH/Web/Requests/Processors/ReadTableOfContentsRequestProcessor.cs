@@ -7,6 +7,7 @@ using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Web.Authorization;
 
+
 namespace DocMAH.Web.Requests.Processors
 {
 	public class ReadTableOfContentsRequestProcessor : IRequestProcessor
@@ -42,11 +43,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = pagesJson,
 				ContentType = ContentTypes.Json,
 			};				
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return false; }
 		}
 
 		#endregion

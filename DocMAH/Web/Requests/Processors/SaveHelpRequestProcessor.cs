@@ -6,9 +6,11 @@ using System.Web.Script.Serialization;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Models;
+using DocMAH.Web.Authorization;
 
 namespace DocMAH.Web.Requests.Processors
 {
+	[EditAuthorization]
 	public class SaveHelpRequestProcessor : IRequestProcessor
 	{
 		#region Constructors
@@ -87,11 +89,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = pageJson,
 				ContentType = ContentTypes.Json,
 			};
-		}
-		
-		public bool RequiresEditAuthorization
-		{
-			get { return true; }
 		}
 
 		#endregion

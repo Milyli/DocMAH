@@ -83,20 +83,23 @@ namespace DocMAH.Web
 
 			// Prevent the filter from being added twice.
 			// Limit create help functionality to MvcHandler for now. (Prevents it from loading onto other modules: Glimpse, Elmah, etc...
-			if (!context.Items.Contains(ContextKey)
-				&& null != context.CurrentHandler
-				&& context.CurrentHandler.GetType().FullName == "System.Web.Mvc.MvcHandler")
+			if (!context.Items.Contains(ContextKey))				
 			{
-				var response = context.Response;
-				if (response.ContentType == "text/html")
-					response.Filter = new HttpResponseFilter(
-						response.Filter,
-						_container.Resolve<IBulletRepository>(),
-						_container.Resolve<IEditAuthorizer>(),
-						_container.Resolve<IMinifier>(),
-						_container.Resolve<IPageRepository>(), 
-						_container.Resolve<IUserPageSettingsRepository>());
 				context.Items.Add(ContextKey, _container);
+
+				if (null != context.CurrentHandler 
+					&& context.CurrentHandler.GetType().FullName == "System.Web.Mvc.MvcHandler")
+				{
+					var response = context.Response;
+					if (response.ContentType == "text/html")
+						response.Filter = new HttpResponseFilter(
+							response.Filter,
+							_container.Resolve<IBulletRepository>(),
+							_container.Resolve<IEditAuthorizer>(),
+							_container.Resolve<IMinifier>(),
+							_container.Resolve<IPageRepository>(),
+							_container.Resolve<IUserPageSettingsRepository>());
+				}
 			}
 		}
 

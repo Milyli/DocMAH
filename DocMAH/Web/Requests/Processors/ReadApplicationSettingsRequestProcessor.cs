@@ -6,6 +6,7 @@ using System.Web.Script.Serialization;
 using DocMAH.Models;
 using DocMAH.Web.Authorization;
 
+
 namespace DocMAH.Web.Requests.Processors
 {
 	public class ReadApplicationSettingsRequestProcessor  : IRequestProcessor
@@ -42,11 +43,6 @@ namespace DocMAH.Web.Requests.Processors
 				Content = applicationSettingsJson,
 				ContentType = ContentTypes.Json,
 			};
-		}
-
-		public bool RequiresEditAuthorization
-		{
-			get { return false; }
 		}
 
 		#endregion
