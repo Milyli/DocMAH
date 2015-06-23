@@ -35,55 +35,54 @@ namespace DocMAH.Web.Requests.Processors
 		public ResponseState Process(string data)
 		{
 			var jsonSerializer = new JavaScriptSerializer();
-			var page = jsonSerializer.Deserialize<Page>(data);
+			var clientPage = jsonSerializer.Deserialize<Page>(data);
 
-			if (page.Id > 0)	// For existing pages ...
+			if (clientPage.Id > 0)	// For existing pages ...
 			{
 				// Validate that the parent and order are not changing on updates.
-				var originalPage = _pageRepository.Read(page.Id);
-				if (!(originalPage.Order == page.Order && originalPage.ParentPageId == page.ParentPageId))
+				var dataStorePage = _pageRepository.Read(clientPage.Id);
+				if (!(dataStorePage.Order == clientPage.Order && dataStorePage.ParentPageId == clientPage.ParentPageId))
 					throw new InvalidOperationException("Changing page order and parent id not supported by SavePage. Use MovePage instead.");
 
-				_pageRepository.Update(page);
+				_pageRepository.Update(clientPage);
 
-				var existingBullets = _bulletRepository.ReadByPageId(page.Id);
+				var dataStoreBullets = _bulletRepository.ReadByPageId(clientPage.Id);
 				// Process incoming bullets. If they exist update, otherwise create.
-				page.Bullets.ForEach(bullet =>
+				foreach(var clientBullet in clientPage.Bullets)
 				{
-					bullet.PageId = page.Id;
-					if (existingBullets.Any(existing => existing.Id == bullet.Id))
-						_bulletRepository.Update(bullet);
+					clientBullet.PageId = clientPage.Id;
+					if (dataStoreBullets.Any(dataStoreBullet => dataStoreBullet.Id == clientBullet.Id))
+						_bulletRepository.Update(clientBullet);
 					else
-						_bulletRepository.Create(bullet);
-				});
+						_bulletRepository.Create(clientBullet);
+				}
 				// Delete any existing bullets not included with incoming bullets.
-				existingBullets.ForEach(existing =>
+				foreach(var dataStoreBullet in dataStoreBullets)
 				{
-					if (!page.Bullets.Any(bullet => bullet.Id == existing.Id))
-						_bulletRepository.Delete(existing.Id);
-				});
+					if (!clientPage.Bullets.Any(clientBullet => clientBullet.Id == dataStoreBullet.Id))
+						_bulletRepository.Delete(dataStoreBullet.Id);
+				}
 			}
 			else // For new pages ...
 			{
 				// Push siblings after the starting at the new page's order up by one.
-				var siblings = _pageRepository.ReadByParentId(page.ParentPageId);
-				for (int i = page.Order; i < siblings.Count; i++)
+				var siblings = _pageRepository.ReadByParentId(clientPage.ParentPageId);
+				for (int i = clientPage.Order; i < siblings.Count; i++)
 				{
 					siblings[i].Order++;
 					_pageRepository.Update(siblings[i]);
 				}
 
-				_pageRepository.Create(page);
-				page.Bullets.ForEach(bullet =>
+				_pageRepository.Create(clientPage);
+				foreach(var clientBullet in clientPage.Bullets)
 				{
-					bullet.PageId = page.Id;
-					_bulletRepository.Create(bullet);
-				});
-
+					clientBullet.PageId = clientPage.Id;
+					_bulletRepository.Create(clientBullet);
+				}
 			}
 
 			var serializer = new JavaScriptSerializer();
-			var pageJson = serializer.Serialize(page);
+			var pageJson = serializer.Serialize(clientPage);
 			return new ResponseState
 			{
 				Content = pageJson,

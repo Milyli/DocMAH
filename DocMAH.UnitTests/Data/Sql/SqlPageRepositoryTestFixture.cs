@@ -123,9 +123,9 @@ namespace DocMAH.UnitTests.Data.Sql
 			// Arrange
 			var parentPage = Models.CreatePage();
 			PageRepository.Create(parentPage);
-			var childPage1 = Models.CreatePage(parentPage.Id);
+			var childPage1 = Models.CreatePage(parentPageId: parentPage.Id);
 			PageRepository.Create(childPage1);
-			var childPage2 = Models.CreatePage(parentPage.Id);
+			var childPage2 = Models.CreatePage(parentPageId: parentPage.Id);
 			PageRepository.Create(childPage2);
 			var noisePage = Models.CreatePage();
 			PageRepository.Create(noisePage);

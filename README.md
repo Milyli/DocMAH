@@ -23,10 +23,15 @@ Or if you like, download or fork us here on GitHub.
 * Generate a deployment script for help content with a button press. Deploy the file with your site to automatically update your help.
 * Override the CSS and JavaScript to create your own look and feel.
 
+## Recent Updates
+* Overhaul of codebase to make it easier to test.
+* Better tested code in order to safely make upcoming usability changes.
+
 ## On the Way
-* More customization.
-* More ease of use.
-* More of everything!!!! MOAR!!!!!
+* On the heels of the code refactor and testing, we're going to be making some big usability improvements.
+* <a href="http://docmah.com/">DocMAH.com</a> on the way courtesy of some of the folks at <a href="http://milyli.com">Milyli</a>.
+
+* More of everything! MOAR!!!!!
 * ... except bugs. Not more of those. Fewer bugs! FUEUER!!!!! (hopefully)
 
 ###### sponsored by <a href="http://milyli.com">milyli</a>

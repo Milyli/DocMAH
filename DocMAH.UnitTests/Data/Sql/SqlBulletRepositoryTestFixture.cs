@@ -29,8 +29,8 @@ namespace DocMAH.UnitTests.Data.Sql
 		{
 			var page = Models.CreatePage();
 			PageRepository.Create(page);
-			
-			var newBullet = Models.CreateBullet(page.Id);
+
+			var newBullet = Models.CreateBullet(pageId: page.Id);
 			Assert.AreEqual(0, newBullet.Id, "The bullet id should not be set until after data layer Bullet_Create method is called.");
 
 			BulletRepository.Create(newBullet);
@@ -61,11 +61,11 @@ namespace DocMAH.UnitTests.Data.Sql
 			var noisePage = Models.CreatePage();
 			PageRepository.Create(noisePage);
 
-			var targetBullet1 = Models.CreateBullet(targetPage.Id);
+			var targetBullet1 = Models.CreateBullet(pageId: targetPage.Id);
 			BulletRepository.Create(targetBullet1);
-			var targetBullet2 = Models.CreateBullet(targetPage.Id);
+			var targetBullet2 = Models.CreateBullet(pageId: targetPage.Id);
 			BulletRepository.Create(targetBullet2);
-			var noiseBullet = Models.CreateBullet(noisePage.Id);
+			var noiseBullet = Models.CreateBullet(pageId: noisePage.Id);
 			BulletRepository.Create(noiseBullet);
 
 			// Act
@@ -103,14 +103,14 @@ namespace DocMAH.UnitTests.Data.Sql
 			// Arrange
 			var keptPage = Models.CreatePage();
 			PageRepository.Create(keptPage);
-			var keptBullet = Models.CreateBullet(keptPage.Id);
+			var keptBullet = Models.CreateBullet(pageId: keptPage.Id);
 			BulletRepository.Create(keptBullet);
 
 			var deletedPage = Models.CreatePage();
 			PageRepository.Create(deletedPage);
-			var deletedBullet = Models.CreateBullet(deletedPage.Id);
+			var deletedBullet = Models.CreateBullet(pageId: deletedPage.Id);
 			BulletRepository.Create(deletedBullet);
-			var anotherDeletedBullet = Models.CreateBullet(deletedPage.Id);
+			var anotherDeletedBullet = Models.CreateBullet(pageId: deletedPage.Id);
 			BulletRepository.Create(anotherDeletedBullet);
 
 			// Act
@@ -129,7 +129,7 @@ namespace DocMAH.UnitTests.Data.Sql
 			// Arrange
 			var page = Models.CreatePage();
 			PageRepository.Create(page);
-			var bullet = Models.CreateBullet(page.Id);
+			var bullet = Models.CreateBullet(pageId: page.Id);
 			BulletRepository.Create(bullet);
 			
 			// Modify the bullet informatio nto verify the values in the data store are overwritten.
@@ -158,7 +158,7 @@ namespace DocMAH.UnitTests.Data.Sql
 			// Arrange
 			var page = Models.CreatePage();
 			PageRepository.Create(page);
-			var bullet = Models.CreateBullet(page.Id);
+			var bullet = Models.CreateBullet(pageId: page.Id);
 			bullet.Id = 42098;			
 
 			// Act

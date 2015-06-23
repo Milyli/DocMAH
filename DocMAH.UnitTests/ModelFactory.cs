@@ -10,12 +10,14 @@ namespace DocMAH.UnitTests
 	public class ModelFactory
 	{
 		public static int _pageCount = 0;
+		public static int _bulletCount = 0;
 
-		public Bullet CreateBullet(int pageId)
+		public Bullet CreateBullet(int id = 0, int pageId = 0)
 		{
-			return new Bullet
+			var result = new Bullet
 			{
-				Text = "Unit test bullet text.",
+				Id = id,
+				Text = string.Format("Unit test bullet text - {0}.", _bulletCount),
 				DocHorizontalOffset = 10,
 				DocVerticalOffset = 10,
 				HorizontalOffset = 20,
@@ -24,16 +26,22 @@ namespace DocMAH.UnitTests
 				Number = 1,
 				PageId = pageId,
 			};
+
+			_bulletCount++;
+
+			return result;
 		}
 
 		public Page CreatePage(
-			int? parentPageId = null, 
-			string matchUrls = null, 
-			int order = 1, 
+			int id = 0,
+			int? parentPageId = null,
+			string matchUrls = null,
+			int order = 1,
 			bool isHidden = false)
 		{
 			var result = new Page
 			{
+				Id = id,
 				Content = "This is some test content for a page.",
 				DocHorizontalOffset = 10,
 				DocVerticalOffset = 10,
@@ -41,7 +49,7 @@ namespace DocMAH.UnitTests
 				HorizontalOffset = 20,
 				VerticalOffset = 20,
 				OffsetElementId = "TestPageOffsetElementId",
-				MatchUrls = matchUrls ?? string.Format("/Test/Run-{0}*",_pageCount) ,
+				MatchUrls = matchUrls ?? string.Format("/Test/Run-{0}*", _pageCount),
 				Order = order,
 				ParentPageId = parentPageId,
 				PageType = PageTypes.FirstTimePage,
