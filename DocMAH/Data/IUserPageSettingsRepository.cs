@@ -18,6 +18,12 @@ namespace DocMAH.Data
 		void Create(UserPageSettings userPageSettings);
 
 		/// <summary>
+		/// Deletes user page settings for all related pages not included in the list of ids.
+		/// </summary>
+		/// <param name="pageIds"></param>
+		void DeleteExcept(List<int> pageIds);
+
+		/// <summary>
 		/// Reads a setting for the given user and page in the data store.
 		/// </summary>
 		/// <param name="userName"></param>

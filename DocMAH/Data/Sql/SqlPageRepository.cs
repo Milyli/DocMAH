@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using DocMAH.Extensions;
 using DocMAH.Models;
 
 namespace DocMAH.Data.Sql
@@ -11,17 +12,17 @@ namespace DocMAH.Data.Sql
 	public class SqlPageRepository : BaseSqlRepository, IPageRepository
 	{
 		#region Constructors
-		
+
 		public SqlPageRepository(ISqlConnectionFactory sqlConnectionFactory)
 			: base(sqlConnectionFactory)
 		{
 
-		}			
-		
+		}
+
 		#endregion
 
 		#region Private Methods
-		
+
 		private IEnumerable<Page> HydratePages(SqlDataReader reader)
 		{
 			var idOrdinal = reader.GetOrdinal("Id");
@@ -152,7 +153,7 @@ namespace DocMAH.Data.Sql
 		#endregion
 
 		#region Public Methods
-		
+
 		public void Create(Page page)
 		{
 			using (var connection = SqlConnectionFactory.GetConnection())
@@ -183,6 +184,40 @@ namespace DocMAH.Data.Sql
 				connection.Open();
 				command.ExecuteNonQuery();
 			}
+		}
+
+		public void DeleteExcept(List<int> pageIds)
+		{
+			if (null == pageIds || pageIds.Count == 0)
+				return;
+
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.Page_DeleteExcept.Replace("@pageIds", pageIds.ToCsv());
+
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void Import(Page page)
+		{
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.Page_Import;
+				AddParameters(page, command);
+				command.Parameters.Add(new SqlParameter("@id", page.Id));
+
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+
+			MatchUrls_DeleteByPageId(page.Id);
+			MatchUrls_CreateByPageId(page.Id, page.MatchUrls);
 		}
 
 		public Page Read(int id)
@@ -305,17 +340,15 @@ namespace DocMAH.Data.Sql
 		public void Update(Page page)
 		{
 			using (var connection = SqlConnectionFactory.GetConnection())
+			using (var command = connection.CreateCommand())
 			{
-				using (var command = connection.CreateCommand())
-				{
-					command.CommandType = CommandType.Text;
-					command.CommandText = SqlScripts.Page_Update;
-					AddParameters(page, command);
-					command.Parameters.Add(new SqlParameter("@id", page.Id));
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.Page_Update;
+				AddParameters(page, command);
+				command.Parameters.Add(new SqlParameter("@id", page.Id));
 
-					connection.Open();
-					command.ExecuteNonQuery();
-				}
+				connection.Open();
+				command.ExecuteNonQuery();
 			}
 
 			MatchUrls_DeleteByPageId(page.Id);

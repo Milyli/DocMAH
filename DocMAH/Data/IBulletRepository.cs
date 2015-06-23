@@ -28,6 +28,19 @@ namespace DocMAH.Data
 		void DeleteByPageId(int pageId);
 
 		/// <summary>
+		/// Deletes bullets with ids not in the list.
+		/// </summary>
+		/// <param name="bulletIds"></param>
+		void DeleteExcept(List<int> bulletIds);
+
+		/// <summary>
+		/// Sends the bullet to the data store to be created or updated based on its 
+		/// current state in the data store.
+		/// </summary>
+		/// <param name="bullet"></param>
+		void Import(Bullet bullet);
+
+		/// <summary>
 		/// Streams all bullets from the data store.
 		/// </summary>
 		/// <returns></returns>

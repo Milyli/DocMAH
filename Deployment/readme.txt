@@ -176,14 +176,14 @@ The first time help entries can optionally be hidden in the documentation pages.
 ** Deployment **
 On the documentation page, there is a button labeled "Generate Install Scripts".
 Clicking this button does two things.
-	a) ApplicationHelpInstall.xml is created in your application's root folder.
+	a) DocmahContent.xml is created in your application's root folder.
 		If you are writing help for the site you are developing, just make sure this file gets deployed and throw away option b.
 	b) You are offered the option to save the file elsewhere on your computer through the browser.
 		This was added so that documentation writers could work on a non-development environment, generate the file and deliver it to a developer to add to the build process.
 
 The first time DocMAH is accessed, it builds and updates its own database tables based on a database version number compiled into the dll.
 
-Immediately afterwards, DocMAH updates the help content based on the content and help content version number in the ApplicationHelpInstall.xml file.
+Immediately afterwards, DocMAH updates the help content based on the content and help content version number in the content deployment file.
 
 It is recommended that you disable the edit tools entirely in production environments.
 Look for this in web.config ->       <editHelp disabled="false"

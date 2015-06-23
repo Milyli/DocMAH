@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
+using DocMAH.Content;
 using DocMAH.Data;
 using DocMAH.Dependencies;
 using DocMAH.Web.Authorization;
@@ -20,7 +23,9 @@ namespace DocMAH.Web
 		/// </summary>
 		public HttpModule()
 		{
-
+			_container = Registrar.Initialize();
+			_dataStore = _container.Resolve<IDataStore>();
+			_helpContentManager = _container.Resolve<IHelpContentManager>();
 		}
 
 		/// <summary>
@@ -43,9 +48,9 @@ namespace DocMAH.Web
 		#region Private Fields
 
 		private readonly HttpContextBase _httpContext;
-		private IContainer _container;
-		private IDataStore _dataStore;
-		private IHelpContentManager _helpContentManager;
+		private readonly IContainer _container;
+		private readonly IDataStore _dataStore;
+		private readonly IHelpContentManager _helpContentManager;
 
 		#endregion
 
@@ -59,18 +64,22 @@ namespace DocMAH.Web
 		#region Public Fields
 
 		public const string ContextKey = "DocMAH.Container";
+		public const string DocmahInitializedKey = "DocMAH.Initialized";
 
 		#endregion
 
 		public void Init(HttpApplication application)
 		{
-			_container = Registrar.Initialize();
 
-			_dataStore = _container.Resolve<IDataStore>();
-			_dataStore.DataStore_Update();
+			if (!(bool)(application.Application[DocmahInitializedKey] ?? false))
+			{
+				_dataStore.DataStore_Update();
 
-			_helpContentManager = _container.Resolve<IHelpContentManager>();
-			_helpContentManager.UpdateDataStoreContent();
+				var fileName = Path.Combine(HostingEnvironment.MapPath("~"), ContentFileConstants.ContentFileName);
+				_helpContentManager.ImportContent(fileName);
+
+				application.Application[DocmahInitializedKey] = true;
+			}
 
 			application.PreSendRequestHeaders += AttachFilterEventHandler;
 			application.PostReleaseRequestState += AttachFilterEventHandler;

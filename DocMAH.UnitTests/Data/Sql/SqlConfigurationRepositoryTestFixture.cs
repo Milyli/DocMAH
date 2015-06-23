@@ -20,7 +20,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Crud_Success()
 		{
 			var helpVersion = ConfigurationRepository.Read(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey);
-			Assert.That(helpVersion, Is.EqualTo(EnumExtensions.GetMaxValue<SqlDataStoreVersions, int>()), "Current version should match the update script.");
+			Assert.That(helpVersion, Is.EqualTo((int)EnumExtensions.GetMaxValue<DataStoreSchemaVersions>()), "Current version should match the update script.");
 
 			ConfigurationRepository.Update(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey, int.MaxValue);
 			helpVersion = ConfigurationRepository.Read(DocMAH.Configuration.DataStoreConfiguration.DataStoreSchemaVersionKey);

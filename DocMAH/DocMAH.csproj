@@ -53,8 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\PathAdapter.cs" />
     <Compile Include="Adapters\DebuggerAdapter.cs" />
     <Compile Include="Adapters\IDebugger.cs" />
+    <Compile Include="Adapters\IPath.cs" />
     <Compile Include="Configuration\CdnUrls.cs" />
     <Compile Include="Configuration\Configurator.cs" />
     <Compile Include="Configuration\DocumentationElement.cs" />
@@ -63,10 +65,16 @@
     <Compile Include="Configuration\IContentConfiguration.cs" />
     <Compile Include="Configuration\IDocumentationConfiguration.cs" />
     <Compile Include="Configuration\IEditHelpConfiguration.cs" />
+    <Compile Include="Content\ContentFileSchemaVersions.cs" />
+    <Compile Include="Data\Sql\SqlScripts.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SqlScripts.resx</DependentUpon>
+    </Compile>
     <Compile Include="Dependencies\Container.cs" />
     <Compile Include="Data\IBulletRepository.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
-    <Compile Include="Data\IHelpContentManager.cs" />
+    <Compile Include="Content\IHelpContentManager.cs" />
     <Compile Include="Data\IPageRepository.cs" />
     <Compile Include="Data\IUserPageSettingsRepository.cs" />
     <Compile Include="Data\Sql\BaseSqlRepository.cs" />
@@ -75,17 +83,12 @@
     <Compile Include="Data\Sql\ISqlConnectionFactory.cs" />
     <Compile Include="Data\Sql\SqlBulletRepository.cs" />
     <Compile Include="Configuration\DataStoreConfiguration.cs" />
-    <Compile Include="Data\HelpContentManager.cs" />
+    <Compile Include="Content\HelpContentManager.cs" />
     <Compile Include="Configuration\IDataStoreConfiguration.cs" />
-    <Compile Include="Data\Sql\SqlDataStoreVersions.cs" />
+    <Compile Include="Data\DataStoreSchemaVersions.cs" />
     <Compile Include="Data\Sql\SqlPageRepository.cs" />
-    <Compile Include="Data\Sql\SqlScripts.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SqlScripts.resx</DependentUpon>
-    </Compile>
     <Compile Include="Data\Sql\SqlUserPageSettingsRepository.cs" />
-    <Compile Include="Data\XmlNodeNames.cs" />
+    <Compile Include="Content\ContentFileConstants.cs" />
     <Compile Include="Dependencies\IContainer.cs" />
     <Compile Include="Dependencies\Registrar.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -157,9 +160,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Sql\Scripts\Bullet_DeleteExcept.sql" />
     <Content Include="Data\Sql\Scripts\Database_Create.sql" />
     <Content Include="Data\Sql\Scripts\Database_Drop.sql" />
     <Content Include="Data\Sql\Scripts\Database_Update_02.sql" />
+    <Content Include="Data\Sql\Scripts\Page_DeleteExcept.sql" />
+    <Content Include="Data\Sql\Scripts\UserPageSettings_DeleteExcept.sql" />
     <Content Include="Web\Css\Images\closedBook.png" />
     <Content Include="Web\Css\Images\closedBook.svg" />
     <Content Include="Web\Css\Images\document.png" />
@@ -172,9 +178,9 @@
       <DependentUpon>FirstTimeViewInjectedScripts.html</DependentUpon>
     </Content>
     <Content Include="Web\JavaScript\DocMAHJavaScript.js" />
-    <Content Include="Data\Sql\Scripts\Bullet_Install.txt" />
+    <Content Include="Data\Sql\Scripts\Bullet_Import.sql" />
     <Content Include="Data\Sql\Scripts\Bullet_ReadAll.sql" />
-    <Content Include="Data\Sql\Scripts\Page_Install.txt" />
+    <Content Include="Data\Sql\Scripts\Page_Import.sql" />
     <Content Include="Data\Sql\Scripts\Page_ReadAll.sql" />
     <Content Include="Web\Css\Mixins.css">
       <DependentUpon>Mixins.less</DependentUpon>

@@ -21,6 +21,19 @@ namespace DocMAH.Data
 		void Delete(int id);
 
 		/// <summary>
+		/// Used during import to delete outdated content.
+		/// </summary>
+		/// <param name="pageIds"></param>
+		void DeleteExcept(List<int> pageIds);
+
+		/// <summary>
+		/// Imports a page into the data store to be created or updated based on its 
+		/// current state in the data store.
+		/// </summary>
+		/// <param name="page"></param>
+		void Import(Page page);
+
+		/// <summary>
 		/// Reads a page by its id.
 		/// </summary>
 		/// <param name="id"></param>

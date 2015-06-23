@@ -77,7 +77,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
-    <Compile Include="Data\DatabaseUpdaterTestFixture.cs" />
+    <Compile Include="Content\ContentFileManagerTestFixture.cs" />
+    <Compile Include="Data\HelpContentManagerTestFixture.cs" />
     <Compile Include="Data\DataStoreConfigurationTestFixture.cs" />
     <Compile Include="Data\Sql\BaseSqlRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlBulletRepositoryTestFixture.cs" />

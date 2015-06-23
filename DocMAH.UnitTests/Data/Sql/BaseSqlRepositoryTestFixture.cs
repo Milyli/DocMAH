@@ -28,8 +28,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		protected SqlUserPageSettingsRepository UserPageSettingsRepository { get; set; }
 
 
-		#endregion
-		
+		#endregion		
 
 		#region SetUp / TearDown
 
@@ -37,7 +36,7 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void BaseSqlRepositoryTestFixtureSetUp()
 		{
 			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreSetUp();
+			dataStoreManager.TestFixtureDataStoreSetUp(false);
 		}
 
 		[TestFixtureTearDown]

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using DocMAH.Extensions;
 using DocMAH.Models;
 
 namespace DocMAH.Data.Sql
@@ -11,12 +12,12 @@ namespace DocMAH.Data.Sql
 	public class SqlUserPageSettingsRepository : BaseSqlRepository, IUserPageSettingsRepository
 	{
 		#region Constructors
-		
+
 		public SqlUserPageSettingsRepository(ISqlConnectionFactory sqlConnectionFactory)
 			: base(sqlConnectionFactory)
 		{
 
-		}	
+		}
 
 		#endregion
 
@@ -70,6 +71,22 @@ namespace DocMAH.Data.Sql
 
 				connection.Open();
 				userPageSettings.Id = (int)command.ExecuteScalar();
+			}
+		}
+
+		public void DeleteExcept(List<int> pageIds)
+		{
+			if (null == pageIds || pageIds.Count == 0)
+				return;
+
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.UserPageSettings_DeleteExcept.Replace("@pageIds", pageIds.ToCsv());
+
+				connection.Open();
+				command.ExecuteNonQuery();
 			}
 		}
 

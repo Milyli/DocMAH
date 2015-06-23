@@ -127,8 +127,11 @@
   <data name="Bullet_DeleteByPageId" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\bullet_deletebypageid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Bullet_Install" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\bullet_install.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Bullet_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\bullet_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Bullet_Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\bullet_import.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Bullet_ReadAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\bullet_readall.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -172,8 +175,11 @@
   <data name="Page_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\page_delete.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Page_Install" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_install.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Page_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\page_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Page_Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\page_import.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Page_ReadAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\page_readall.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -195,6 +201,9 @@
   </data>
   <data name="UserPageSettings_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\userpagesettings_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="UserPageSettings_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\userpagesettings_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="UserPageSettings_ReadByUserAndPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\userpagesettings_readbyuserandpage.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

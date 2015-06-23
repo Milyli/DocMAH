@@ -17,11 +17,13 @@ using DocMAH.Data.Sql;
 using DocMAH.Dependencies;
 
 using DocMAH.Web.Requests;
+using DocMAH.Content;
+using DocMAH.Adapters;
 
 namespace DocMAH.IntegrationTests.Tests
 {
 	[TestFixture]
-	public class SqlDataStoreIntegrationTests : BaseIntegrationTestFixture
+	public class ContentDeploymentIntegrationTests : BaseIntegrationTestFixture
 	{
 
 		#region Tests
@@ -31,35 +33,45 @@ namespace DocMAH.IntegrationTests.Tests
 		public void PageIdConsistencyAcrossSchemaUpdates()
 		{
 			// Create installation file.
-			HttpContext.SetMapPath("~", NUnit.Framework.TestContext.CurrentContext.TestDirectory);
 			HttpContext.AddApplicationState(HelpContentManager.DocmahInitializedKey, false);
 			HttpContext.SetRequestParameter("m", RequestTypes.GenerateInstallScript);
 			Container.Register<HttpContextBase>(c => HttpContext.Object);
+
+			var path = Mocks.Create<IPath>();
+			path.Setup(p => p.MapPath("~")).Returns(TestContext.CurrentContext.TestDirectory);
+			Container.Register<IPath>(c => path.Object);
 
 			var pageRepository = Container.Resolve<IPageRepository>();
 			var handler = new HttpHandler(Container);
 
 			var models = new ModelFactory();
 			var firstPage = models.CreatePage();
+			pageRepository.Create(firstPage);
+
+			handler.ProcessWrappedRequest(HttpContext.Object);
+
+
+			// Change content and recreate installation file.
 			var deletedPage = models.CreatePage();
 			var recreatedPage = models.CreatePage();
 			var lastPage = models.CreatePage();
 
-			pageRepository.Create(firstPage);
-			handler.ProcessWrappedRequest(HttpContext.Object);
 			pageRepository.Create(deletedPage);
 			pageRepository.Create(recreatedPage);
 			pageRepository.Create(lastPage);
 			pageRepository.Delete(recreatedPage.Id);
 			pageRepository.Create(recreatedPage);
 			pageRepository.Delete(deletedPage.Id);
+
 			HttpContext.SetRequestContent(string.Empty); // Resets stream for next read.
 			handler.ProcessWrappedRequest(HttpContext.Object);
+
 
 			// Reset data store and exercise startup file.
 			var dataStoreManager = new TestFixtureDataStoreManager();
 			dataStoreManager.TestFixtureDataStoreTearDown();
 			dataStoreManager.TestFixtureDataStoreSetUp();
+
 
 			// Validate model ids.
 			var newFirstPage = pageRepository.Read(firstPage.Id);

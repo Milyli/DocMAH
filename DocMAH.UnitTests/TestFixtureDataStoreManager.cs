@@ -14,7 +14,7 @@ using DocMAH.Data.Sql;
 using DocMAH.Dependencies;
 using Moq;
 using NUnit.Framework;
-
+using DocMAH.Content;
 namespace DocMAH.UnitTests
 {
 	public class TestFixtureDataStoreManager
@@ -40,14 +40,14 @@ namespace DocMAH.UnitTests
 		public void DeleteInstallFile()
 		{
 			// Ensure clean environment.
-			var installFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "ApplicationHelpInstall.xml");
+			var installFile = Path.Combine(TestContext.CurrentContext.TestDirectory, ContentFileConstants.ContentFileName);
 			if (File.Exists(installFile))
 			{
 				File.Delete(installFile);
 			}
 		}
 
-		public void TestFixtureDataStoreSetUp()
+		public void TestFixtureDataStoreSetUp(bool updateContent = true)
 		{
 			// Fake the HttpContext to indicate the database needs to be updated.
 			var context = new Mock<HttpContextBase>();
@@ -56,16 +56,21 @@ namespace DocMAH.UnitTests
 
 			// Create custom container to use mock http context.
 			_container.Register<HttpContextBase>(c => context.Object);
-			
+
 			// Create data store for unit tests.
 			var dataStore = _container.Resolve<IDataStore>();
 			dataStore.DataStore_Create();
+			dataStore.DataStore_Update();
 
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
 			//	other tests will work if this doesn't.
-			var helpContentManager = _container.Resolve<IHelpContentManager>();
-			helpContentManager.UpdateDataStoreContent();
+			if (updateContent)
+			{
+				var fileName = Path.Combine(TestContext.CurrentContext.TestDirectory, ContentFileConstants.ContentFileName);
+				var helpContentManager = _container.Resolve<IHelpContentManager>();
+				helpContentManager.ImportContent(fileName);
+			}
 		}
 
 		public void TestFixtureDataStoreTearDown()

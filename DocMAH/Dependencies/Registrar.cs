@@ -11,7 +11,7 @@ using DocMAH.Data.Sql;
 using DocMAH.Web.Authorization;
 using DocMAH.Web.Requests;
 using DocMAH.Web.Requests.Processors;
-
+using DocMAH.Content;
 namespace DocMAH.Dependencies
 {
 	public class Registrar
@@ -35,6 +35,7 @@ namespace DocMAH.Dependencies
 
 					// Self registration.
 					_container.Register<IContainer>(c => _container);
+					_container.Register<IPath>(c => new PathAdapter());
 
 					// Adapter registration.
 					_container.Register<IDebugger>(c => new DebuggerAdapter());
@@ -44,7 +45,7 @@ namespace DocMAH.Dependencies
 					_container.Register<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor(c.Resolve<IMinifier>()));
 					_container.Register<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
 					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.Resolve<HttpContextBase>(), c.Resolve<IContentConfiguration>(), c.Resolve<IDocumentationConfiguration>(), c.Resolve<IMinifier>()));
-					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<DocMAH.Configuration.IDataStoreConfiguration>(), c.Resolve<HttpContextBase>(), c.Resolve<IPageRepository>()));
+					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.Resolve<IPath>(), c.Resolve<IHelpContentManager>()));
 					_container.Register<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor(c.Resolve<IMinifier>()));
 					_container.Register<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.Resolve<IPageRepository>()));
 					_container.Register<IRequestProcessor>(RequestTypes.NotFound, c => new NotFoundRequestProcessor());
@@ -58,12 +59,12 @@ namespace DocMAH.Dependencies
 					// DataStore registration.
 					_container.Register<IBulletRepository>(c => new SqlBulletRepository(c.Resolve<ISqlConnectionFactory>()));
 					_container.Register<IConfigurationRepository>(c => new SqlConfigurationRepository(c.Resolve<ISqlConnectionFactory>()));
-					_container.Register<IDataStore>(c => new SqlDataStore(c.Resolve<DocMAH.Configuration.IDataStoreConfiguration>(), c.Resolve<ISqlConnectionFactory>()));
+					_container.Register<IDataStore>(c => new SqlDataStore(c.Resolve<IDataStoreConfiguration>(), c.Resolve<ISqlConnectionFactory>()));
 					_container.Register<IPageRepository>(c => new SqlPageRepository(c.Resolve<ISqlConnectionFactory>()));
 					_container.Register<IUserPageSettingsRepository>(c => new SqlUserPageSettingsRepository(c.Resolve<ISqlConnectionFactory>()));
 
 					// Content manager registration.
-					_container.Register<IHelpContentManager>(c => new HelpContentManager(c.Resolve<HttpContextBase>(), c.Resolve<IDataStore>(), c.Resolve<IDataStoreConfiguration>()));
+					_container.Register<IHelpContentManager>(c => new HelpContentManager(c.Resolve<IBulletRepository>(), c.Resolve<IDataStoreConfiguration>(), c.Resolve<IPageRepository>(), c.Resolve<IUserPageSettingsRepository>()));
 
 					// Configuration registration.
 					_container.Register<IContentConfiguration>(c => DocmahConfigurationSection.Current);

@@ -11,7 +11,7 @@ namespace DocMAH.UnitTests.Data.Sql
 	public class SqlPageRepositoryTestFixture : BaseSqlRepositoryTestFixture
 	{
 		#region Tests
-		
+
 		// I'm not normally a fan of testing multiple methods in a single test.
 		// However, in this case I would otherwise need to write a bunch of
 		// SQL just for the unit tests.
@@ -43,6 +43,77 @@ namespace DocMAH.UnitTests.Data.Sql
 
 			var deletedPage = PageRepository.Read(newPage.Id);
 			Assert.That(deletedPage, Is.Null, "The page should have been deleted from the database.");
+		}
+
+		[Test]
+		[Description("Empty list should not cause method to throw SqlException.")]
+		public void DeleteExcept_EmptyList()
+		{
+			// Arrange
+			
+			// Act
+			PageRepository.DeleteExcept(new List<int>());
+
+			// Assert
+			// Above method call should not throw a SqlException.
+
+		}
+
+		[Test]
+		[Description("Deletes pages and page URLs no included in the parameter list.")]
+		public void DeleteExcept_Success()
+		{
+			// Arrange
+			var keptPage = Models.CreatePage(matchUrls: "/Pages/KeptPage1 /Pages/KeptPage2");
+			PageRepository.Create(keptPage);
+			var deletedPage = Models.CreatePage(matchUrls: "/Pages/DeletedPage1 /Pages/DeletedPage2");
+			PageRepository.Create(deletedPage);
+			var anotherDeletedPage = Models.CreatePage(matchUrls: "/Pages/AnotherDeletedPage1 /Pages/AnotherDeletedPage2");
+			PageRepository.Create(anotherDeletedPage);
+
+			// Act
+			PageRepository.DeleteExcept(new List<int> { keptPage.Id });
+
+			// Assert
+			var pages = PageRepository.ReadAll().ToList();
+			Assert.That(pages.Count, Is.EqualTo(1), "Only one page should be left in the repository.");
+			Assert.That(pages[0].Id, Is.EqualTo(keptPage.Id), "The kept page should remain because its id was in the list.");
+		}
+
+		[Test]
+		[Description("Updates an existing page in the data store.")]
+		public void Import_ExistingPage()
+		{
+			// Arrange
+			var page = Models.CreatePage();
+			PageRepository.Create(page);
+
+			page.Title = "Imported existing page title.";
+
+			// Act
+			PageRepository.Import(page);
+			var result = PageRepository.Read(page.Id);
+
+			// Assert
+			Assert.That(result, Is.Not.Null, "The page should still exist in the repository.");
+			Assert.That(result.Title, Is.EqualTo(page.Title), "The title should have been updated on import.");
+		}
+
+		[Test]
+		[Description("Imports a new page into the data store.")]
+		public void Import_NewPage()
+		{
+			// Arrange
+			var page = Models.CreatePage();
+			page.Id = 10573;
+
+			// Act
+			PageRepository.Import(page);
+			var result = PageRepository.Read(page.Id);
+
+			// Assert
+			Assert.That(result, Is.Not.Null, "The page should have been created with the supplied id.");
+			Assert.That(result.Title, Is.EqualTo(page.Title), "The page Title should have been added to the data store.");
 		}
 
 		[Test]

@@ -16,7 +16,9 @@ namespace DocMAH.Extensions
 				result.Append(value);
 				result.Append(',');
 			}
-			return result.ToString().Remove(result.Length - 1);
+			if (result.Length > 0)
+				result.Remove(result.Length - 1, 1);
+			return result.ToString();
 		}
 	}
 }

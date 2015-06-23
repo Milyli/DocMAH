@@ -1,5 +1,0 @@
-﻿IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = {0}) BEGIN 
-	UPDATE DocmahPages SET PageTypeId = {1},ParentPageId = {2},[Order] = {3},SourceUrl = {4},Title = {5},Content = {6},VerticalOffset = {7},HorizontalOffset = {8},OffsetElementId = {9},DocImageUrl = {10},DocVerticalOffset = {11},DocHorizontalOffset = {12},IsHidden = {13} WHERE Id = {0}
-END ELSE BEGIN
-	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVerticalOffset,DocHorizontalOffset,IsHidden) VALUES ({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13})
-END

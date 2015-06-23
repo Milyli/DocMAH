@@ -82,6 +82,95 @@ namespace DocMAH.UnitTests.Data.Sql
 			Assert.AreEqual(1, noiseBullets.Count(), "One noise bullet should still exist in the database.");
 			Assert.IsNotNull(noiseBullets.Where(b => b.Id == noiseBullet.Id).FirstOrDefault(), "The noise bullet should exist in the noise bullets read.");
 		}
+
+		[Test]
+		[Description("Prevent SQL exceptions when list is empty.")]
+		public void DeleteExcept_EmptyList()
+		{
+			// Arrange			
+
+			// Act
+			BulletRepository.DeleteExcept(new List<int>());
+
+			// Assert
+			// Above call should not blow up with an empty list.
+		}
+
+		[Test]
+		[Description("Deletes bullets except for those with listed ids.")]
+		public void DeleteExcept_Success()
+		{
+			// Arrange
+			var keptPage = Models.CreatePage();
+			PageRepository.Create(keptPage);
+			var keptBullet = Models.CreateBullet(keptPage.Id);
+			BulletRepository.Create(keptBullet);
+
+			var deletedPage = Models.CreatePage();
+			PageRepository.Create(deletedPage);
+			var deletedBullet = Models.CreateBullet(deletedPage.Id);
+			BulletRepository.Create(deletedBullet);
+			var anotherDeletedBullet = Models.CreateBullet(deletedPage.Id);
+			BulletRepository.Create(anotherDeletedBullet);
+
+			// Act
+			BulletRepository.DeleteExcept(new List<int> { keptBullet.Id });
+
+			// Assert
+			var bullets = BulletRepository.ReadAll().ToList();
+			Assert.That(bullets.Count, Is.EqualTo(1), "Exactly one bullet should be left in the repository.");
+			Assert.That(bullets[0].Id, Is.EqualTo(keptBullet.Id), "The remaining bullet should be the one associated with the undeleted page.");
+		}
+
+		[Test]
+		[Description("Imports an existing bullet to the Sql data store.")]
+		public void Import_ExistingBullet()
+		{
+			// Arrange
+			var page = Models.CreatePage();
+			PageRepository.Create(page);
+			var bullet = Models.CreateBullet(page.Id);
+			BulletRepository.Create(bullet);
+			
+			// Modify the bullet informatio nto verify the values in the data store are overwritten.
+			bullet.Number = 10;
+			bullet.Text = "Import unit test bullet text.";
+			bullet.VerticalOffset = 1089;
+
+
+			// Act
+			BulletRepository.Import(bullet);
+			var results = BulletRepository.ReadByPageId(page.Id);
+
+			// Assert
+			Assert.That(results, Is.Not.Null, "The bullet should still exist in the data store.");
+			Assert.That(results.Count, Is.EqualTo(1), "There should be exactly one bullet associated with the page.");
+			var result = results.First();
+			Assert.That(result.Id, Is.EqualTo(bullet.Id), "The id should remain the same.");
+			Assert.That(result.Text, Is.EqualTo(bullet.Text), "The bullet text should have been updated in the data store.");
+			Assert.That(result.VerticalOffset, Is.EqualTo(bullet.VerticalOffset), "The vertical offset should have been updated in the data store.");
+		}
+
+		[Test]
+		[Description("Imports a new bullet to the SQL data store.")]
+		public void Import_NewBullet()
+		{
+			// Arrange
+			var page = Models.CreatePage();
+			PageRepository.Create(page);
+			var bullet = Models.CreateBullet(page.Id);
+			bullet.Id = 42098;			
+
+			// Act
+			BulletRepository.Import(bullet);
+			var results = BulletRepository.ReadByPageId(page.Id);
+
+			// Assert
+			Assert.That(results, Is.Not.Null, "The bullet should have been added to the data store.");
+			Assert.That(results.Count, Is.EqualTo(1), "There should be exactly one bullet associated with the page.");
+			var result = results.First();
+			Assert.That(result.Id, Is.EqualTo(bullet.Id), "The id should have been created using the input id.");
+		}
 		
 		#endregion
 	}

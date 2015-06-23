@@ -10,3 +10,5 @@ Solutions/TestResults/Coverage/DocMAHCoverage/
 /Solutions/Scripts/NuGet.DocMAH.Local
 *.nupkg
 /Solutions/Deployment/_version.txt
+/DocMAH.MvcHarness/ApplicationHelpInstall.xml
+/DocMAH.MvcHarness/ApplicationHelpInstall - Copy.xml

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using DocMAH.Extensions;
 using DocMAH.Models;
 
 namespace DocMAH.Data.Sql
@@ -119,6 +120,37 @@ namespace DocMAH.Data.Sql
 				command.CommandType = CommandType.Text;
 				command.CommandText = SqlScripts.Bullet_DeleteByPageId;
 				command.Parameters.Add(new SqlParameter("@pageId", pageId));
+
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void DeleteExcept(List<int> bulletIds)
+		{
+			if (null == bulletIds || bulletIds.Count == 0)
+				return;
+
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using(var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.Bullet_DeleteExcept.Replace("@bulletIds", bulletIds.ToCsv());
+
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		public void Import(Bullet bullet)
+		{
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.Bullet_Import;
+				AddParameters(bullet, command);
+				command.Parameters.Add(new SqlParameter("@id", bullet.Id));
 
 				connection.Open();
 				command.ExecuteNonQuery();

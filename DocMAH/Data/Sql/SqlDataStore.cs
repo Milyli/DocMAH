@@ -22,9 +22,9 @@ namespace DocMAH.Data.Sql
 
 		static SqlDataStore()
 		{
-			_updateScripts = new Dictionary<SqlDataStoreVersions, string>();
-			_updateScripts.Add(SqlDataStoreVersions.Database_01, SqlScripts.Database_Update_01);
-			_updateScripts.Add(SqlDataStoreVersions.Database_02, SqlScripts.Database_Update_02);
+			_updateScripts = new Dictionary<DocMAH.Data.DataStoreSchemaVersions, string>();
+			_updateScripts.Add(DocMAH.Data.DataStoreSchemaVersions.Version_01, SqlScripts.Database_Update_01);
+			_updateScripts.Add(DocMAH.Data.DataStoreSchemaVersions.Version_02, SqlScripts.Database_Update_02);
 		}
 
 		public SqlDataStore(IDataStoreConfiguration dataStoreConfiguration, ISqlConnectionFactory connectionFactory)
@@ -37,7 +37,7 @@ namespace DocMAH.Data.Sql
 
 		#region Private Fields
 
-		private static Dictionary<SqlDataStoreVersions, string> _updateScripts;
+		private static Dictionary<DocMAH.Data.DataStoreSchemaVersions, string> _updateScripts;
 
 		private readonly ISqlConnectionFactory _connectionFactory;
 		private readonly IDataStoreConfiguration _dataStoreConfiguration;
@@ -81,11 +81,11 @@ namespace DocMAH.Data.Sql
 		{
 			var currentDataStoreVersion = _dataStoreConfiguration.DataStoreSchemaVersion;
 
-			var allDataStoreVersions = Enum.GetValues(typeof(SqlDataStoreVersions));
+			var allDataStoreVersions = Enum.GetValues(typeof(DocMAH.Data.DataStoreSchemaVersions));
 			using (var connection = _connectionFactory.GetConnection())
 			{
 				connection.Open();
-				foreach (SqlDataStoreVersions dataStoreVersion in allDataStoreVersions)
+				foreach (DocMAH.Data.DataStoreSchemaVersions dataStoreVersion in allDataStoreVersions)
 				{
 					if (currentDataStoreVersion < (int)dataStoreVersion)
 					{

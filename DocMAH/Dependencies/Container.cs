@@ -6,6 +6,11 @@ using System.Text;
 
 namespace DocMAH.Dependencies
 {
+	/// <summary>
+	/// This is a simple IoC container that satisfies the needs of DocMAH for now.
+	/// We went this route to prevent the need of a dependent NuGet package
+	/// that might conflict with other project package references.
+	/// </summary>
 	public class Container : IContainer
 	{
 		#region Private Fields

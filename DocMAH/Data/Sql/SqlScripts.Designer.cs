@@ -116,16 +116,32 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = {0}) = 1)BEGIN
-        ///	UPDATE DocmahBullets SET PageId = {1},Number = {2},Text = {3},VerticalOffset = {4},HorizontalOffset = {5},OffsetElementId = {6},DocVerticalOffset = {7},DocHorizontalOffset = {8} WHERE Id = {0}
-        ///END ELSE BEGIN
-        ///	INSERT DocmahBullets(Id,PageId,Number,Text,VerticalOffset,HorizontalOffset,OffsetElementId,DocVerticalOffset,DocHorizontalOffset) VALUES ({0},{1},{2},{3},{4},{5},{6},{7},{8})
-        ///END
-        ///.
+        ///   Looks up a localized string similar to DELETE [DocmahBullets] WHERE PageId NOT IN (@pageIds).
         /// </summary>
-        internal static string Bullet_Install {
+        internal static string Bullet_DeleteExcept {
             get {
-                return ResourceManager.GetString("Bullet_Install", resourceCulture);
+                return ResourceManager.GetString("Bullet_DeleteExcept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = @id) = 1)BEGIN
+        ///	UPDATE DocmahBullets SET 
+        ///		PageId = @pageId,
+        ///		Number = @number,
+        ///		[Text] = @text,
+        ///		VerticalOffset = @verticalOffset,
+        ///		HorizontalOffset = @horizontalOffset,
+        ///		OffsetElementId = @offsetElementId,
+        ///		DocVerticalOffset = @docVerticalOffset,
+        ///		DocHorizontalOffset = @docHorizontalOffset 
+        ///	WHERE Id = @id
+        ///END ELSE BEGIN
+        ///	INSERT DocmahBullets(	 Id,  PageId,  Number, [Text], VerticalOffset,  HorizontalOffset,  OffsetElementId,  DocVerti [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Bullet_Import {
+            get {
+                return ResourceManager.GetString("Bullet_Import", resourceCulture);
             }
         }
         
@@ -265,7 +281,12 @@ namespace DocMAH.Data.Sql {
         /// <summary>
         ///   Looks up a localized string similar to UPDATE DocmahConfiguration
         ///SET [Name] = &apos;HelpContentVersion&apos;
-        ///WHERE [Name] = &apos;DatabaseHelpVersion&apos;.
+        ///WHERE [Name] = &apos;DatabaseHelpVersion&apos;
+        ///
+        ///
+        ///-- Update database schema version.
+        ///UPDATE [DocmahConfiguration] SET [Value] = 2 WHERE [Name] = &apos;DatabaseSchemaVersion&apos;
+        ///.
         /// </summary>
         internal static string Database_Update_02 {
             get {
@@ -313,14 +334,36 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = {0}) BEGIN 
-        ///	UPDATE DocmahPages SET PageTypeId = {1},ParentPageId = {2},[Order] = {3},SourceUrl = {4},Title = {5},Content = {6},VerticalOffset = {7},HorizontalOffset = {8},OffsetElementId = {9},DocImageUrl = {10},DocVerticalOffset = {11},DocHorizontalOffset = {12},IsHidden = {13} WHERE Id = {0}
-        ///END ELSE BEGIN
-        ///	INSERT DocmahPages(Id,PageTypeId,ParentPageId,[Order],SourceUrl,Title,Content,VerticalOffset,HorizontalOffset,OffsetElementId,DocImageUrl,DocVertical [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to DELETE [DocmahPageUrls] WHERE PageId NOT IN (@pageIds)
+        ///DELETE [DocmahPages] WHERE Id NOT IN (@pageIds).
         /// </summary>
-        internal static string Page_Install {
+        internal static string Page_DeleteExcept {
             get {
-                return ResourceManager.GetString("Page_Install", resourceCulture);
+                return ResourceManager.GetString("Page_DeleteExcept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = @id) BEGIN 
+        ///	UPDATE DocmahPages SET 
+        ///		PageTypeId = @pageTypeId, 
+        ///		ParentPageId = @parentPageId,
+        ///		[Order] = @order,
+        ///		SourceUrl = @sourceUrl,
+        ///		Title = @title,
+        ///		Content = @content,
+        ///		VerticalOffset = @verticalOffset,
+        ///		HorizontalOffset = @horizontalOffset,
+        ///		OffsetElementId = @offsetElementId,
+        ///		DocImageUrl = @docImageUrl,
+        ///		DocVerticalOffset = @docVerticalOffset,
+        ///		DocHorizontalOffset = @docHorizontalOffset,
+        ///		IsHidden = @isHidden 
+        ///	WHERE Id [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Page_Import {
+            get {
+                return ResourceManager.GetString("Page_Import", resourceCulture);
             }
         }
         
@@ -509,6 +552,15 @@ namespace DocMAH.Data.Sql {
         internal static string UserPageSettings_Create {
             get {
                 return ResourceManager.GetString("UserPageSettings_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE [DocmahUserPageSettings] WHERE PageId NOT IN (@pageIds).
+        /// </summary>
+        internal static string UserPageSettings_DeleteExcept {
+            get {
+                return ResourceManager.GetString("UserPageSettings_DeleteExcept", resourceCulture);
             }
         }
         

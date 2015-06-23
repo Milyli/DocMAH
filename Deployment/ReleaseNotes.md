@@ -6,6 +6,14 @@ DocMAH Release Notes
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs no longer deleted on page reorder.][10]
 1. B40 - [Install script generation now requires edit permission.][11]
+1. I38 - [Improve Testability of Request Processors][12]
+		 **Breaking Change - Low Impact -** One of the many changes for testability required
+		 modification of the content deployment file format. The new version of the application 
+		 is *not* backwards compatible. However, as long as you regenerate your content 
+		 deployment file and deploy it with this version of DocMAH, there will be no issues.
+		 **Breaking Change - Low Impact -** The content deployment file was renamed 
+		 from ApplicationHelpInstall.xml to DocmahContent.xml. Similar to above, make sure to 
+		 regenerate your content file and deploy it with your new DocMAH DLL.
 
 ## 0.9.4.0 Maintenance Release
 1. I5 - [Return to application from documentation.][6]
@@ -40,3 +48,4 @@ High level feature sets include:
 [9]: https://github.com/Milyli/DocMAH/issues/20
 [10]: https://github.com/Milyli/DocMAH/issues/36
 [11]: https://github.com/Milyli/DocMAH/issues/40
+[12]: https://github.com/Milyli/DocMAH/issues/38
