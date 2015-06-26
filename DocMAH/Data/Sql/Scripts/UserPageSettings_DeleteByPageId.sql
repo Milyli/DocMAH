@@ -1,0 +1,1 @@
+﻿DELETE [DocmahUserPageSettings] WHERE PageId = @pageId

@@ -13,10 +13,11 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public DeletePageRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository)
+		public DeletePageRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_bulletRepository = bulletRepository;
 			_pageRepository = pageRepository;
+			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
 		#endregion
@@ -25,6 +26,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IPageRepository _pageRepository;
+		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
 
@@ -35,6 +37,7 @@ namespace DocMAH.Web.Requests.Processors
 			var pageId = int.Parse(data);
 
 			_bulletRepository.DeleteByPageId(pageId);
+			_userPageSettingsRepository.DeleteByPageId(pageId);
 
 			// Get the page so we have the parent id.
 			var page = _pageRepository.Read(pageId);

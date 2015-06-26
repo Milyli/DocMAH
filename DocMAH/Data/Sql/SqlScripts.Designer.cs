@@ -116,7 +116,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahBullets] WHERE PageId NOT IN (@pageIds).
+        ///   Looks up a localized string similar to DELETE [DocmahBullets] WHERE Id NOT IN (@bulletIds).
         /// </summary>
         internal static string Bullet_DeleteExcept {
             get {
@@ -552,6 +552,15 @@ namespace DocMAH.Data.Sql {
         internal static string UserPageSettings_Create {
             get {
                 return ResourceManager.GetString("UserPageSettings_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string UserPageSettings_DeleteByPageId {
+            get {
+                return ResourceManager.GetString("UserPageSettings_DeleteByPageId", resourceCulture);
             }
         }
         

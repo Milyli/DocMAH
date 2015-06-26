@@ -202,6 +202,9 @@
   <data name="UserPageSettings_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\userpagesettings_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="UserPageSettings_DeleteByPageId" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\userpagesettings_deletebypageid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="UserPageSettings_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\userpagesettings_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

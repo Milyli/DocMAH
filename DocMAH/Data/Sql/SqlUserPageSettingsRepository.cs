@@ -74,6 +74,20 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
+		public void DeleteByPageId(int pageId)
+		{
+			using (var connection = SqlConnectionFactory.GetConnection())
+			using(var command = connection.CreateCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.CommandText = SqlScripts.UserPageSettings_DeleteByPageId;
+				command.Parameters.Add(new SqlParameter("@pageId", pageId));
+
+				connection.Open();
+				command.ExecuteNonQuery();
+			}
+		}
+
 		public void DeleteExcept(List<int> pageIds)
 		{
 			if (null == pageIds || pageIds.Count == 0)

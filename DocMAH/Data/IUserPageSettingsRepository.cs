@@ -18,6 +18,13 @@ namespace DocMAH.Data
 		void Create(UserPageSettings userPageSettings);
 
 		/// <summary>
+		/// Deletes all user page settings for a give page.
+		/// Used when deleting pages in the system.
+		/// </summary>
+		/// <param name="pageId"></param>
+		void DeleteByPageId(int pageId);
+
+		/// <summary>
 		/// Deletes user page settings for all related pages not included in the list of ids.
 		/// </summary>
 		/// <param name="pageIds"></param>

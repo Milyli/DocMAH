@@ -176,6 +176,7 @@
     <Content Include="Data\Sql\Scripts\Database_Drop.sql" />
     <Content Include="Data\Sql\Scripts\Database_Update_02.sql" />
     <Content Include="Data\Sql\Scripts\Page_DeleteExcept.sql" />
+    <Content Include="Data\Sql\Scripts\UserPageSettings_DeleteByPageId.sql" />
     <Content Include="Data\Sql\Scripts\UserPageSettings_DeleteExcept.sql" />
     <Content Include="Web\Css\Images\closedBook.png" />
     <Content Include="Web\Css\Images\closedBook.svg" />

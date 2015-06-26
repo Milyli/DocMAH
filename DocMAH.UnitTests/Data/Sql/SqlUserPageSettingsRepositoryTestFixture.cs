@@ -37,6 +37,39 @@ namespace DocMAH.UnitTests.Data.Sql
 		}
 
 		[Test]
+		[Description("Deletes all settings for a single page.")]
+		public void DeleteByPageId_Success()
+		{
+			// Arrange
+			var targetPage = Models.CreatePage();
+			PageRepository.Create(targetPage);
+
+			var noisePage = Models.CreatePage();
+			PageRepository.Create(noisePage);
+
+			var userName1 = "Test1@docmah.org";
+			var userName2 = "Test2@docmah.org";
+
+			var targetSettings1 = new UserPageSettings { PageId = targetPage.Id, UserName = userName1 };
+			UserPageSettingsRepository.Create(targetSettings1);
+			var targetSettings2 = new UserPageSettings { PageId = targetPage.Id, UserName = userName2 };
+			UserPageSettingsRepository.Create(targetSettings2);
+			var noiseSettings = new UserPageSettings { PageId = noisePage.Id, UserName = userName1 };
+			UserPageSettingsRepository.Create(noiseSettings);
+
+			// Act
+			UserPageSettingsRepository.DeleteByPageId(targetPage.Id);
+
+			// Assert
+			var deletedSettings1 = UserPageSettingsRepository.Read(userName1, targetPage.Id);
+			Assert.That(deletedSettings1, Is.Null, "First user's settings for target page should have been deleted.");
+			var deletedSettings2 = UserPageSettingsRepository.Read(userName2, targetPage.Id);
+			Assert.That(deletedSettings2, Is.Null, "Second user's settings for target page should have been deleted.");
+			var existingSettings = UserPageSettingsRepository.Read(userName1, noisePage.Id);
+			Assert.That(existingSettings, Is.Not.Null, "Settings for other pages should remain.");
+		}
+
+		[Test]
 		[Description("Method should not throw exception on empty lists.")]
 		public void DeleteExcept_EmptyList()
 		{
