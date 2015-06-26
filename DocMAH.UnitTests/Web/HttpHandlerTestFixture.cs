@@ -64,7 +64,7 @@ namespace DocMAH.UnitTests.Web
 
 		[Test]
 		[Description("Authorization fails on required edit authorization.")]
-		public void ProcessWrappedRequest_EditAuthorizationFails()
+		public void ProcessRequestInternal_EditAuthorizationFails()
 		{
 			// Arrange
 			var processor = new EditAuthorizedProcessor();
@@ -80,7 +80,7 @@ namespace DocMAH.UnitTests.Web
 			var handler = new HttpHandler(Container.Object);
 
 			// Act
-			handler.ProcessWrappedRequest(HttpContext.Object);
+			handler.ProcessRequestInternal(HttpContext.Object);
 
 			// Assert
 			Mocks.VerifyAll();
@@ -88,7 +88,7 @@ namespace DocMAH.UnitTests.Web
 
 		[Test]
 		[Description("Successfully processes a request that does not require authorization.")]
-		public void ProcessWrappedRequest_NoAuthorization()
+		public void ProcessRequestInternal_NoAuthorization()
 		{
 			// Arrange
 			var requestProcessor = Mocks.Create<IRequestProcessor>();
@@ -99,7 +99,7 @@ namespace DocMAH.UnitTests.Web
 			var handler = new HttpHandler(Container.Object);
 
 			// Act
-			handler.ProcessWrappedRequest(HttpContext.Object);
+			handler.ProcessRequestInternal(HttpContext.Object);
 
 			// Assert
 			Mocks.VerifyAll();

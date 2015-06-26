@@ -35,13 +35,14 @@ namespace DocMAH.Web.Requests.Processors
 			var jsonSerializer = new JavaScriptSerializer();
 			var moveRequest = jsonSerializer.Deserialize<MoveTocRequest>(data);
 
+			// Remove page from old siblings collection.
 			var page = _pageRepository.Read(moveRequest.PageId);
 			var oldSiblings = _pageRepository.ReadByParentId(page.ParentPageId);
-			List<Page> newSiblings;
-
-			int insertIndex, updateStartIndex, updateEndIndex;
-
 			oldSiblings.RemoveAt(page.Order);
+
+			List<Page> newSiblings;
+			int updateStartIndex, updateEndIndex;
+			int insertIndex = moveRequest.NewPosition;
 
 			// When the parent page changes...
 			if (moveRequest.NewParentId != page.ParentPageId)
@@ -55,31 +56,29 @@ namespace DocMAH.Web.Requests.Processors
 
 				// Read new siblings and set update values.
 				newSiblings = _pageRepository.ReadByParentId(moveRequest.NewParentId);
-				insertIndex = moveRequest.NewPosition;
 				updateStartIndex = moveRequest.NewPosition;
 				updateEndIndex = newSiblings.Count;
 			}
 			else
 			{
-				// when the parent doesn't change, the siblings don't change.
+				// When the parent doesn't change, the siblings don't change.
 				newSiblings = oldSiblings;
+
+				// if the new position is greater than the old position ...
 				if (moveRequest.NewPosition > page.Order)
 				{
-					// if the new position is greater than the old position ...
-					insertIndex = moveRequest.NewPosition;
 					updateStartIndex = page.Order;				// ... the old position is the start where orders must be updated.
 					updateEndIndex = moveRequest.NewPosition;	// ... the new position is the end of where orders must be updated.
 				}
+				// if the new position is less than the old position ...
 				else
 				{
-					// if the new position is less than the old position ...
-					insertIndex = moveRequest.NewPosition;
 					updateStartIndex = moveRequest.NewPosition;	// ... the new position is the start of where orders must be updated.
 					updateEndIndex = page.Order;				// ... the old position is the end of where orders must be updated.
 				}
 			}
 
-			// Insert that page in the new location and update order numbers.
+			// Insert page in the new location and update order numbers.
 			page.ParentPageId = moveRequest.NewParentId;
 			newSiblings.Insert(insertIndex, page);
 			for (int i = updateStartIndex; i <= updateEndIndex; i++)

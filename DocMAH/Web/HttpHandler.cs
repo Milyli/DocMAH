@@ -88,20 +88,9 @@ namespace DocMAH.Web
 
 		#endregion
 
-		#region IHttpHandler Members
+		#region Internal Methods
 
-		public bool IsReusable
-		{
-			get { return false; }
-		}
-
-		public void ProcessRequest(HttpContext context)
-		{
-			var wrapper = new HttpContextWrapper(context);
-			ProcessWrappedRequest(wrapper);
-		}
-
-		public void ProcessWrappedRequest(HttpContextBase context)
+		internal void ProcessRequestInternal(HttpContextBase context)
 		{
 			// Read post data or request parameters
 			var data = ReadPostData(context);
@@ -120,6 +109,21 @@ namespace DocMAH.Web
 			// Process the request and return the response.
 			var response = requestProcessor.Process(data);
 			WriteResponse(context, response);
+		}
+		
+		#endregion
+
+		#region IHttpHandler Members
+
+		public bool IsReusable
+		{
+			get { return false; }
+		}
+
+		public void ProcessRequest(HttpContext context)
+		{
+			var wrapper = new HttpContextWrapper(context);
+			ProcessRequestInternal(wrapper);
 		}
 
 		#endregion

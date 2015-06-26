@@ -48,7 +48,7 @@ namespace DocMAH.IntegrationTests.Tests
 			var firstPage = models.CreatePage();
 			pageRepository.Create(firstPage);
 
-			handler.ProcessWrappedRequest(HttpContext.Object);
+			handler.ProcessRequestInternal(HttpContext.Object);
 
 
 			// Change content and recreate installation file.
@@ -64,7 +64,7 @@ namespace DocMAH.IntegrationTests.Tests
 			pageRepository.Delete(deletedPage.Id);
 
 			HttpContext.SetRequestContent(string.Empty); // Resets stream for next read.
-			handler.ProcessWrappedRequest(HttpContext.Object);
+			handler.ProcessRequestInternal(HttpContext.Object);
 
 
 			// Reset data store and exercise startup file.

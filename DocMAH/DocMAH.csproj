@@ -103,6 +103,7 @@
     <Compile Include="Web\Authorization\EditAuthorizationAttribute.cs" />
     <Compile Include="Web\Authorization\EditAuthorizer.cs" />
     <Compile Include="Web\Authorization\IEditAuthorizer.cs" />
+    <Compile Include="Web\Html\HtmlBuilder.cs" />
     <Compile Include="Web\HttpModule.cs" />
     <Compile Include="Web\HttpResponseFilter.cs" />
     <Compile Include="Web\HttpHandler.cs" />

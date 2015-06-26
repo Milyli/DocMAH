@@ -59,7 +59,7 @@ namespace DocMAH.IntegrationTests.Tests
 			var handler = new HttpHandler(Container);
 
 			// Act
-			handler.ProcessWrappedRequest(HttpContext.Object);
+			handler.ProcessRequestInternal(HttpContext.Object);
 
 			// Assert
 			var movedPage = pageRepository.Read(pageToMove.Id);

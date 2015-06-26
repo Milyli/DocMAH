@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,7 +36,7 @@ namespace DocMAH.Web
 		/// <param name="container"></param>
 		/// <param name="dataStore"></param>
 		/// <param name="helpContentManager"></param>
-		public HttpModule(HttpContextBase httpContext, IContainer container, IDataStore dataStore, IHelpContentManager helpContentManager)
+		internal HttpModule(HttpContextBase httpContext, IContainer container, IDataStore dataStore, IHelpContentManager helpContentManager)
 		{
 			_httpContext = httpContext;
 			_container = container;
@@ -54,6 +55,59 @@ namespace DocMAH.Web
 
 		#endregion
 
+		#region Internal Fields
+
+		internal const string ContainerKey = "DocMAH.Container";
+		internal const string DocmahInitializedKey = "DocMAH.Initialized";
+
+		internal const string MvcHandlerName = "System.Web.Mvc.MvcHandler";
+		
+		#endregion
+
+		#region Internal Methods
+
+		internal void AttachFilterEventHandler(object sender, EventArgs e)
+		{
+			// If a test context has been set, use it. Otherwise, use the current context.
+			var context = _httpContext ?? new HttpContextWrapper(HttpContext.Current);
+
+			// Prevent the filter from being added twice.
+			if (!context.Items.Contains(ContainerKey))
+			{
+				// Flag that filter creation routine has been processed.
+				context.Items.Add(ContainerKey, true);
+				
+				// Limit create help functionality to compatible handlers. 
+				// This prevents DocMAH from loading onto other handlers: Glimpse, Elmah, etc...
+				if (null != context.CurrentHandler
+					&& CompatibleHandlers.Contains(context.CurrentHandler.GetType().FullName))
+				{
+					var response = context.Response;
+					if (response.ContentType.ToLower() == ContentTypes.Html)
+						response.Filter = new HttpResponseFilter(
+							response.Filter,
+							_container.Resolve<IBulletRepository>(),
+							_container.Resolve<IEditAuthorizer>(),
+							_container.Resolve<IMinifier>(),
+							_container.Resolve<IPageRepository>(),
+							_container.Resolve<IUserPageSettingsRepository>());
+				}
+			}
+		}
+
+		#endregion
+
+		#region Public Fields
+
+		// TODO: Consider making this a mutable list so that users can configure custom handlers here.
+		//			That might be too much power though. For now, just let them see what's available.
+		public readonly ReadOnlyCollection<string> CompatibleHandlers = 
+			new ReadOnlyCollection<string>(new List<string> { 
+				MvcHandlerName,
+			});
+
+		#endregion
+
 		#region IHttpModule Members
 
 		public void Dispose()
@@ -61,16 +115,8 @@ namespace DocMAH.Web
 			// Do nothing.
 		}
 
-		#region Public Fields
-
-		public const string ContextKey = "DocMAH.Container";
-		public const string DocmahInitializedKey = "DocMAH.Initialized";
-
-		#endregion
-
 		public void Init(HttpApplication application)
 		{
-
 			if (!(bool)(application.Application[DocmahInitializedKey] ?? false))
 			{
 				_dataStore.DataStore_Update();
@@ -83,33 +129,6 @@ namespace DocMAH.Web
 
 			application.PreSendRequestHeaders += AttachFilterEventHandler;
 			application.PostReleaseRequestState += AttachFilterEventHandler;
-		}
-
-		void AttachFilterEventHandler(object sender, EventArgs e)
-		{
-			// If a test context has been set, use it. Otherwise, use the current context.
-			var context = _httpContext ?? new HttpContextWrapper(HttpContext.Current);
-
-			// Prevent the filter from being added twice.
-			// Limit create help functionality to MvcHandler for now. (Prevents it from loading onto other modules: Glimpse, Elmah, etc...
-			if (!context.Items.Contains(ContextKey))				
-			{
-				context.Items.Add(ContextKey, _container);
-
-				if (null != context.CurrentHandler 
-					&& context.CurrentHandler.GetType().FullName == "System.Web.Mvc.MvcHandler")
-				{
-					var response = context.Response;
-					if (response.ContentType == "text/html")
-						response.Filter = new HttpResponseFilter(
-							response.Filter,
-							_container.Resolve<IBulletRepository>(),
-							_container.Resolve<IEditAuthorizer>(),
-							_container.Resolve<IMinifier>(),
-							_container.Resolve<IPageRepository>(),
-							_container.Resolve<IUserPageSettingsRepository>());
-				}
-			}
 		}
 
 		#endregion
