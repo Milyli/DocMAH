@@ -11,32 +11,22 @@ using DocMAH.Configuration;
 using DocMAH.Data;
 using DocMAH.Data.Sql;
 using DocMAH.Models;
-using DocMAH.Properties;
 using DocMAH.Web.Authorization;
+using DocMAH.Web.Html;
 using DocMAH.Web.Requests;
 
 namespace DocMAH.Web
 {
-	public class HttpResponseFilter : Stream
+	internal class HttpResponseFilter : Stream
 	{
 		#region Constructors
 
-		public HttpResponseFilter(
-			Stream stream, 
-			IBulletRepository bulletRepository, 
-			IEditAuthorizer editAuthorizer, 
-			IMinifier minifier,
-			IPageRepository pageRepository, 
-			IUserPageSettingsRepository userPageSettingsRepository)
+		internal HttpResponseFilter(Stream stream, IHtmlBuilder htmlBuilder)
 		{
 			_stream = stream;
 			_writer = new StreamWriter(_stream, Encoding.UTF8);
-			
-			_bulletRepository = bulletRepository;
-			_editAuthorizer = editAuthorizer;
-			_minifier = minifier;
-			_pageRepository = pageRepository;
-			_userPageSettingsRepository = userPageSettingsRepository;
+
+			_htmlBuilder = htmlBuilder;
 		}
 
 		#endregion
@@ -44,14 +34,10 @@ namespace DocMAH.Web
 		#region Private Fields
 
 		private readonly Stream _stream;
+		private readonly IHtmlBuilder _htmlBuilder;
+
 		private readonly StreamWriter _writer; // Stream writer to write to response on.
 		private string _unprocessedContent; // Content from previous write that could not be added.
-		
-		private readonly IBulletRepository _bulletRepository;
-		private readonly IEditAuthorizer _editAuthorizer;
-		private readonly IMinifier _minifier;
-		private readonly IPageRepository _pageRepository;
-		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
 
@@ -74,7 +60,7 @@ namespace DocMAH.Web
 				if (headIndex >= 0)
 				{
 					_writer.Write(content.Remove(headIndex + 6));
-					_writer.Write(Resources.Html_CssLink);
+					_writer.Write(_htmlBuilder.CreateFirstTimeHelpCssLink());
 					content = content.Substring(headIndex + 6);
 				}
 
@@ -84,65 +70,11 @@ namespace DocMAH.Web
 				if (endBodyIndex >= 0)
 				{
 					_writer.Write(content.Remove(endBodyIndex));
-					_writer.Write(FormatHtmlViewHelp());
-					if (_editAuthorizer.Authorize())
-					{
-						_writer.Write(_minifier.Minify(Resources.Html_FirstTimeEdit, Resources.Html_FirstTimeEdit_min));
-					}
+					_writer.Write(_htmlBuilder.CreateFirstTimeHelpHtml());
 					content = content.Substring(endBodyIndex);
 				}
 			}
 			return content;
-		}
-
-		private string FormatHtmlViewHelp()
-		{
-			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
-			var page = _pageRepository.ReadByUrl(requestUrl.Replace('*', '%'));
-			UserPageSettings userPageSettings = null;
-
-			if (null != page)
-			{
-				page.Bullets = _bulletRepository.ReadByPageId(page.Id);
-				if (HttpContext.Current.Request.IsAuthenticated)
-				{
-					var userName = HttpContext.Current.User.Identity.Name;
-					userPageSettings = _userPageSettingsRepository.Read(userName, page.Id);
-				}
-			}
-
-			var result = string.Empty;
-
-			// The HTML is reused on the documentation page.
-			// When injecting into other requests, the initialization scripts must be included.
-			result += _minifier.Minify(Resources.Html_FirstTimeView, Resources.Html_FirstTimeView_min);
-
-			// TODO: Iron out javascript reference injection for first time help in base site pages.
-			// Attach jQueryUi CDN locations if not configured.
-			// Leaving out jQuery for the time being as it's likely included.
-			var javaScriptDependencies = new DocmahConfigurationSection().JsUrl;
-			if (string.IsNullOrEmpty(javaScriptDependencies))
-			{
-				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);
-				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
-			}
-
-			result += _minifier.Minify(Resources.Html_FirstTimeViewInjectedScripts, Resources.Html_FirstTimeViewInjectedScripts_min);
-
-			// TODO: Cache the non-dynamic portion of the first time HTML for faster loading.
-			
-			var serializer = new JavaScriptSerializer();
-			var pageJson = serializer.Serialize(page);
-			result = result.Replace("[PAGEJSON]", pageJson);
-
-			var userPageSettingsJson = serializer.Serialize(userPageSettings);
-			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
-
-			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize() };
-			var applicationSettingsJson = serializer.Serialize(applicationSettings);
-			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
-
-			return result;
 		}
 
 		#endregion

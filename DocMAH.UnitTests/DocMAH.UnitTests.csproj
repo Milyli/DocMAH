@@ -122,6 +122,7 @@
     <Compile Include="Web\Authorization\EditAuthorizerTestFixture.cs" />
     <Compile Include="Web\HttpHandlerTestFixture.cs" />
     <Compile Include="Web\HttpModuleTestFixture.cs" />
+    <Compile Include="Web\HttpResponseFilterTestFixture.cs" />
     <Compile Include="Web\Requests\MinifierTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\CssRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\DeletePageRequestProcessorTestFixture.cs" />

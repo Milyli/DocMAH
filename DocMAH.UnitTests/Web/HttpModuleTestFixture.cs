@@ -13,6 +13,7 @@ using DocMAH.Data;
 using DocMAH.Dependencies;
 using DocMAH.Web;
 using DocMAH.Web.Authorization;
+using DocMAH.Web.Html;
 using DocMAH.Web.Requests;
 using Moq;
 using NUnit.Framework;
@@ -53,11 +54,7 @@ namespace DocMAH.UnitTests.Web
 		{
 			// Arrange
 			var container = Mocks.Create<IContainer>();
-			container.Setup(c => c.Resolve<IBulletRepository>()).Returns(Mocks.Create<IBulletRepository>().Object);
-			container.Setup(c => c.Resolve<IEditAuthorizer>()).Returns(Mocks.Create<IEditAuthorizer>().Object);
-			container.Setup(c => c.Resolve<IMinifier>()).Returns(Mocks.Create<IMinifier>().Object);
-			container.Setup(c => c.Resolve<IPageRepository>()).Returns(Mocks.Create<IPageRepository>().Object);
-			container.Setup(c => c.Resolve<IUserPageSettingsRepository>()).Returns(Mocks.Create<IUserPageSettingsRepository>().Object);
+			container.Setup(c => c.Resolve<IHtmlBuilder>()).Returns(Mocks.Create<IHtmlBuilder>().Object);
 
 			var response = Mocks.Create<HttpResponseBase>();
 			response.Setup(r => r.ContentType).Returns(ContentTypes.Html);

@@ -104,6 +104,12 @@
     <Compile Include="Web\Authorization\EditAuthorizer.cs" />
     <Compile Include="Web\Authorization\IEditAuthorizer.cs" />
     <Compile Include="Web\Html\HtmlBuilder.cs" />
+    <Compile Include="Web\Html\HtmlContent.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HtmlContent.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\Html\IHtmlBuilder.cs" />
     <Compile Include="Web\HttpModule.cs" />
     <Compile Include="Web\HttpResponseFilter.cs" />
     <Compile Include="Web\HttpHandler.cs" />
@@ -146,6 +152,10 @@
       <LastGenOutput>SqlScripts.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Web\Html\FirstTimeView.html" />
+    <EmbeddedResource Include="Web\Html\HtmlContent.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HtmlContent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Web\Css\Mixins.css.map">

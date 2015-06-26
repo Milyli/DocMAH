@@ -761,7 +761,7 @@ DMH.HelpButton = function () {
 		if (_currentPage)
 			$(_button).trigger('showFirstTime.dmh');
 		else
-			window.location = DMH.Urls.NavigateDocumentation;
+			window.open(DMH.Urls.NavigateDocumentation, '_blank');
 	}
 
 

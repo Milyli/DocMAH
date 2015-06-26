@@ -11,6 +11,7 @@ using DocMAH.Content;
 using DocMAH.Data;
 using DocMAH.Dependencies;
 using DocMAH.Web.Authorization;
+using DocMAH.Web.Html;
 using DocMAH.Web.Requests;
 
 namespace DocMAH.Web
@@ -84,13 +85,7 @@ namespace DocMAH.Web
 				{
 					var response = context.Response;
 					if (response.ContentType.ToLower() == ContentTypes.Html)
-						response.Filter = new HttpResponseFilter(
-							response.Filter,
-							_container.Resolve<IBulletRepository>(),
-							_container.Resolve<IEditAuthorizer>(),
-							_container.Resolve<IMinifier>(),
-							_container.Resolve<IPageRepository>(),
-							_container.Resolve<IUserPageSettingsRepository>());
+						response.Filter = new HttpResponseFilter(response.Filter, _container.Resolve<IHtmlBuilder>());
 				}
 			}
 		}

@@ -12,6 +12,7 @@ using DocMAH.Web.Authorization;
 using DocMAH.Web.Requests;
 using DocMAH.Web.Requests.Processors;
 using DocMAH.Content;
+using DocMAH.Web.Html;
 namespace DocMAH.Dependencies
 {
 	public class Registrar
@@ -44,7 +45,7 @@ namespace DocMAH.Dependencies
 					_container.Register<IRequestProcessorFactory>(c => new RequestProcessorFactory(c.Resolve<IContainer>()));
 					_container.Register<IRequestProcessor>(RequestTypes.Css, c => new CssRequestProcessor(c.Resolve<IMinifier>()));
 					_container.Register<IRequestProcessor>(RequestTypes.DeletePage, c => new DeletePageRequestProcessor(c.Resolve<IBulletRepository>(), c.Resolve<IPageRepository>()));
-					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.Resolve<HttpContextBase>(), c.Resolve<IContentConfiguration>(), c.Resolve<IDocumentationConfiguration>(), c.Resolve<IMinifier>()));
+					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage, c => new DocumentationPageRequestProcessor(c.Resolve<IHtmlBuilder>()));
 					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript, c => new GenerateInstallScriptRequestProcessor(c.Resolve<IPath>(), c.Resolve<IHelpContentManager>()));
 					_container.Register<IRequestProcessor>(RequestTypes.JavaScript, c => new JavaScriptRequestProcessor(c.Resolve<IMinifier>()));
 					_container.Register<IRequestProcessor>(RequestTypes.MovePage, c => new MovePageRequestProcessor(c.Resolve<IPageRepository>()));
@@ -80,6 +81,7 @@ namespace DocMAH.Dependencies
 
 					// Other web registration.
 					_container.Register<HttpContextBase>(c => { return new HttpContextWrapper(HttpContext.Current); });
+					_container.Register<IHtmlBuilder>(c => new HtmlBuilder(c.Resolve<HttpContextBase>(), c.Resolve<IBulletRepository>(), c.Resolve<IContentConfiguration>(), c.Resolve<IDocumentationConfiguration>(), c.Resolve<IEditAuthorizer>(), c.Resolve<IMinifier>(), c.Resolve<IPageRepository>(), c.Resolve<IUserPageSettingsRepository>()));
 					_container.Register<IMinifier>(c => new Minifier(c.Resolve<IDebugger>(), c.Resolve<HttpContextBase>()));
 				}
 			}
