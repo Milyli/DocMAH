@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DocMAH.AspxHarness", "http://localhost:39980", "{CB427504-3E8E-4B78-9319-918EAB1AFA11}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{745167d4-85f8-4a2c-83fb-2802af181292}|DocMAH.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_39980"
+		Debug.AspNetCompiler.PhysicalPath = "..\DocMAH.AspxHarness\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_39980\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_39980"
+		Release.AspNetCompiler.PhysicalPath = "..\DocMAH.AspxHarness\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_39980\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\DocMAH.AspxHarness\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH", "..\DocMAH\DocMAH.csproj", "{745167D4-85F8-4A2C-83FB-2802AF181292}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.IntegrationTests", "..\DocMAH.IntegrationTests\DocMAH.IntegrationTests.csproj", "{B54A4631-1AD2-455A-852E-0986F0BEA792}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.UnitTests", "..\DocMAH.UnitTests\DocMAH.UnitTests.csproj", "{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{EE8C70B6-E76D-401E-B75D-52B2580DABC3}"
+	ProjectSection(SolutionItems) = preProject
+		..\Deployment\readme.txt = ..\Deployment\readme.txt
+		..\Deployment\ReleaseNotes.md = ..\Deployment\ReleaseNotes.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{CB427504-3E8E-4B78-9319-918EAB1AFA11}.Release|x64.ActiveCfg = Debug|Any CPU
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Debug|x64.ActiveCfg = Debug|x64
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Debug|x64.Build.0 = Debug|x64
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Release|x64.ActiveCfg = Release|x64
+		{745167D4-85F8-4A2C-83FB-2802AF181292}.Release|x64.Build.0 = Release|x64
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B54A4631-1AD2-455A-852E-0986F0BEA792}.Release|x64.ActiveCfg = Release|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

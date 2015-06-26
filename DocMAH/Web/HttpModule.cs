@@ -62,6 +62,7 @@ namespace DocMAH.Web
 		internal const string DocmahInitializedKey = "DocMAH.Initialized";
 
 		internal const string MvcHandlerName = "System.Web.Mvc.MvcHandler";
+		internal const string AspxHandlerName = "ASP.default_aspx";
 		
 		#endregion
 
@@ -99,6 +100,7 @@ namespace DocMAH.Web
 		public readonly ReadOnlyCollection<string> CompatibleHandlers = 
 			new ReadOnlyCollection<string>(new List<string> { 
 				MvcHandlerName,
+				AspxHandlerName,
 			});
 
 		#endregion

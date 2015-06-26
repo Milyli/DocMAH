@@ -15,6 +15,7 @@ DocMAH Release Notes
 		 from ApplicationHelpInstall.xml to DocmahContent.xml. Similar to above, make sure to 
 		 regenerate your content file and deploy it with your new DocMAH DLL.
 1. I45 - [Open Documentation in New Window/Tab][13]
+1. B43 - [Not Working in ASP.NET Classic][14]
 
 ## 0.9.4.0 Maintenance Release
 1. I5 - [Return to application from documentation.][6]
@@ -51,3 +52,4 @@ High level feature sets include:
 [11]: https://github.com/Milyli/DocMAH/issues/40
 [12]: https://github.com/Milyli/DocMAH/issues/38
 [13]: https://github.com/Milyli/DocMAH/issues/45
+[14]: https://github.com/Milyli/DocMAH/issues/43
