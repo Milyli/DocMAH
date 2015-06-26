@@ -1309,7 +1309,7 @@ DMH.FirstTimeView = function (options) {
 		if (_options.showDocumentLink) {
 			$getShowDocumentationButton()
 				.show()
-				.click(function () { window.location = DMH.Urls.NavigateDocumentation; });
+				.click(function () { window.open(DMH.Urls.NavigateDocumentation, '_blank'); });
 		} else {
 			$getShowDocumentationButton().hide();
 		}
