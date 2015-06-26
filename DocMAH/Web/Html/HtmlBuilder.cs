@@ -134,7 +134,7 @@ namespace DocMAH.Web.Html
 			// TODO: Iron out javascript reference injection for first time help in base site pages.
 			// Attach jQueryUi CDN locations if not configured.
 			// Leaving out jQuery for the time being as it's likely included.
-			var javaScriptDependencies = new DocmahConfigurationSection().JsUrl;
+			var javaScriptDependencies = _contentConfiguration.JsUrl;
 			if (string.IsNullOrEmpty(javaScriptDependencies))
 			{
 				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);

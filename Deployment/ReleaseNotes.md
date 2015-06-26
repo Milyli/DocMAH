@@ -1,7 +1,7 @@
 DocMAH Release Notes
 ====================
 
-*Unless otherwise noted. The release notes for each release only contain links to the [GitHub issues][1] addressed.*
+*Unless otherwise noted, the release notes for each release contain links to the [GitHub issues][1] addressed.*
 
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs no longer deleted on page reorder.][10]
@@ -14,6 +14,7 @@ DocMAH Release Notes
 		 **Breaking Change - Low Impact -** The content deployment file was renamed 
 		 from ApplicationHelpInstall.xml to DocmahContent.xml. Similar to above, make sure to 
 		 regenerate your content file and deploy it with your new DocMAH DLL.
+1. I45 - [Open Documentation in New Window/Tab][13]
 
 ## 0.9.4.0 Maintenance Release
 1. I5 - [Return to application from documentation.][6]
@@ -49,3 +50,4 @@ High level feature sets include:
 [10]: https://github.com/Milyli/DocMAH/issues/36
 [11]: https://github.com/Milyli/DocMAH/issues/40
 [12]: https://github.com/Milyli/DocMAH/issues/38
+[13]: https://github.com/Milyli/DocMAH/issues/45
