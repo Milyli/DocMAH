@@ -114,7 +114,7 @@ namespace DocMAH.Web
 		{
 			if (!(bool)(application.Application[DocmahInitializedKey] ?? false))
 			{
-				_dataStore.DataStore_Update();
+				_dataStore.Update();
 
 				var fileName = Path.Combine(HostingEnvironment.MapPath("~"), ContentFileConstants.ContentFileName);
 				_helpContentManager.ImportContent(fileName);

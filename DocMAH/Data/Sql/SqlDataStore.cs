@@ -51,7 +51,7 @@ namespace DocMAH.Data.Sql
 
 		#region Public Methods
 
-		public void DataStore_Create()
+		public void Create()
 		{
 			using (var connection = _connectionFactory.GetConnection(initialCatalog: "master"))
 			using (var command = connection.CreateCommand())
@@ -64,7 +64,7 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		public void DataStore_Drop()
+		public void Delete()
 		{
 			using (var connection = _connectionFactory.GetConnection(initialCatalog: "master"))
 			using (var command = connection.CreateCommand())
@@ -77,7 +77,7 @@ namespace DocMAH.Data.Sql
 			}
 		}
 
-		public void DataStore_Update()
+		public void Update()
 		{
 			var currentDataStoreVersion = _dataStoreConfiguration.DataStoreSchemaVersion;
 
@@ -97,18 +97,6 @@ namespace DocMAH.Data.Sql
 						}
 					}
 				}
-			}
-		}
-
-		public void Database_RunScript(string sql)
-		{
-			using (var connection = _connectionFactory.GetConnection())
-			using (var command = connection.CreateCommand())
-			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = sql;
-				connection.Open();
-				command.ExecuteNonQuery();
 			}
 		}
 

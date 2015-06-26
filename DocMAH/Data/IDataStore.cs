@@ -20,25 +20,18 @@ namespace DocMAH.Data
 		/// <summary>
 		/// Creates a new DocMAH data store if one does not exist.
 		/// </summary>
-		void DataStore_Create();
+		void Create();
 
 		/// <summary>
 		/// Deletes a data store.
 		/// Should only be used in unit tests.
 		/// </summary>
-		void DataStore_Drop();
-
-		/// <summary>
-		/// This will be replaced with model specific data store calls when data file is updated.
-		/// This will likely be a breaking change.
-		/// </summary>
-		/// <param name="sql"></param>
-		void Database_RunScript(string sql);
+		void Delete();
 
 		/// <summary>
 		/// Updates the data store to the version used by this version of the DocMAH library.
 		/// </summary>
-		void DataStore_Update();
+		void Update();
 
 	}
 }

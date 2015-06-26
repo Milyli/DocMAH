@@ -59,8 +59,8 @@ namespace DocMAH.UnitTests
 
 			// Create data store for unit tests.
 			var dataStore = _container.Resolve<IDataStore>();
-			dataStore.DataStore_Create();
-			dataStore.DataStore_Update();
+			dataStore.Create();
+			dataStore.Update();
 
 			// Bring the data store schema up to date.
 			// This serves as the test for this routine as none of the
@@ -77,7 +77,7 @@ namespace DocMAH.UnitTests
 		{
 			// Clean up the data store when tests are done.
 			var dataStore = _container.Resolve<IDataStore>();
-			dataStore.DataStore_Drop();
+			dataStore.Delete();
 		}		
 
 		#endregion
