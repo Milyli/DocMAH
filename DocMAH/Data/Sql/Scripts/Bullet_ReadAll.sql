@@ -1,1 +1,1 @@
-﻿SELECT * FROM DocmahBullets
+﻿SELECT * FROM [dbo].[DocmahBullets]

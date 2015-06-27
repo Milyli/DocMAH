@@ -1,3 +1,3 @@
 ﻿SELECT *
-FROM [DocmahPages]
-WHERE Id = @id
+FROM [dbo].[DocmahPages]
+WHERE [Id] = @id

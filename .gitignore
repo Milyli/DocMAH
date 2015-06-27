@@ -4,12 +4,13 @@
 *.coverage
 *.csproj.user
 *.suo
+*.nupkg
+*.mdf
+*.ldf
 Solutions/packages/
 Solutions/TestResults/Coverage/DocMAHCoverage/
 /DocMAH.nuget
 /Solutions/Scripts/NuGet.DocMAH.Local
-*.nupkg
 /Solutions/Deployment/_version.txt
 /DocMAH.MvcHarness/ApplicationHelpInstall.xml
-/DocMAH.MvcHarness/ApplicationHelpInstall - Copy.xml
 /DocMAH.MvcHarness/DocmahContent.xml

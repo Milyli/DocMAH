@@ -1,2 +1,2 @@
-﻿DELETE [DocmahPageUrls] WHERE PageId NOT IN (@pageIds)
-DELETE [DocmahPages] WHERE Id NOT IN (@pageIds)
+﻿DELETE [dbo].[DocmahPageUrls] WHERE [PageId] NOT IN (@pageIds)
+DELETE [dbo].[DocmahPages] WHERE [Id] NOT IN (@pageIds)

@@ -1,2 +1,2 @@
-﻿DELETE [DocmahBullets] 
-WHERE PageId = @pageId
+﻿DELETE [dbo].[DocmahBullets] 
+WHERE [PageId] = @pageId

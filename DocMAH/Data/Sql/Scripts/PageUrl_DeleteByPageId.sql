@@ -1,2 +1,2 @@
-﻿DELETE DocmahPageUrls
-WHERE PageId = @pageId
+﻿DELETE [dbo].[DocmahPageUrls]
+WHERE [PageId] = @pageId

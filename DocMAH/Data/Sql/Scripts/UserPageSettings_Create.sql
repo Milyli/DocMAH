@@ -1,4 +1,4 @@
-﻿INSERT INTO [DocmahUserPageSettings](
+﻿INSERT INTO [dbo].[DocmahUserPageSettings](
 	[UserName]
 	,[PageId]
 	,[HidePage]

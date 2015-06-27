@@ -1,3 +1,3 @@
 ﻿SELECT *
-FROM DocmahPageUrls
-WHERE PageId = @pageId
+FROM [dbo].[DocmahPageUrls]
+WHERE [PageId] = @pageId

@@ -1,4 +1,4 @@
-﻿UPDATE [DocmahBullets]
+﻿UPDATE [dbo].[DocmahBullets]
    SET [PageId] = @pageId
       ,[Number] = @number
       ,[Text] = @text
@@ -7,4 +7,4 @@
       ,[OffsetElementId] = @offsetElementId
 	  ,[DocVerticalOffset] = @docVerticalOffset
 	  ,[DocHorizontalOffset] = @docHorizontalOffset
- WHERE Id = @id
+ WHERE [Id] = @id

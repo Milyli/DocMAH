@@ -1,8 +1,8 @@
 ﻿DECLARE @nextId INT 
-SELECT @nextId = ISNULL(MAX(Id), 0) + 1 FROM DocmahBullets
+SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahBullets]
 
 INSERT INTO [DocmahBullets] (
-	Id
+	[Id]
 	,[PageId]
 	,[Number]
 	,[Text]

@@ -1,1 +1,1 @@
-﻿DELETE [DocmahBullets] WHERE Id NOT IN (@bulletIds)
+﻿DELETE [dbo].[DocmahBullets] WHERE [Id] NOT IN (@bulletIds)

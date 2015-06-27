@@ -1,1 +1,1 @@
-﻿DELETE [DocmahBullets] WHERE Id = @id
+﻿DELETE [dbo].[DocmahBullets] WHERE [Id] = @id

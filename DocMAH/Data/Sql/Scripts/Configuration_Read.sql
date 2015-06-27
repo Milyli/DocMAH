@@ -3,4 +3,4 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[DocmahCo
 	SELECT 0;
 END
 
-SELECT [Value] FROM [DocmahConfiguration] WHERE [Name] = @name;
+SELECT [Value] FROM [dbo].[DocmahConfiguration] WHERE [Name] = @name;

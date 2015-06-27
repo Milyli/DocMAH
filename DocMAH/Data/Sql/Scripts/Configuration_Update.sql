@@ -1,3 +1,3 @@
-﻿UPDATE [DocmahConfiguration]
+﻿UPDATE [dbo].[DocmahConfiguration]
 SET [Value] = @value
 WHERE [Name] = @name

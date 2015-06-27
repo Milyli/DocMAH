@@ -1,1 +1,1 @@
-﻿DELETE [DocmahUserPageSettings] WHERE PageId NOT IN (@pageIds)
+﻿DELETE [dbo].[DocmahUserPageSettings] WHERE [PageId] NOT IN (@pageIds)

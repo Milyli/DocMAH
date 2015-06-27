@@ -1,1 +1,1 @@
-﻿DELETE [DocmahUserPageSettings] WHERE PageId = @pageId
+﻿DELETE [dbo].[DocmahUserPageSettings] WHERE PageId = @pageId

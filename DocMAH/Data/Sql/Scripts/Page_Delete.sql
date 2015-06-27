@@ -1,2 +1,2 @@
-﻿DELETE [DocmahPages]
-WHERE Id = @id
+﻿DELETE [dbo].[DocmahPages]
+WHERE [Id] = @id

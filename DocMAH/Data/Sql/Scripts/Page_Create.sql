@@ -3,9 +3,9 @@
 -- without invalidating user settings.
 
 DECLARE @nextId INT 
-SELECT @nextId = ISNULL(MAX(Id), 0) + 1 FROM DocmahPages
+SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahPages]
 
-INSERT INTO [DocmahPages] (
+INSERT INTO [dbo].[DocmahPages] (
 	[Id]
 	,[PageTypeId]
 	,[ParentPageId]

@@ -5,8 +5,8 @@ AS (
 		[Id],
 		[ParentPageId],
 		[Order]
-	FROM [DocmahPages]
-	WHERE ParentPageId IS NULL
+	FROM [dbo].[DocmahPages]
+	WHERE [ParentPageId] IS NULL
 
 	UNION ALL
 
@@ -15,10 +15,10 @@ AS (
 		[Page].[Id],
 		[Page].[ParentPageId],
 		[Page].[Order]
-	FROM [DocmahPages] AS [Page]
-		JOIN Pages_CTE AS Parent ON [Page].ParentPageId = Parent.Id
+	FROM [dbo].[DocmahPages] AS [Page]
+		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
 )
 SELECT Pages.*
-FROM DocmahPages AS Pages
+FROM [dbo].[DocmahPages] AS Pages
 	JOIN Pages_CTE AS Cte ON Pages.Id = Cte.Id
 ORDER BY Cte.[Level],Cte.[Order]

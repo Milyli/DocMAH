@@ -1,5 +1,5 @@
 ﻿SELECT *
-FROM DocmahUserPageSettings
+FROM [dbo].[DocmahUserPageSettings]
 WHERE 
-	UserName = @userName 
-	AND PageId = @pageId
+	[UserName] = @userName 
+	AND [PageId] = @pageId

@@ -1,4 +1,4 @@
-﻿UPDATE [DocmahPages]
+﻿UPDATE [dbo].[DocmahPages]
    SET [PageTypeId] = @pageTypeId
       ,[ParentPageId] = @parentPageId
       ,[Order] = @order
@@ -12,4 +12,4 @@
 	  ,[DocVerticalOffset] = @docVerticalOffset
 	  ,[DocHorizontalOffset] = @docHorizontalOffset
 	  ,[IsHidden] = @isHidden
- WHERE Id = @id
+ WHERE [Id] = @id

@@ -1,3 +1,3 @@
 ﻿SELECT *
-FROM DocmahBullets
-WHERE PageId = @pageId
+FROM [dbo].[DocmahBullets]
+WHERE [PageId] = @pageId
