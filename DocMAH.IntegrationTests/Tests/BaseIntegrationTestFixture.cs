@@ -20,7 +20,7 @@ namespace DocMAH.IntegrationTests.Tests
 		protected MockHttpContext HttpContext { get; set; }
 
 		#endregion
-
+		
 		#region SetUp / TearDown
 
 		[SetUp]

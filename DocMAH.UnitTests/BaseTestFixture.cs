@@ -13,7 +13,7 @@ namespace DocMAH.UnitTests
 	{
 		#region Protected Properties
 
-		protected MockFactory Mocks { get; set; }
+		protected MockRepository Mocks { get; set; }
 		protected ModelFactory Models { get; set; }		
 
 		#endregion
@@ -23,7 +23,7 @@ namespace DocMAH.UnitTests
 		[SetUp]
 		public void BaseSetUp()
 		{
-			Mocks = new MockFactory(MockBehavior.Strict);
+			Mocks = new MockRepository(MockBehavior.Strict);
 			Models = new ModelFactory();
 		}
 

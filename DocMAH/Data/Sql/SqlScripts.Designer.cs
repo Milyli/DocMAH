@@ -62,10 +62,10 @@ namespace DocMAH.Data.Sql {
         
         /// <summary>
         ///   Looks up a localized string similar to DECLARE @nextId INT 
-        ///SELECT @nextId = ISNULL(MAX(Id), 0) + 1 FROM DocmahBullets
+        ///SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahBullets]
         ///
         ///INSERT INTO [DocmahBullets] (
-        ///	Id
+        ///	[Id]
         ///	,[PageId]
         ///	,[Number]
         ///	,[Text]
@@ -96,7 +96,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahBullets] WHERE Id = @id
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahBullets] WHERE [Id] = @id
         ///.
         /// </summary>
         internal static string Bullet_Delete {
@@ -106,8 +106,8 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahBullets] 
-        ///WHERE PageId = @pageId.
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahBullets] 
+        ///WHERE [PageId] = @pageId.
         /// </summary>
         internal static string Bullet_DeleteByPageId {
             get {
@@ -116,7 +116,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahBullets] WHERE Id NOT IN (@bulletIds).
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahBullets] WHERE [Id] NOT IN (@bulletIds).
         /// </summary>
         internal static string Bullet_DeleteExcept {
             get {
@@ -125,19 +125,19 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IF( (SELECT COUNT(*) FROM DocmahBullets WHERE Id = @id) = 1)BEGIN
-        ///	UPDATE DocmahBullets SET 
-        ///		PageId = @pageId,
-        ///		Number = @number,
+        ///   Looks up a localized string similar to IF( (SELECT COUNT(*) FROM [dbo].[DocmahBullets] WHERE [Id] = @id) = 1)BEGIN
+        ///	UPDATE [dbo].[DocmahBullets] SET 
+        ///		[PageId] = @pageId,
+        ///		[Number] = @number,
         ///		[Text] = @text,
-        ///		VerticalOffset = @verticalOffset,
-        ///		HorizontalOffset = @horizontalOffset,
-        ///		OffsetElementId = @offsetElementId,
-        ///		DocVerticalOffset = @docVerticalOffset,
-        ///		DocHorizontalOffset = @docHorizontalOffset 
-        ///	WHERE Id = @id
+        ///		[VerticalOffset] = @verticalOffset,
+        ///		[HorizontalOffset] = @horizontalOffset,
+        ///		[OffsetElementId] = @offsetElementId,
+        ///		[DocVerticalOffset] = @docVerticalOffset,
+        ///		[DocHorizontalOffset] = @docHorizontalOffset 
+        ///	WHERE [Id] = @id
         ///END ELSE BEGIN
-        ///	INSERT DocmahBullets(	 Id,  PageId,  Number, [Text], VerticalOffset,  HorizontalOffset,  OffsetElementId,  DocVerti [rest of string was truncated]&quot;;.
+        ///	INSERT [dbo].[DocmahBullets](	[Id], [PageId], [Number], [Text], [VerticalOffset], [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Bullet_Import {
             get {
@@ -146,7 +146,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM DocmahBullets
+        ///   Looks up a localized string similar to SELECT * FROM [dbo].[DocmahBullets]
         ///.
         /// </summary>
         internal static string Bullet_ReadAll {
@@ -157,8 +157,8 @@ namespace DocMAH.Data.Sql {
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT *
-        ///FROM DocmahBullets
-        ///WHERE PageId = @pageId.
+        ///FROM [dbo].[DocmahBullets]
+        ///WHERE [PageId] = @pageId.
         /// </summary>
         internal static string Bullet_ReadByPageId {
             get {
@@ -167,7 +167,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [DocmahBullets]
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahBullets]
         ///   SET [PageId] = @pageId
         ///      ,[Number] = @number
         ///      ,[Text] = @text
@@ -176,7 +176,7 @@ namespace DocMAH.Data.Sql {
         ///      ,[OffsetElementId] = @offsetElementId
         ///	  ,[DocVerticalOffset] = @docVerticalOffset
         ///	  ,[DocHorizontalOffset] = @docHorizontalOffset
-        /// WHERE Id = @id.
+        /// WHERE [Id] = @id.
         /// </summary>
         internal static string Bullet_Update {
             get {
@@ -190,7 +190,7 @@ namespace DocMAH.Data.Sql {
         ///	SELECT 0;
         ///END
         ///
-        ///SELECT [Value] FROM [DocmahConfiguration] WHERE [Name] = @name;
+        ///SELECT [Value] FROM [dbo].[DocmahConfiguration] WHERE [Name] = @name;
         ///.
         /// </summary>
         internal static string Configuration_Read {
@@ -200,7 +200,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [DocmahConfiguration]
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahConfiguration]
         ///SET [Value] = @value
         ///WHERE [Name] = @name.
         /// </summary>
@@ -256,21 +256,19 @@ namespace DocMAH.Data.Sql {
         /// <summary>
         ///   Looks up a localized string similar to SET ANSI_NULLS ON
         ///SET QUOTED_IDENTIFIER ON
-        ///CREATE TABLE [dbo].[DocmahBullets](
-        ///	[Id] [int] NOT NULL,
-        ///	[PageId] [int] NOT NULL,
-        ///	[Number] [int] NOT NULL,
-        ///	[Text] [nvarchar](max) NOT NULL,
-        ///	[VerticalOffset] [int] NOT NULL,
-        ///	[HorizontalOffset] [int] NOT NULL,
-        ///	[OffsetElementId] [nvarchar](50) NOT NULL,
-        ///	[DocVerticalOffset] [int] NULL,
-        ///	[DocHorizontalOffset] [int] NULL,
-        /// CONSTRAINT [PK_DocmahBullets] PRIMARY KEY CLUSTERED 
-        ///(
-        ///	[Id] ASC
-        ///)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
-        ///)        /// [rest of string was truncated]&quot;;.
+        ///
+        ///
+        ///IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N&apos;[dbo].[DocmahBullets]&apos;) AND type in (N&apos;U&apos;)) BEGIN
+        ///	CREATE TABLE [dbo].[DocmahBullets](
+        ///		[Id] [int] NOT NULL,
+        ///		[PageId] [int] NOT NULL,
+        ///		[Number] [int] NOT NULL,
+        ///		[Text] [nvarchar](max) NOT NULL,
+        ///		[VerticalOffset] [int] NOT NULL,
+        ///		[HorizontalOffset] [int] NOT NULL,
+        ///		[OffsetElementId] [nvarchar](50) NOT NULL,
+        ///		[DocVerticalOffset] [int] NULL,
+        ///		[DocHorizontalOffset] [int] NU [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Database_Update_01 {
             get {
@@ -279,14 +277,20 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE DocmahConfiguration
-        ///SET [Name] = &apos;HelpContentVersion&apos;
-        ///WHERE [Name] = &apos;DatabaseHelpVersion&apos;
+        ///   Looks up a localized string similar to SET ANSI_NULLS ON
+        ///SET QUOTED_IDENTIFIER ON
         ///
+        ///IF EXISTS (SELECT * FROM [dbo].[DocmahConfiguration] WHERE [Name] = &apos;DatabaseHelpVersion&apos;) BEGIN
+        ///	UPDATE DocmahConfiguration
+        ///	SET [Name] = &apos;HelpContentVersion&apos;
+        ///	WHERE [Name] = &apos;DatabaseHelpVersion&apos;
+        ///END
         ///
-        ///-- Update database schema version.
-        ///UPDATE [DocmahConfiguration] SET [Value] = 2 WHERE [Name] = &apos;DatabaseSchemaVersion&apos;
-        ///.
+        ///IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N&apos;[dbo].[DocmahFirstTimeHelp]&apos;) AND type in (N&apos;U&apos;)) BEGIN
+        ///	CREATE TABLE [dbo].[DocmahFirstTimeHelp](
+        ///		[Id] [int] NOT NULL,
+        ///		[SourceUrl] [nvarchar](256) NULL,
+        ///		[Title] [nvarchar](50 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Database_Update_02 {
             get {
@@ -300,9 +304,9 @@ namespace DocMAH.Data.Sql {
         ///-- without invalidating user settings.
         ///
         ///DECLARE @nextId INT 
-        ///SELECT @nextId = ISNULL(MAX(Id), 0) + 1 FROM DocmahPages
+        ///SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahPages]
         ///
-        ///INSERT INTO [DocmahPages] (
+        ///INSERT INTO [dbo].[DocmahPages] (
         ///	[Id]
         ///	,[PageTypeId]
         ///	,[ParentPageId]
@@ -314,8 +318,7 @@ namespace DocMAH.Data.Sql {
         ///	,[HorizontalOffset]
         ///	,[OffsetElementId]
         ///	,[DocImageUrl]
-        ///	,[DocVerticalOffset]
-        ///	,[DocHori [rest of string was truncated]&quot;;.
+        ///	,[DocVerticalOff [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Page_Create {
             get {
@@ -324,8 +327,8 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahPages]
-        ///WHERE Id = @id.
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPages]
+        ///WHERE [Id] = @id.
         /// </summary>
         internal static string Page_Delete {
             get {
@@ -334,8 +337,8 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahPageUrls] WHERE PageId NOT IN (@pageIds)
-        ///DELETE [DocmahPages] WHERE Id NOT IN (@pageIds).
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPageUrls] WHERE [PageId] NOT IN (@pageIds)
+        ///DELETE [dbo].[DocmahPages] WHERE [Id] NOT IN (@pageIds).
         /// </summary>
         internal static string Page_DeleteExcept {
             get {
@@ -344,22 +347,20 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM DocmahPages WHERE Id = @id) BEGIN 
-        ///	UPDATE DocmahPages SET 
-        ///		PageTypeId = @pageTypeId, 
-        ///		ParentPageId = @parentPageId,
+        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM [dbo].[DocmahPages] WHERE [Id] = @id) BEGIN 
+        ///	UPDATE [dbo].[DocmahPages] SET 
+        ///		[PageTypeId] = @pageTypeId, 
+        ///		[ParentPageId] = @parentPageId,
         ///		[Order] = @order,
-        ///		SourceUrl = @sourceUrl,
-        ///		Title = @title,
-        ///		Content = @content,
-        ///		VerticalOffset = @verticalOffset,
-        ///		HorizontalOffset = @horizontalOffset,
-        ///		OffsetElementId = @offsetElementId,
-        ///		DocImageUrl = @docImageUrl,
-        ///		DocVerticalOffset = @docVerticalOffset,
-        ///		DocHorizontalOffset = @docHorizontalOffset,
-        ///		IsHidden = @isHidden 
-        ///	WHERE Id [rest of string was truncated]&quot;;.
+        ///		[SourceUrl] = @sourceUrl,
+        ///		[Title] = @title,
+        ///		[Content] = @content,
+        ///		[VerticalOffset] = @verticalOffset,
+        ///		[HorizontalOffset] = @horizontalOffset,
+        ///		[OffsetElementId] = @offsetElementId,
+        ///		[DocImageUrl] = @docImageUrl,
+        ///		[DocVerticalOffset] = @docVerticalOffset,
+        ///		[DocHorizontalOffset] = @docHorizontalOff [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Page_Import {
             get {
@@ -375,8 +376,8 @@ namespace DocMAH.Data.Sql {
         ///		[Id],
         ///		[ParentPageId],
         ///		[Order]
-        ///	FROM [DocmahPages]
-        ///	WHERE ParentPageId IS NULL
+        ///	FROM [dbo].[DocmahPages]
+        ///	WHERE [ParentPageId] IS NULL
         ///
         ///	UNION ALL
         ///
@@ -385,11 +386,11 @@ namespace DocMAH.Data.Sql {
         ///		[Page].[Id],
         ///		[Page].[ParentPageId],
         ///		[Page].[Order]
-        ///	FROM [DocmahPages] AS [Page]
-        ///		JOIN Pages_CTE AS Parent ON [Page].ParentPageId = Parent.Id
+        ///	FROM [dbo].[DocmahPages] AS [Page]
+        ///		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
         ///)
         ///SELECT Pages.*
-        ///FROM DocmahPages AS Pages
+        ///FROM [dbo].[DocmahPages] AS Pages
         ///	JOIN Pages_CTE AS Cte ON Pages.Id = Cte.Id
         ///ORDER BY Cte.[Level],Cte.[Order].
         /// </summary>
@@ -401,8 +402,8 @@ namespace DocMAH.Data.Sql {
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT *
-        ///FROM [DocmahPages]
-        ///WHERE Id = @id.
+        ///FROM [dbo].[DocmahPages]
+        ///WHERE [Id] = @id.
         /// </summary>
         internal static string Page_ReadById {
             get {
@@ -413,8 +414,8 @@ namespace DocMAH.Data.Sql {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///SELECT *
-        ///FROM [DocmahPages]
-        ///WHERE ISNULL(@parentId, -1) = ISNULL(ParentPageId, -1)
+        ///FROM [dbo].[DocmahPages]
+        ///WHERE ISNULL(@parentId, -1) = ISNULL([ParentPageId], -1)
         ///ORDER BY [Order]
         ///.
         /// </summary>
@@ -429,19 +430,19 @@ namespace DocMAH.Data.Sql {
         ///DECLARE @hitCount INT
         ///
         ///SELECT @hitCount = COUNT(*)
-        ///FROM DocmahPageUrls
-        ///WHERE @url = Url
+        ///FROM [dbo].[DocmahPageUrls]
+        ///WHERE @url = [Url]
         ///
         ///IF @hitCount &gt; 0 BEGIN	
         ///	SELECT P.*
-        ///	FROM DocmahPages AS P
-        ///		JOIN DocmahPageUrls AS U ON U.PageId = P.Id
-        ///	WHERE @url = U.Url
+        ///	FROM [dbo].[DocmahPages] AS P
+        ///		JOIN [dbo].[DocmahPageUrls] AS U ON U.[PageId] = P.[Id]
+        ///	WHERE @url = U.[Url]
         ///END ELSE BEGIN
         ///	SELECT P.*
-        ///	FROM DocmahPages AS P
-        ///		JOIN DocmahPageUrls AS U ON U.PageId = P.Id
-        ///	WHERE @url LIKE U.Url
+        ///	FROM [dbo].[DocmahPages] AS P
+        ///		JOIN [dbo].[DocmahPageUrls] AS U ON U.[PageId] = P.[Id]
+        ///	WHERE @url LIKE U.[Url]
         ///END.
         /// </summary>
         internal static string Page_ReadByUrl {
@@ -456,7 +457,7 @@ namespace DocMAH.Data.Sql {
         ///	SELECT 
         ///		1 AS [Level],
         ///		[Id],[ParentPageId],[Order],[Title],[IsHidden]
-        ///	FROM [DocmahPages]
+        ///	FROM [dbo].[DocmahPages]
         ///	WHERE ParentPageId IS NULL
         ///		AND (@includeHidden = 1 OR [IsHidden] = 0)
         ///
@@ -465,11 +466,11 @@ namespace DocMAH.Data.Sql {
         ///	SELECT 
         ///		[Parent].[Level] + 1 AS [Level],
         ///		[Page].[Id],[Page].[ParentPageId],[Page].[Order],[Page].[Title],[Page].[IsHidden]
-        ///	FROM [DocmahPages] AS [Page]
-        ///		JOIN Pages_CTE AS Parent ON [Page].ParentPageId = Parent.Id
+        ///	FROM [dbo].[DocmahPages] AS [Page]
+        ///		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
         ///	WHERE @includeHidden = 1 OR [Page].[IsHidden] = 0
         ///)
-        ///SELECT [Id],[ParentPa [rest of string was truncated]&quot;;.
+        ///SELEC [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Page_ReadTableOfContents {
             get {
@@ -478,7 +479,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [DocmahPages]
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahPages]
         ///   SET [PageTypeId] = @pageTypeId
         ///      ,[ParentPageId] = @parentPageId
         ///      ,[Order] = @order
@@ -492,7 +493,7 @@ namespace DocMAH.Data.Sql {
         ///	  ,[DocVerticalOffset] = @docVerticalOffset
         ///	  ,[DocHorizontalOffset] = @docHorizontalOffset
         ///	  ,[IsHidden] = @isHidden
-        /// WHERE Id = [rest of string was truncated]&quot;;.
+        /// WHER [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Page_Update {
             get {
@@ -501,7 +502,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [DocmahPageUrls] (
+        ///   Looks up a localized string similar to INSERT INTO [dbo].[DocmahPageUrls] (
         ///	[Url]
         ///	,[PageId]
         ///) VALUES (
@@ -516,8 +517,8 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE DocmahPageUrls
-        ///WHERE PageId = @pageId.
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPageUrls]
+        ///WHERE [PageId] = @pageId.
         /// </summary>
         internal static string PageUrl_DeleteByPageId {
             get {
@@ -527,8 +528,8 @@ namespace DocMAH.Data.Sql {
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT *
-        ///FROM DocmahPageUrls
-        ///WHERE PageId = @pageId.
+        ///FROM [dbo].[DocmahPageUrls]
+        ///WHERE [PageId] = @pageId.
         /// </summary>
         internal static string PageUrl_ReadByPageId {
             get {
@@ -537,7 +538,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [DocmahUserPageSettings](
+        ///   Looks up a localized string similar to INSERT INTO [dbo].[DocmahUserPageSettings](
         ///	[UserName]
         ///	,[PageId]
         ///	,[HidePage]
@@ -556,7 +557,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahUserPageSettings] WHERE PageId = @pageId.
         /// </summary>
         internal static string UserPageSettings_DeleteByPageId {
             get {
@@ -565,7 +566,7 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [DocmahUserPageSettings] WHERE PageId NOT IN (@pageIds).
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahUserPageSettings] WHERE [PageId] NOT IN (@pageIds).
         /// </summary>
         internal static string UserPageSettings_DeleteExcept {
             get {
@@ -575,10 +576,10 @@ namespace DocMAH.Data.Sql {
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT *
-        ///FROM DocmahUserPageSettings
+        ///FROM [dbo].[DocmahUserPageSettings]
         ///WHERE 
-        ///	UserName = @userName 
-        ///	AND PageId = @pageId.
+        ///	[UserName] = @userName 
+        ///	AND [PageId] = @pageId.
         /// </summary>
         internal static string UserPageSettings_ReadByUserAndPage {
             get {
@@ -587,11 +588,11 @@ namespace DocMAH.Data.Sql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [DocmahUserPageSettings]
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahUserPageSettings]
         ///   SET [UserName] = @userName
         ///      ,[PageId] = @pageId
         ///      ,[HidePage] = @hidePage
-        /// WHERE Id = @id.
+        /// WHERE [Id] = @id.
         /// </summary>
         internal static string UserPageSettings_Update {
             get {
