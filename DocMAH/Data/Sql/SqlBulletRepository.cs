@@ -31,8 +31,6 @@ namespace DocMAH.Data.Sql
 						new SqlParameter("@verticalOffset", bullet.VerticalOffset),
 						new SqlParameter("@horizontalOffset", bullet.HorizontalOffset),
 						new SqlParameter("@offsetElementId", bullet.OffsetElementId),
-						new SqlParameter("@docVerticalOffset", (object)bullet.DocVerticalOffset ?? DBNull.Value),
-						new SqlParameter("@docHorizontalOffset", (object)bullet.DocHorizontalOffset ?? DBNull.Value),
 					});
 		}
 
@@ -45,8 +43,6 @@ namespace DocMAH.Data.Sql
 			var verticalOffsetOrdinal = reader.GetOrdinal("VerticalOffset");
 			var horizontalOffsetOrdinal = reader.GetOrdinal("HorizontalOffset");
 			var offsetElementIdOrdinal = reader.GetOrdinal("OffsetElementId");
-			var docVerticalOffsetOrdinal = reader.GetOrdinal("DocVerticalOffset");
-			var docHorizontalOffsetOrdinal = reader.GetOrdinal("DocHorizontalOffset");
 
 			while (reader.Read())
 			{
@@ -59,8 +55,6 @@ namespace DocMAH.Data.Sql
 					VerticalOffset = reader.GetInt32(verticalOffsetOrdinal),
 					HorizontalOffset = reader.GetInt32(horizontalOffsetOrdinal),
 					OffsetElementId = reader.GetString(offsetElementIdOrdinal),
-					DocVerticalOffset = reader.IsDBNull(docVerticalOffsetOrdinal) ? (int?)null : reader.GetInt32(docVerticalOffsetOrdinal),
-					DocHorizontalOffset = reader.IsDBNull(docHorizontalOffsetOrdinal) ? (int?)null : reader.GetInt32(docHorizontalOffsetOrdinal),
 				};
 			}
 		}

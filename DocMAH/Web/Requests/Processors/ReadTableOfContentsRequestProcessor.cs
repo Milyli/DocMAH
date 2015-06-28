@@ -14,7 +14,7 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public ReadTableOfContentsRequestProcessor(IEditAuthorizer editAuthorizer, IPageRepository pageRepository)
+		public ReadTableOfContentsRequestProcessor(IEditAuthorizer editAuthorizer, IDocumentationPageRepository pageRepository)
 		{
 			_editAuthorizer = editAuthorizer;
 			_pageRepository = pageRepository;
@@ -25,7 +25,7 @@ namespace DocMAH.Web.Requests.Processors
 		#region Private Fields
 
 		private readonly IEditAuthorizer _editAuthorizer;
-		private readonly IPageRepository _pageRepository;
+		private readonly IDocumentationPageRepository _pageRepository;
 
 		#endregion
 

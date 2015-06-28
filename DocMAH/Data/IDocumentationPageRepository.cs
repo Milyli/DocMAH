@@ -6,13 +6,13 @@ using DocMAH.Models;
 
 namespace DocMAH.Data
 {
-	public interface IPageRepository
+	public interface IDocumentationPageRepository
 	{
 		/// <summary>
 		/// Add a new page in the data store.
 		/// </summary>
 		/// <param name="page"></param>
-		void Create(Page page);
+		void Create(DocumentationPage page);
 
 		/// <summary>
 		/// Delete an existing page from the data store.   
@@ -31,36 +31,28 @@ namespace DocMAH.Data
 		/// current state in the data store.
 		/// </summary>
 		/// <param name="page"></param>
-		void Import(Page page);
+		void Import(DocumentationPage page);
 
 		/// <summary>
 		/// Reads a page by its id.
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		Page Read(int id);
+		DocumentationPage Read(int id);
 
 		/// <summary>
 		/// Read all pages from the data store.
 		/// </summary>
 		/// <returns></returns>
-		IEnumerable<Page> ReadAll();
+		IEnumerable<DocumentationPage> ReadAll();
 
 		/// <summary>
 		/// Reads pages by parent id.
 		/// </summary>
 		/// <param name="parentId">null to read pages without parents.</param>
 		/// <returns></returns>
-		List<Page> ReadByParentId(int? parentId);
-
-		/// <summary>
-		/// Reads a page for the requested URL.
-		/// The requested URL will match wildcards stored in data store.
-		/// </summary>
-		/// <param name="url"></param>
-		/// <returns></returns>
-		Page ReadByUrl(string url);
-
+		List<DocumentationPage> ReadByParentId(int? parentId);
+		
 		/// <summary>
 		/// Reads page id, order, title and parent id.
 		/// Result list first contains pages having no parents 
@@ -68,12 +60,12 @@ namespace DocMAH.Data
 		/// </summary>
 		/// <param name="includeHidden">false for public pages only.</param>
 		/// <returns></returns>
-		List<Page> ReadTableOfContents(bool includeHidden);
+		List<DocumentationPage> ReadTableOfContents(bool includeHidden);
 
 		/// <summary>
 		/// Updates an existing page in the datastore.
 		/// </summary>
 		/// <param name="page"></param>
-		void Update(Page page);
+		void Update(DocumentationPage page);
 	}
 }

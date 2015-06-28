@@ -13,7 +13,7 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public DeletePageRequestProcessor(IBulletRepository bulletRepository, IPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
+		public DeletePageRequestProcessor(IBulletRepository bulletRepository, IDocumentationPageRepository pageRepository, IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_bulletRepository = bulletRepository;
 			_pageRepository = pageRepository;
@@ -25,7 +25,7 @@ namespace DocMAH.Web.Requests.Processors
 		#region Private Fields
 
 		private readonly IBulletRepository _bulletRepository;
-		private readonly IPageRepository _pageRepository;
+		private readonly IDocumentationPageRepository _pageRepository;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion

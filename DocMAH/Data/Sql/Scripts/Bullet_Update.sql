@@ -5,6 +5,4 @@
       ,[VerticalOffset] = @verticalOffset
       ,[HorizontalOffset] = @horizontalOffset
       ,[OffsetElementId] = @offsetElementId
-	  ,[DocVerticalOffset] = @docVerticalOffset
-	  ,[DocHorizontalOffset] = @docHorizontalOffset
  WHERE [Id] = @id

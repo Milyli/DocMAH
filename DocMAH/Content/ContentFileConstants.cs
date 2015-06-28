@@ -10,7 +10,8 @@ namespace DocMAH.Content
 		public const string FileSchemaVersionAttribute = "fileSchemaVersion";
 		public const string FileContentVersionAttribute = "fileContentVersion";
 		public const string DataStoreSchemaVersionAttribute = "dataStoreSchemaVersion";
-		public const string PageCollectionElement = "pages";
+		public const string DocumentationPageCollectionElement = "documentationPages";
+		public const string FirstTimeHelpCollectionElement = "firstTimeHelp";
 		public const string BulletCollectionElement = "bullets";
 	}
 }

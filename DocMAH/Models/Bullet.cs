@@ -15,7 +15,5 @@ namespace DocMAH.Models
 		public int VerticalOffset { get; set; }
 		public int HorizontalOffset { get; set; }
 		public string OffsetElementId { get; set; }
-		public int? DocVerticalOffset { get; set; }
-		public int? DocHorizontalOffset { get; set; }
 	}
 }

@@ -30,7 +30,7 @@ DMH.Urls = function () {
 	this.ReadApplicationSettings = '/help.axd?m=ReadApplicationSettings';
 	this.ReadPage = '/help.axd?m=ReadPage';
 	this.ReadTableOfContents = '/help.axd?m=ReadTableOfContents';
-	this.SavePage = '/help.axd?m=SavePage';
+	this.SaveFirstTimeHelp = '/help.axd?m=SaveFirstTimeHelp';
 	this.SaveUserPageSettings = '/help.axd?m=SaveUserPageSettings';
 
 	// Return singleton.
@@ -100,12 +100,12 @@ DMH.AjaxClient = function () {
 		});
 	}
 
-	this.SavePage = function (page, successCallback) {
+	this.SaveFirstTimeHelp = function (page, successCallback) {
 		$.ajax({
 			type: 'POST',
 			contentType: "application/json",
 			dataType: 'json',
-			url: DMH.Urls.SavePage,
+			url: DMH.Urls.SaveFirstTimeHelp,
 			data: JSON.stringify(page),
 			success: successCallback,
 		});
@@ -1051,7 +1051,7 @@ DMH.FirstTimeEdit = function () {
 	function SaveHelpButton_Click() {
 		UpdatePageModel();
 		var client = new DMH.AjaxClient();
-		client.SavePage(_currentPage, function (page) {
+		client.SaveFirstTimeHelp(_currentPage, function (page) {
 			_currentPage.Id = page.Id;
 		});
 

@@ -28,8 +28,8 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			var editAuthorizer = Mocks.Create<IEditAuthorizer>();
 			editAuthorizer.Setup(a => a.Authorize()).Returns(isAuthorized);
 
-			var pageRepository = Mocks.Create<IPageRepository>();
-			pageRepository.Setup(r => r.ReadTableOfContents(isAuthorized)).Returns(new List<Page>());
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
+			pageRepository.Setup(r => r.ReadTableOfContents(isAuthorized)).Returns(new List<DocumentationPage>());
 
 			var processor = new ReadTableOfContentsRequestProcessor(editAuthorizer.Object, pageRepository.Object);
 

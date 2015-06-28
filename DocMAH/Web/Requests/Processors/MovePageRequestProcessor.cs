@@ -15,7 +15,7 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public MovePageRequestProcessor(IPageRepository pageRepository)
+		public MovePageRequestProcessor(IDocumentationPageRepository pageRepository)
 		{
 			_pageRepository = pageRepository;
 		}
@@ -24,7 +24,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		#region Private Fields
 
-		private readonly IPageRepository _pageRepository;
+		private readonly IDocumentationPageRepository _pageRepository;
 
 		#endregion
 
@@ -40,7 +40,7 @@ namespace DocMAH.Web.Requests.Processors
 			var oldSiblings = _pageRepository.ReadByParentId(page.ParentPageId);
 			oldSiblings.RemoveAt(page.Order);
 
-			List<Page> newSiblings;
+			List<DocumentationPage> newSiblings;
 			int updateStartIndex, updateEndIndex;
 			int insertIndex = moveRequest.NewPosition;
 

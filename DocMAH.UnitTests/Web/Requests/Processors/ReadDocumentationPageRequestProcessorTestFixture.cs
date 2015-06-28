@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace DocMAH.UnitTests.Web.Requests.Processors
 {
 	[TestFixture]
-	public class ReadPageRequestProcessorTestFixture : BaseTestFixture
+	public class ReadDocumentationPageRequestProcessorTestFixture : BaseTestFixture
 	{
 		#region Tests
 
@@ -23,16 +23,12 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_Success()
 		{
 			// Arrange
-			var page = Models.CreatePage(id: 84932);
-			var bullet = Models.CreateBullet(id: 98342, pageId: page.Id);
+			var page = Models.CreateDocumentationPage(id: 84932);
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.Read(page.Id)).Returns(page);
 
-			var bulletRepository = Mocks.Create<IBulletRepository>();
-			bulletRepository.Setup(r => r.ReadByPageId(page.Id)).Returns(new List<Bullet> { bullet });
-
-			var processor = new ReadPageRequestProcessor(bulletRepository.Object, pageRepository.Object);
+			var processor = new ReadDocumentationPageRequestProcessor(pageRepository.Object);
 
 			// Act
 			var result = processor.Process(page.Id.ToString());
@@ -42,9 +38,8 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "The request should succeed.");
 			Assert.That(result.ContentType, Is.EqualTo(ContentTypes.Json), "JSON should be returned in the response.");
 			var serializer = new JavaScriptSerializer();
-			var clientPage = serializer.Deserialize<Page>(result.Content);
+			var clientPage = serializer.Deserialize<DocumentationPage>(result.Content);
 			Assert.That(clientPage.Id, Is.EqualTo(page.Id), "The page read from the repository should be included in the result.");
-			Assert.That(clientPage.Bullets[0].Id, Is.EqualTo(bullet.Id), "The bullets read from the repository should be included in the result.");
 		}
 
 		#endregion

@@ -18,12 +18,12 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Crud_Success()
 		{
 			var userName = "TestUserName";
-			var page = Models.CreatePage();
-			PageRepository.Create(page);
+			var help = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(help);
 
 			var settings = new UserPageSettings(){
 				UserName = userName,
-				PageId = page.Id,
+				PageId = help.Id,
 				HidePage = false,
 			};
 			UserPageSettingsRepository.Create(settings);
@@ -41,31 +41,31 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void DeleteByPageId_Success()
 		{
 			// Arrange
-			var targetPage = Models.CreatePage();
-			PageRepository.Create(targetPage);
+			var targetHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(targetHelp);
 
-			var noisePage = Models.CreatePage();
-			PageRepository.Create(noisePage);
+			var noiseHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(noiseHelp);
 
 			var userName1 = "Test1@docmah.org";
 			var userName2 = "Test2@docmah.org";
 
-			var targetSettings1 = new UserPageSettings { PageId = targetPage.Id, UserName = userName1 };
+			var targetSettings1 = new UserPageSettings { PageId = targetHelp.Id, UserName = userName1 };
 			UserPageSettingsRepository.Create(targetSettings1);
-			var targetSettings2 = new UserPageSettings { PageId = targetPage.Id, UserName = userName2 };
+			var targetSettings2 = new UserPageSettings { PageId = targetHelp.Id, UserName = userName2 };
 			UserPageSettingsRepository.Create(targetSettings2);
-			var noiseSettings = new UserPageSettings { PageId = noisePage.Id, UserName = userName1 };
+			var noiseSettings = new UserPageSettings { PageId = noiseHelp.Id, UserName = userName1 };
 			UserPageSettingsRepository.Create(noiseSettings);
 
 			// Act
-			UserPageSettingsRepository.DeleteByPageId(targetPage.Id);
+			UserPageSettingsRepository.DeleteByPageId(targetHelp.Id);
 
 			// Assert
-			var deletedSettings1 = UserPageSettingsRepository.Read(userName1, targetPage.Id);
+			var deletedSettings1 = UserPageSettingsRepository.Read(userName1, targetHelp.Id);
 			Assert.That(deletedSettings1, Is.Null, "First user's settings for target page should have been deleted.");
-			var deletedSettings2 = UserPageSettingsRepository.Read(userName2, targetPage.Id);
+			var deletedSettings2 = UserPageSettingsRepository.Read(userName2, targetHelp.Id);
 			Assert.That(deletedSettings2, Is.Null, "Second user's settings for target page should have been deleted.");
-			var existingSettings = UserPageSettingsRepository.Read(userName1, noisePage.Id);
+			var existingSettings = UserPageSettingsRepository.Read(userName1, noiseHelp.Id);
 			Assert.That(existingSettings, Is.Not.Null, "Settings for other pages should remain.");
 		}
 
@@ -88,38 +88,38 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void DeleteExcept_Success()
 		{
 			// Arrange
-			var keptPage = Models.CreatePage();
-			PageRepository.Create(keptPage);
+			var keptHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(keptHelp);
 
-			var deletedPage = Models.CreatePage();
-			PageRepository.Create(deletedPage);
+			var deletedHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(deletedHelp);
 
-			var anotherDeletedPage = Models.CreatePage();
-			PageRepository.Create(anotherDeletedPage);
+			var anotherDeletedHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(anotherDeletedHelp);
 
 			var userName1 = "user1@testerson.com";
 			var userName2 = "user2@testerson.com";
 
-			var keptPageSetting = new UserPageSettings { PageId = keptPage.Id, UserName = userName1 };
+			var keptPageSetting = new UserPageSettings { PageId = keptHelp.Id, UserName = userName1 };
 			UserPageSettingsRepository.Create(keptPageSetting);
-			var deletedPageSetting1 = new UserPageSettings { PageId = deletedPage.Id, UserName = userName1 };
+			var deletedPageSetting1 = new UserPageSettings { PageId = deletedHelp.Id, UserName = userName1 };
 			UserPageSettingsRepository.Create(deletedPageSetting1);
-			var deletedPageSetting2 = new UserPageSettings { PageId = deletedPage.Id, UserName = userName2 };
+			var deletedPageSetting2 = new UserPageSettings { PageId = deletedHelp.Id, UserName = userName2 };
 			UserPageSettingsRepository.Create(deletedPageSetting2);
-			var anotherDeletedPageSetting = new UserPageSettings { PageId = anotherDeletedPage.Id, UserName = userName1 };
+			var anotherDeletedPageSetting = new UserPageSettings { PageId = anotherDeletedHelp.Id, UserName = userName1 };
 			UserPageSettingsRepository.Create(anotherDeletedPageSetting);
 
 			// Act
-			UserPageSettingsRepository.DeleteExcept(new List<int> { keptPage.Id });
+			UserPageSettingsRepository.DeleteExcept(new List<int> { keptHelp.Id });
 
 			// Assert
-			var keptResult = UserPageSettingsRepository.Read(userName1, keptPage.Id);
+			var keptResult = UserPageSettingsRepository.Read(userName1, keptHelp.Id);
 			Assert.That(keptResult, Is.Not.Null, "The kept settings should still be in the data store.");
-			var deletedResult1 = UserPageSettingsRepository.Read(userName1, deletedPage.Id);
+			var deletedResult1 = UserPageSettingsRepository.Read(userName1, deletedHelp.Id);
 			Assert.That(deletedResult1, Is.Null, "Settings shoudl not exist for the first deleted page and first user.");
-			var deletedResult2 = UserPageSettingsRepository.Read(userName2, deletedPage.Id);
+			var deletedResult2 = UserPageSettingsRepository.Read(userName2, deletedHelp.Id);
 			Assert.That(deletedResult2, Is.Null, "Settings should not exist for the first deleted page and second user.");
-			var anotherDeletedResult = UserPageSettingsRepository.Read(userName1, anotherDeletedPage.Id);
+			var anotherDeletedResult = UserPageSettingsRepository.Read(userName1, anotherDeletedHelp.Id);
 			Assert.That(anotherDeletedResult, Is.Null, "Settings should not exist for the second deleted page and first user.");
 		}
 

@@ -111,7 +111,8 @@
     <Compile Include="Data\Sql\BaseSqlRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlBulletRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlConfigurationRepositoryTestFixture.cs" />
-    <Compile Include="Data\Sql\SqlPageRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlDocumentationPageRepositoryTestFixture.cs" />
+    <Compile Include="Data\Sql\SqlFirstTimeHelpRepositoryTestFixture.cs" />
     <Compile Include="Data\Sql\SqlUserPageSettingsRepositoryTestFixture.cs" />
     <Compile Include="Dependencies\ContainerTestFixture.cs" />
     <Compile Include="Extensions\Int32ExtensionsTestFixture.cs" />
@@ -132,9 +133,10 @@
     <Compile Include="Web\Requests\Processors\MovePageRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\NotFoundRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\ReadApplicationSettingsRequestProcessorTestFixture.cs" />
-    <Compile Include="Web\Requests\Processors\ReadPageRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\ReadDocumentationPageRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\ReadTableOfContentsRequestProcessorTestFixture.cs" />
-    <Compile Include="Web\Requests\Processors\SaveHelpRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\SaveDocumentationPageRequestProcessorTestFixture.cs" />
+    <Compile Include="Web\Requests\Processors\SaveFirstTimeHelpRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\SaveUserPageSettingsRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\Processors\UnauthorizedRequestProcessorTestFixture.cs" />
     <Compile Include="Web\Requests\RequestProcessorFactoryTestFixture.cs" />

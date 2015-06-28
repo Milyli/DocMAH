@@ -9,8 +9,6 @@ INSERT INTO [DocmahBullets] (
 	,[VerticalOffset]
 	,[HorizontalOffset]
 	,[OffsetElementId]
-	,[DocVerticalOffset]
-	,[DocHorizontalOffset]
 )
 VALUES (
 	@nextId
@@ -20,8 +18,6 @@ VALUES (
 	,@verticalOffset
 	,@horizontalOffset
 	,@offsetElementId
-	,@docVerticalOffset
-	,@docHorizontalOffset
 )
 
 SELECT @nextId

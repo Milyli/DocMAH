@@ -41,20 +41,19 @@ namespace DocMAH.IntegrationTests.Tests
 			path.Setup(p => p.MapPath("~")).Returns(TestContext.CurrentContext.TestDirectory);
 			Container.Register<IPath>(c => path.Object);
 
-			var pageRepository = Container.Resolve<IPageRepository>();
+			var pageRepository = Container.Resolve<IDocumentationPageRepository>();
 			var handler = new HttpHandler(Container);
 
-			var models = new ModelFactory();
-			var firstPage = models.CreatePage();
+			var firstPage = Models.CreateDocumentationPage();
 			pageRepository.Create(firstPage);
 
 			handler.ProcessRequestInternal(HttpContext.Object);
 
 
 			// Change content and recreate installation file.
-			var deletedPage = models.CreatePage();
-			var recreatedPage = models.CreatePage();
-			var lastPage = models.CreatePage();
+			var deletedPage = Models.CreateDocumentationPage();
+			var recreatedPage = Models.CreateDocumentationPage();
+			var lastPage = Models.CreateDocumentationPage();
 
 			pageRepository.Create(deletedPage);
 			pageRepository.Create(recreatedPage);

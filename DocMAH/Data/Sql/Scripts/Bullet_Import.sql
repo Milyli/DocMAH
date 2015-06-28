@@ -5,11 +5,9 @@
 		[Text] = @text,
 		[VerticalOffset] = @verticalOffset,
 		[HorizontalOffset] = @horizontalOffset,
-		[OffsetElementId] = @offsetElementId,
-		[DocVerticalOffset] = @docVerticalOffset,
-		[DocHorizontalOffset] = @docHorizontalOffset 
+		[OffsetElementId] = @offsetElementId
 	WHERE [Id] = @id
 END ELSE BEGIN
-	INSERT [dbo].[DocmahBullets](	[Id], [PageId], [Number], [Text], [VerticalOffset], [HorizontalOffset], [OffsetElementId], [DocVerticalOffset], [DocHorizontalOffset]) 
-	VALUES						(	@id,  @pageId,  @number,  @text,  @verticalOffset,  @horizontalOffset,  @offsetElementId,  @docVerticalOffset,  @docHorizontalOffset)
+	INSERT [dbo].[DocmahBullets](	[Id], [PageId], [Number], [Text], [VerticalOffset], [HorizontalOffset], [OffsetElementId]) 
+	VALUES						(	@id,  @pageId,  @number,  @text,  @verticalOffset,  @horizontalOffset,  @offsetElementId)
 END

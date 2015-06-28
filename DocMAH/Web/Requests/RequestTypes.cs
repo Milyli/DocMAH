@@ -19,7 +19,8 @@ namespace DocMAH.Web.Requests
 		public const string ReadApplicationSettings = "ReadApplicationSettings";
 		public const string ReadPage = "ReadPage";
 		public const string ReadTableOfContents = "ReadTableOfContents";
-		public const string SavePage = "SavePage";
+		public const string SaveDocumentationPage = "SaveDocumentationPage";
+		public const string SaveFirstTimeHelp = "SaveFirstTimeHelp";
 		public const string SaveUserPageSettings = "SaveUserPageSettings";
 		public const string Unauthorized = "Unauthorized";
 

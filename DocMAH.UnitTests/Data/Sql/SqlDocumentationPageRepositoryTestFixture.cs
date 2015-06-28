@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace DocMAH.UnitTests.Data.Sql
 {
 	[TestFixture]
-	public class SqlPageRepositoryTestFixture : BaseSqlRepositoryTestFixture
+	public class SqlDocumentationPageRepositoryTestFixture : BaseSqlRepositoryTestFixture
 	{
 		#region Tests
 
@@ -24,24 +24,24 @@ namespace DocMAH.UnitTests.Data.Sql
 		[Description("Tests page create, read, update and delete methods.")]
 		public void Crud_Success()
 		{
-			var newPage = Models.CreatePage();
+			var newPage = Models.CreateDocumentationPage();
 			Assert.AreEqual(0, newPage.Id, "The page id should not be set until after data layer Page_Create method is called.");
 
-			PageRepository.Create(newPage);
+			DocumentationPageRepository.Create(newPage);
 			Assert.AreNotEqual(0, newPage.Id, "The page id should have been set by the data layer.");
 
 			var oldTitle = newPage.Title;
 			newPage.Title = "New Page Title";
-			PageRepository.Update(newPage);
+			DocumentationPageRepository.Update(newPage);
 
-			var existingPage = PageRepository.Read(newPage.Id);
+			var existingPage = DocumentationPageRepository.Read(newPage.Id);
 			Assert.IsNotNull(existingPage, "The page should exist in the database.");
 			Assert.AreNotEqual(oldTitle, existingPage.Title, "The page's title should have been updated.");
 			Assert.AreEqual(newPage.Content, existingPage.Content, "The rest of the page instances' contents should be the same.");
 
-			PageRepository.Delete(newPage.Id);
+			DocumentationPageRepository.Delete(newPage.Id);
 
-			var deletedPage = PageRepository.Read(newPage.Id);
+			var deletedPage = DocumentationPageRepository.Read(newPage.Id);
 			Assert.That(deletedPage, Is.Null, "The page should have been deleted from the database.");
 		}
 
@@ -52,7 +52,7 @@ namespace DocMAH.UnitTests.Data.Sql
 			// Arrange
 			
 			// Act
-			PageRepository.DeleteExcept(new List<int>());
+			DocumentationPageRepository.DeleteExcept(new List<int>());
 
 			// Assert
 			// Above method call should not throw a SqlException.
@@ -64,18 +64,18 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void DeleteExcept_Success()
 		{
 			// Arrange
-			var keptPage = Models.CreatePage(matchUrls: "/Pages/KeptPage1 /Pages/KeptPage2");
-			PageRepository.Create(keptPage);
-			var deletedPage = Models.CreatePage(matchUrls: "/Pages/DeletedPage1 /Pages/DeletedPage2");
-			PageRepository.Create(deletedPage);
-			var anotherDeletedPage = Models.CreatePage(matchUrls: "/Pages/AnotherDeletedPage1 /Pages/AnotherDeletedPage2");
-			PageRepository.Create(anotherDeletedPage);
+			var keptPage = Models.CreateDocumentationPage(matchUrls: "/Pages/KeptPage1 /Pages/KeptPage2");
+			DocumentationPageRepository.Create(keptPage);
+			var deletedPage = Models.CreateDocumentationPage(matchUrls: "/Pages/DeletedPage1 /Pages/DeletedPage2");
+			DocumentationPageRepository.Create(deletedPage);
+			var anotherDeletedPage = Models.CreateDocumentationPage(matchUrls: "/Pages/AnotherDeletedPage1 /Pages/AnotherDeletedPage2");
+			DocumentationPageRepository.Create(anotherDeletedPage);
 
 			// Act
-			PageRepository.DeleteExcept(new List<int> { keptPage.Id });
+			DocumentationPageRepository.DeleteExcept(new List<int> { keptPage.Id });
 
 			// Assert
-			var pages = PageRepository.ReadAll().ToList();
+			var pages = DocumentationPageRepository.ReadAll().ToList();
 			Assert.That(pages.Count, Is.EqualTo(1), "Only one page should be left in the repository.");
 			Assert.That(pages[0].Id, Is.EqualTo(keptPage.Id), "The kept page should remain because its id was in the list.");
 		}
@@ -85,14 +85,14 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Import_ExistingPage()
 		{
 			// Arrange
-			var page = Models.CreatePage();
-			PageRepository.Create(page);
+			var page = Models.CreateDocumentationPage();
+			DocumentationPageRepository.Create(page);
 
 			page.Title = "Imported existing page title.";
 
 			// Act
-			PageRepository.Import(page);
-			var result = PageRepository.Read(page.Id);
+			DocumentationPageRepository.Import(page);
+			var result = DocumentationPageRepository.Read(page.Id);
 
 			// Assert
 			Assert.That(result, Is.Not.Null, "The page should still exist in the repository.");
@@ -104,12 +104,12 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Import_NewPage()
 		{
 			// Arrange
-			var page = Models.CreatePage();
+			var page = Models.CreateDocumentationPage();
 			page.Id = 10573;
 
 			// Act
-			PageRepository.Import(page);
-			var result = PageRepository.Read(page.Id);
+			DocumentationPageRepository.Import(page);
+			var result = DocumentationPageRepository.Read(page.Id);
 
 			// Assert
 			Assert.That(result, Is.Not.Null, "The page should have been created with the supplied id.");
@@ -121,48 +121,23 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void ReadByParentId_Success()
 		{
 			// Arrange
-			var parentPage = Models.CreatePage();
-			PageRepository.Create(parentPage);
-			var childPage1 = Models.CreatePage(parentPageId: parentPage.Id);
-			PageRepository.Create(childPage1);
-			var childPage2 = Models.CreatePage(parentPageId: parentPage.Id);
-			PageRepository.Create(childPage2);
-			var noisePage = Models.CreatePage();
-			PageRepository.Create(noisePage);
+			var parentPage = Models.CreateDocumentationPage();
+			DocumentationPageRepository.Create(parentPage);
+			var childPage1 = Models.CreateDocumentationPage(parentPageId: parentPage.Id);
+			DocumentationPageRepository.Create(childPage1);
+			var childPage2 = Models.CreateDocumentationPage(parentPageId: parentPage.Id);
+			DocumentationPageRepository.Create(childPage2);
+			var noisePage = Models.CreateDocumentationPage();
+			DocumentationPageRepository.Create(noisePage);
 
 			// Act
-			var results = PageRepository.ReadByParentId(parentPage.Id);
+			var results = DocumentationPageRepository.ReadByParentId(parentPage.Id);
 
 			// Assert
 			Assert.AreEqual(2, results.Count(), "Two child pages exist and should be returned.");
 			Assert.IsNotNull(results.Where(p => p.Id == childPage1.Id).FirstOrDefault(), "The results should contain childPage1.");
 			var childPage2Result = results.Where(p => p.Id == childPage2.Id).FirstOrDefault();
 			Assert.IsNotNull(childPage2Result, "The results should contain childPage2.");
-			Assert.That(childPage2.MatchUrls, Is.EqualTo(childPage2Result.MatchUrls), "The match URLs not being populated is causing issues in the page move algorithm. B36");
-		}
-
-		[Test]
-		[Description("Reads pages by URLs.")]
-		public void ReadByUrl_Success()
-		{
-			// Arrange
-			var targetPage = Models.CreatePage(matchUrls: "/Controller/Target /Controller/Target/*");
-			PageRepository.Create(targetPage);
-			var noisePage = Models.CreatePage(matchUrls: "/Controller/Noise /Controller/Target/Exact");
-			PageRepository.Create(noisePage);
-
-			// Act
-			var targetShortUrlMatch = PageRepository.ReadByUrl("/Controller/Target");
-			var noiseExactMatch = PageRepository.ReadByUrl("/Controller/Target/Exact");
-			var targetWildCardMatch = PageRepository.ReadByUrl("/Controller/Target/WildCard");
-
-			// Assert
-			Assert.IsNotNull(targetShortUrlMatch, "A value should be returned for the target short URL match.");
-			Assert.AreEqual(targetPage.Id, targetShortUrlMatch.Id, "The target page should be returned for the target short URL match.");
-			Assert.IsNotNull(noiseExactMatch, "A value should be returned for the noise exact match.");
-			Assert.AreEqual(noisePage.Id, noiseExactMatch.Id, "The noise page should be returned for the noise exact match.");
-			Assert.IsNotNull(targetWildCardMatch, "A value should be returned for the target wild card match.");
-			Assert.AreEqual(targetPage.Id, targetWildCardMatch.Id, "The target page should be returned for the wild card match.");
 		}
 
 		[Test]
@@ -170,21 +145,21 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void ReadTableOfContents_All()
 		{
 			// Arrange
-			var root_1 = Models.CreatePage(order: 1);
-			PageRepository.Create(root_1);
-			var child_1_1 = Models.CreatePage(parentPageId: root_1.Id, order: 1);
-			PageRepository.Create(child_1_1);
-			var child_1_1_1 = Models.CreatePage(parentPageId: child_1_1.Id, order: 1);
-			PageRepository.Create(child_1_1_1);
-			var child_1_2 = Models.CreatePage(parentPageId: root_1.Id, order: 2);
-			PageRepository.Create(child_1_2);
-			var root_2 = Models.CreatePage(order: 2);
-			PageRepository.Create(root_2);
-			var child_2_1 = Models.CreatePage(parentPageId: root_2.Id, order: 1);
-			PageRepository.Create(child_2_1);
+			var root_1 = Models.CreateDocumentationPage(order: 1);
+			DocumentationPageRepository.Create(root_1);
+			var child_1_1 = Models.CreateDocumentationPage(parentPageId: root_1.Id, order: 1);
+			DocumentationPageRepository.Create(child_1_1);
+			var child_1_1_1 = Models.CreateDocumentationPage(parentPageId: child_1_1.Id, order: 1);
+			DocumentationPageRepository.Create(child_1_1_1);
+			var child_1_2 = Models.CreateDocumentationPage(parentPageId: root_1.Id, order: 2);
+			DocumentationPageRepository.Create(child_1_2);
+			var root_2 = Models.CreateDocumentationPage(order: 2);
+			DocumentationPageRepository.Create(root_2);
+			var child_2_1 = Models.CreateDocumentationPage(parentPageId: root_2.Id, order: 1);
+			DocumentationPageRepository.Create(child_2_1);
 
 			// Act
-			var toc = PageRepository.ReadTableOfContents(true);
+			var toc = DocumentationPageRepository.ReadTableOfContents(true);
 
 			// Assert
 			Assert.AreEqual(6, toc.Count(), "Six pages should be returned in the table of contents.");
@@ -205,15 +180,15 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void ReadTableOfContents_Visible()
 		{
 			// Arrange
-			var root = Models.CreatePage(order: 1, isHidden: false);
-			PageRepository.Create(root);
-			var child = Models.CreatePage(order: 1, parentPageId: root.Id, isHidden: true);
-			PageRepository.Create(child);
-			var grandchild = Models.CreatePage(order: 1, parentPageId: child.Id, isHidden: false);
-			PageRepository.Create(grandchild);
+			var root = Models.CreateDocumentationPage(order: 1, isHidden: false);
+			DocumentationPageRepository.Create(root);
+			var child = Models.CreateDocumentationPage(order: 1, parentPageId: root.Id, isHidden: true);
+			DocumentationPageRepository.Create(child);
+			var grandchild = Models.CreateDocumentationPage(order: 1, parentPageId: child.Id, isHidden: false);
+			DocumentationPageRepository.Create(grandchild);
 
 			// Act
-			var toc = PageRepository.ReadTableOfContents(false);
+			var toc = DocumentationPageRepository.ReadTableOfContents(false);
 
 			// Assert
 			Assert.AreEqual(1, toc.Count(), "Only one page should be returned because all other pages are hidden or beneath hidden pages.");

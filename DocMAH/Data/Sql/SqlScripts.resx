@@ -160,6 +160,57 @@
   <data name="Database_Update_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\database_update_02.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="DocumentationPage_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_delete.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_import.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_ReadAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_readall.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_ReadById" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_readbyid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_ReadByParentId" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_readbyparentid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_ReadTableOfContents" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_readtableofcontents.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="DocumentationPage_Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\documentationpage_update.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_delete.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_import.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_ReadAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_readall.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_ReadById" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_readbyid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_ReadByUrl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_readbyurl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="FirstTimeHelp_Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>scripts\firsttimehelp_update.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="PageUrl_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\pageurl_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -168,36 +219,6 @@
   </data>
   <data name="PageUrl_ReadByPageId" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\pageurl_readbypageid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_delete.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_DeleteExcept" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_deleteexcept.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_Import" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_import.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_ReadAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_readall.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_ReadById" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_readbyid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_ReadByParentId" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_readbyparentid.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_ReadByUrl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_readbyurl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_ReadTableOfContents" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_readtableofcontents.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Page_Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>scripts\page_update.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="UserPageSettings_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>scripts\userpagesettings_create.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

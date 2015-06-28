@@ -14,12 +14,12 @@ END
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DocmahFirstTimeHelp]') AND type in (N'U')) BEGIN
 	CREATE TABLE [dbo].[DocmahFirstTimeHelp](
 		[Id] [int] NOT NULL,
-		[SourceUrl] [nvarchar](256) NULL,
+		[SourceUrl] [nvarchar](256) NOT NULL,
 		[Title] [nvarchar](50) NOT NULL,
 		[Content] [nvarchar](max) NOT NULL,
-		[VerticalOffset] [int] NULL,
-		[HorizontalOffset] [int] NULL,
-		[OffsetElementId] [nvarchar](50) NULL,
+		[VerticalOffset] [int] NOT NULL,
+		[HorizontalOffset] [int] NOT NULL,
+		[OffsetElementId] [nvarchar](50) NOT NULL,
 	 CONSTRAINT [PK_DocmahFirstTimeHelp] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -194,6 +194,16 @@ END
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DocmahPages]') AND type in (N'U')) BEGIN
 	DROP TABLE [dbo].[DocmahPages]
 END
+
+-- Drop old columns.
+IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'DocVerticalOffset' AND object_id = OBJECT_ID(N'DocmahBullets')) BEGIN
+	ALTER TABLE [dbo].[DocmahBullets] DROP COLUMN [DocVerticalOffset]
+END
+
+IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'DocHorizontalOffset' AND object_id = OBJECT_ID(N'DocmahBullets')) BEGIN
+	ALTER TABLE [dbo].[DocmahBullets] DROP COLUMN [DocHorizontalOffset]
+END
+
 /***** END SPLIT DocmahPages TABLE INTO DocmahFirstTimeHelp AND DocmahDocumentationPages *****/
 
 -- Update database schema version.

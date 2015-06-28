@@ -23,22 +23,22 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_Success()
 		{
 			// Arrange
-			var page = Models.CreatePage(id: 66387, order: 1, parentPageId: 23198);
-			var sibling0 = Models.CreatePage(id: 98231, order: 0, parentPageId: page.ParentPageId);
-			var sibling2 = Models.CreatePage(id: 66123, order: 2, parentPageId: page.ParentPageId);
-			var child0 = Models.CreatePage(id: 4392, order: 0, parentPageId: page.Id);
-			var child1 = Models.CreatePage(id: 9342, order: 1, parentPageId: page.Id);
+			var page = Models.CreateDocumentationPage(id: 66387, order: 1, parentPageId: 23198);
+			var sibling0 = Models.CreateDocumentationPage(id: 98231, order: 0, parentPageId: page.ParentPageId);
+			var sibling2 = Models.CreateDocumentationPage(id: 66123, order: 2, parentPageId: page.ParentPageId);
+			var child0 = Models.CreateDocumentationPage(id: 4392, order: 0, parentPageId: page.Id);
+			var child1 = Models.CreateDocumentationPage(id: 9342, order: 1, parentPageId: page.Id);
 
-			var siblings = new List<Page> { sibling0, page, sibling2 }; 
-			var children = new List<Page> { child0, child1 };
+			var siblings = new List<DocumentationPage> { sibling0, page, sibling2 }; 
+			var children = new List<DocumentationPage> { child0, child1 };
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.Read(page.Id)).Returns(page);
 			pageRepository.Setup(r => r.ReadByParentId(page.ParentPageId)).Returns(siblings); // read to update orders.
 			pageRepository.Setup(r => r.ReadByParentId(page.Id)).Returns(children);	// read to update orders and parent id.
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == child0.Id && p.ParentPageId == page.ParentPageId && p.Order == 1)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == child1.Id && p.ParentPageId == page.ParentPageId && p.Order == 2)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == sibling2.Id && p.ParentPageId == page.ParentPageId && p.Order == 3)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == child0.Id && p.ParentPageId == page.ParentPageId && p.Order == 1)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == child1.Id && p.ParentPageId == page.ParentPageId && p.Order == 2)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == sibling2.Id && p.ParentPageId == page.ParentPageId && p.Order == 3)));
 			pageRepository.Setup(r => r.Delete(page.Id));
 
 			var bulletRepository = Mocks.Create<IBulletRepository>();

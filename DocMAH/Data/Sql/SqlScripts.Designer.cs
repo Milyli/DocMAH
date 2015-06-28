@@ -280,17 +280,17 @@ namespace DocMAH.Data.Sql {
         ///   Looks up a localized string similar to SET ANSI_NULLS ON
         ///SET QUOTED_IDENTIFIER ON
         ///
+        ///-- Rename DatabaseHelpVersion setting to HelpContentVersion
         ///IF EXISTS (SELECT * FROM [dbo].[DocmahConfiguration] WHERE [Name] = &apos;DatabaseHelpVersion&apos;) BEGIN
         ///	UPDATE DocmahConfiguration
         ///	SET [Name] = &apos;HelpContentVersion&apos;
         ///	WHERE [Name] = &apos;DatabaseHelpVersion&apos;
         ///END
         ///
-        ///IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N&apos;[dbo].[DocmahFirstTimeHelp]&apos;) AND type in (N&apos;U&apos;)) BEGIN
-        ///	CREATE TABLE [dbo].[DocmahFirstTimeHelp](
-        ///		[Id] [int] NOT NULL,
-        ///		[SourceUrl] [nvarchar](256) NULL,
-        ///		[Title] [nvarchar](50 [rest of string was truncated]&quot;;.
+        ////***** BEGIN SPLIT DocmahPages TABLE INTO DocmahFirstTimeHelp AND DocmahDocumentationPages *****/
+        ///
+        ///-- Create new tables.
+        ///IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N&apos; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Database_Update_02 {
             get {
@@ -304,67 +304,69 @@ namespace DocMAH.Data.Sql {
         ///-- without invalidating user settings.
         ///
         ///DECLARE @nextId INT 
-        ///SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahPages]
+        ///SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahDocumentationPages]
         ///
-        ///INSERT INTO [dbo].[DocmahPages] (
+        ///INSERT INTO [dbo].[DocmahDocumentationPages] (
         ///	[Id]
-        ///	,[PageTypeId]
         ///	,[ParentPageId]
         ///	,[Order]
-        ///	,[SourceUrl]
         ///	,[Title]
         ///	,[Content]
-        ///	,[VerticalOffset]
-        ///	,[HorizontalOffset]
-        ///	,[OffsetElementId]
-        ///	,[DocImageUrl]
-        ///	,[DocVerticalOff [rest of string was truncated]&quot;;.
+        ///	,[IsHidden]
+        ///)
+        ///VALUES (
+        ///	@nextId
+        ///	,@parentPageId
+        ///	,@order
+        ///	,@title
+        ///	,@content
+        ///	,@isHidden
+        ///)
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Page_Create {
+        internal static string DocumentationPage_Create {
             get {
-                return ResourceManager.GetString("Page_Create", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_Create", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPages]
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahDocumentationPages]
         ///WHERE [Id] = @id.
         /// </summary>
-        internal static string Page_Delete {
+        internal static string DocumentationPage_Delete {
             get {
-                return ResourceManager.GetString("Page_Delete", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPageUrls] WHERE [PageId] NOT IN (@pageIds)
-        ///DELETE [dbo].[DocmahPages] WHERE [Id] NOT IN (@pageIds).
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahDocumentationPages] WHERE [Id] NOT IN (@pageIds).
         /// </summary>
-        internal static string Page_DeleteExcept {
+        internal static string DocumentationPage_DeleteExcept {
             get {
-                return ResourceManager.GetString("Page_DeleteExcept", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_DeleteExcept", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM [dbo].[DocmahPages] WHERE [Id] = @id) BEGIN 
-        ///	UPDATE [dbo].[DocmahPages] SET 
-        ///		[PageTypeId] = @pageTypeId, 
+        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM [dbo].[DocmahDocumentationPages] WHERE [Id] = @id) BEGIN 
+        ///	UPDATE [dbo].[DocmahDocumentationPages] SET 
         ///		[ParentPageId] = @parentPageId,
         ///		[Order] = @order,
-        ///		[SourceUrl] = @sourceUrl,
         ///		[Title] = @title,
         ///		[Content] = @content,
-        ///		[VerticalOffset] = @verticalOffset,
-        ///		[HorizontalOffset] = @horizontalOffset,
-        ///		[OffsetElementId] = @offsetElementId,
-        ///		[DocImageUrl] = @docImageUrl,
-        ///		[DocVerticalOffset] = @docVerticalOffset,
-        ///		[DocHorizontalOffset] = @docHorizontalOff [rest of string was truncated]&quot;;.
+        ///		[IsHidden] = @isHidden 
+        ///	WHERE [Id] = @id
+        ///END ELSE BEGIN
+        ///	INSERT [dbo].[DocmahDocumentationPages]	([Id], [ParentPageId], [Order], [Title], [Content], [IsHidden]) 
+        ///	VALUES									(@id,  @parentPageId,  @order,  @title,  @content,  @isHidden)
+        ///END
+        ///.
         /// </summary>
-        internal static string Page_Import {
+        internal static string DocumentationPage_Import {
             get {
-                return ResourceManager.GetString("Page_Import", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_Import", resourceCulture);
             }
         }
         
@@ -376,7 +378,7 @@ namespace DocMAH.Data.Sql {
         ///		[Id],
         ///		[ParentPageId],
         ///		[Order]
-        ///	FROM [dbo].[DocmahPages]
+        ///	FROM [dbo].[DocmahFirstTimeHelp]
         ///	WHERE [ParentPageId] IS NULL
         ///
         ///	UNION ALL
@@ -386,42 +388,173 @@ namespace DocMAH.Data.Sql {
         ///		[Page].[Id],
         ///		[Page].[ParentPageId],
         ///		[Page].[Order]
-        ///	FROM [dbo].[DocmahPages] AS [Page]
+        ///	FROM [dbo].[DocmahFirstTimeHelp] AS [Page]
         ///		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
         ///)
         ///SELECT Pages.*
-        ///FROM [dbo].[DocmahPages] AS Pages
+        ///FROM [dbo].[DocmahFirstTimeHelp] AS Pages
         ///	JOIN Pages_CTE AS Cte ON Pages.Id = Cte.Id
-        ///ORDER BY Cte.[Level],Cte.[Order].
+        ///ORDER BY Cte.[Lev [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Page_ReadAll {
+        internal static string DocumentationPage_ReadAll {
             get {
-                return ResourceManager.GetString("Page_ReadAll", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_ReadAll", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT *
-        ///FROM [dbo].[DocmahPages]
+        ///FROM [dbo].[DocmahDocumentationPages]
         ///WHERE [Id] = @id.
         /// </summary>
-        internal static string Page_ReadById {
+        internal static string DocumentationPage_ReadById {
             get {
-                return ResourceManager.GetString("Page_ReadById", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_ReadById", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to 
         ///SELECT *
-        ///FROM [dbo].[DocmahPages]
+        ///FROM [dbo].[DocmahDocumentationPages]
         ///WHERE ISNULL(@parentId, -1) = ISNULL([ParentPageId], -1)
         ///ORDER BY [Order]
         ///.
         /// </summary>
-        internal static string Page_ReadByParentId {
+        internal static string DocumentationPage_ReadByParentId {
             get {
-                return ResourceManager.GetString("Page_ReadByParentId", resourceCulture);
+                return ResourceManager.GetString("DocumentationPage_ReadByParentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WITH Pages_CTE
+        ///AS (
+        ///	SELECT 
+        ///		1 AS [Level],
+        ///		[Id],[ParentPageId],[Order],[Title],[IsHidden]
+        ///	FROM [dbo].[DocmahDocumentationPages]
+        ///	WHERE ParentPageId IS NULL
+        ///		AND (@includeHidden = 1 OR [IsHidden] = 0)
+        ///
+        ///	UNION ALL
+        ///
+        ///	SELECT 
+        ///		[Parent].[Level] + 1 AS [Level],
+        ///		[Page].[Id],[Page].[ParentPageId],[Page].[Order],[Page].[Title],[Page].[IsHidden]
+        ///	FROM [dbo].[DocmahDocumentationPages] AS [Page]
+        ///		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
+        ///	WHERE @includeHidden = 1 OR [Page [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DocumentationPage_ReadTableOfContents {
+            get {
+                return ResourceManager.GetString("DocumentationPage_ReadTableOfContents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahDocumentationPages]
+        ///   SET [ParentPageId] = @parentPageId
+        ///      ,[Order] = @order
+        ///      ,[Title] = @title
+        ///      ,[Content] = @content
+        ///	  ,[IsHidden] = @isHidden
+        /// WHERE [Id] = @id.
+        /// </summary>
+        internal static string DocumentationPage_Update {
+            get {
+                return ResourceManager.GetString("DocumentationPage_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -- Need to fake identity column so that Ids generated when writing documentation
+        ///-- are used in production so that installation scripts can update help 
+        ///-- without invalidating user settings.
+        ///
+        ///DECLARE @nextId INT 
+        ///SELECT @nextId = ISNULL(MAX([Id]), 0) + 1 FROM [dbo].[DocmahDocumentationPages]
+        ///
+        ///INSERT INTO [dbo].[DocmahDocumentationPages] (
+        ///	[Id]
+        ///	,[SourceUrl]
+        ///	,[Title]
+        ///	,[Content]
+        ///	,[VerticalOffset]
+        ///	,[HorizontalOffset]
+        ///	,[OffsetElementId]
+        ///)
+        ///VALUES (
+        ///	@nextId
+        ///	,@sourceUrl
+        ///	,@title
+        ///	,@con [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FirstTimeHelp_Create {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahFirstTimeHelp]
+        ///WHERE [Id] = @id.
+        /// </summary>
+        internal static string FirstTimeHelp_Delete {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE [dbo].[DocmahPageUrls] WHERE [PageId] NOT IN (@pageIds)
+        ///DELETE [dbo].[DocmahFirstTimeHelp] WHERE [Id] NOT IN (@pageIds).
+        /// </summary>
+        internal static string FirstTimeHelp_DeleteExcept {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_DeleteExcept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IF EXISTS (SELECT 1 FROM [dbo].[DocmahFirstTimeHelp] WHERE [Id] = @id) BEGIN 
+        ///	UPDATE [dbo].[DocmahFirstTimeHelp] SET 
+        ///		[SourceUrl] = @sourceUrl,
+        ///		[Title] = @title,
+        ///		[Content] = @content,
+        ///		[VerticalOffset] = @verticalOffset,
+        ///		[HorizontalOffset] = @horizontalOffset,
+        ///		[OffsetElementId] = @offsetElementId
+        ///	WHERE [Id] = @id
+        ///END ELSE BEGIN
+        ///	INSERT [dbo].[DocmahFirstTimeHelp]	([Id], [SourceUrl], [Title], [Content], [VerticalOffset], [HorizontalOffset], [OffsetElementId]) 
+        ///	VALUES								(@id,  @s [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FirstTimeHelp_Import {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT * 
+        ///FROM [dbo].[DocmahFirstTimeHelp]
+        ///ORDER BY [Id].
+        /// </summary>
+        internal static string FirstTimeHelp_ReadAll {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_ReadAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT *
+        ///FROM [dbo].[DocmahFirstTimeHelp]
+        ///WHERE [Id] = @id.
+        /// </summary>
+        internal static string FirstTimeHelp_ReadById {
+            get {
+                return ResourceManager.GetString("FirstTimeHelp_ReadById", resourceCulture);
             }
         }
         
@@ -435,69 +568,35 @@ namespace DocMAH.Data.Sql {
         ///
         ///IF @hitCount &gt; 0 BEGIN	
         ///	SELECT P.*
-        ///	FROM [dbo].[DocmahPages] AS P
+        ///	FROM [dbo].[DocmahFirstTimeHelp] AS P
         ///		JOIN [dbo].[DocmahPageUrls] AS U ON U.[PageId] = P.[Id]
         ///	WHERE @url = U.[Url]
         ///END ELSE BEGIN
         ///	SELECT P.*
-        ///	FROM [dbo].[DocmahPages] AS P
+        ///	FROM [dbo].[DocmahFirstTimeHelp] AS P
         ///		JOIN [dbo].[DocmahPageUrls] AS U ON U.[PageId] = P.[Id]
         ///	WHERE @url LIKE U.[Url]
         ///END.
         /// </summary>
-        internal static string Page_ReadByUrl {
+        internal static string FirstTimeHelp_ReadByUrl {
             get {
-                return ResourceManager.GetString("Page_ReadByUrl", resourceCulture);
+                return ResourceManager.GetString("FirstTimeHelp_ReadByUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WITH Pages_CTE
-        ///AS (
-        ///	SELECT 
-        ///		1 AS [Level],
-        ///		[Id],[ParentPageId],[Order],[Title],[IsHidden]
-        ///	FROM [dbo].[DocmahPages]
-        ///	WHERE ParentPageId IS NULL
-        ///		AND (@includeHidden = 1 OR [IsHidden] = 0)
-        ///
-        ///	UNION ALL
-        ///
-        ///	SELECT 
-        ///		[Parent].[Level] + 1 AS [Level],
-        ///		[Page].[Id],[Page].[ParentPageId],[Page].[Order],[Page].[Title],[Page].[IsHidden]
-        ///	FROM [dbo].[DocmahPages] AS [Page]
-        ///		JOIN Pages_CTE AS Parent ON [Page].[ParentPageId] = Parent.[Id]
-        ///	WHERE @includeHidden = 1 OR [Page].[IsHidden] = 0
-        ///)
-        ///SELEC [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Page_ReadTableOfContents {
-            get {
-                return ResourceManager.GetString("Page_ReadTableOfContents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahPages]
-        ///   SET [PageTypeId] = @pageTypeId
-        ///      ,[ParentPageId] = @parentPageId
-        ///      ,[Order] = @order
-        ///      ,[SourceUrl] = @sourceUrl
-        ///      ,[Title] = @title
+        ///   Looks up a localized string similar to UPDATE [dbo].[DocmahFirstTimeHelp]
+        ///   SET [SourceUrl = @sourceUrl
+        ///	  ,[Title] = @title
         ///      ,[Content] = @content
-        ///      ,[VerticalOffset] = @verticalOffset
-        ///      ,[HorizontalOffset] = @horizontalOffset
-        ///      ,[OffsetElementId] = @offsetElementId
-        ///	  ,[DocImageUrl] = @docImageUrl
-        ///	  ,[DocVerticalOffset] = @docVerticalOffset
-        ///	  ,[DocHorizontalOffset] = @docHorizontalOffset
-        ///	  ,[IsHidden] = @isHidden
-        /// WHER [rest of string was truncated]&quot;;.
+        ///	  ,[VerticalOffset] = @verticalOffset
+        ///	  ,[HorizontalOffset] = @horizontalOffset
+        ///	  ,[OffsetElementId] = @offsetElementId
+        /// WHERE [Id] = @id.
         /// </summary>
-        internal static string Page_Update {
+        internal static string FirstTimeHelp_Update {
             get {
-                return ResourceManager.GetString("Page_Update", resourceCulture);
+                return ResourceManager.GetString("FirstTimeHelp_Update", resourceCulture);
             }
         }
         

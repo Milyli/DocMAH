@@ -24,20 +24,20 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_MoveHigherInSameParent()
 		{
 			// Arrange
-			var parentPage = Models.CreatePage(id: 83472);
-			var firstSibling = Models.CreatePage(id: 89231, parentPageId: parentPage.Id, order: 0);
-			var targetPage = Models.CreatePage(id: 43294, parentPageId: parentPage.Id, order: 1);
-			var secondSibling = Models.CreatePage(id: 1428, parentPageId: parentPage.Id, order: 2);
-			var thirdSibling = Models.CreatePage(id: 65473, parentPageId: parentPage.Id, order: 3);
-			var fourthSibling = Models.CreatePage(id: 33242, parentPageId: parentPage.Id, order: 4);
-			var siblings = new List<Page> { firstSibling, targetPage, secondSibling, thirdSibling, fourthSibling };
+			var parentPage = Models.CreateDocumentationPage(id: 83472);
+			var firstSibling = Models.CreateDocumentationPage(id: 89231, parentPageId: parentPage.Id, order: 0);
+			var targetPage = Models.CreateDocumentationPage(id: 43294, parentPageId: parentPage.Id, order: 1);
+			var secondSibling = Models.CreateDocumentationPage(id: 1428, parentPageId: parentPage.Id, order: 2);
+			var thirdSibling = Models.CreateDocumentationPage(id: 65473, parentPageId: parentPage.Id, order: 3);
+			var fourthSibling = Models.CreateDocumentationPage(id: 33242, parentPageId: parentPage.Id, order: 4);
+			var siblings = new List<DocumentationPage> { firstSibling, targetPage, secondSibling, thirdSibling, fourthSibling };
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.Read(targetPage.Id)).Returns(targetPage);
 			pageRepository.Setup(r => r.ReadByParentId(parentPage.Id)).Returns(siblings);
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == secondSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 1)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == thirdSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 2)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == targetPage.Id && p.ParentPageId == parentPage.Id && p.Order == 3)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == secondSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 1)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == thirdSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 2)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == targetPage.Id && p.ParentPageId == parentPage.Id && p.Order == 3)));
 
 			var serializer = new JavaScriptSerializer();
 			var moveRequest = new MoveTocRequest { PageId = targetPage.Id, NewParentId = parentPage.Id, NewPosition = 3 };
@@ -60,20 +60,20 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_MoveLowerInSameParent()
 		{
 			// Arrange
-			var parentPage = Models.CreatePage(id: 37453);
-			var firstSibling = Models.CreatePage(id: 87623, parentPageId: parentPage.Id, order: 0);
-			var secondSibling = Models.CreatePage(id: 12387, parentPageId: parentPage.Id, order: 1);
-			var thirdSibling = Models.CreatePage(id: 54356, parentPageId: parentPage.Id, order: 2);
-			var targetPage = Models.CreatePage(id: 76527, parentPageId: parentPage.Id, order: 3);
-			var fourthSibling = Models.CreatePage(id: 33452, parentPageId: parentPage.Id, order: 4);
-			var siblings = new List<Page> { firstSibling, secondSibling, thirdSibling, targetPage, fourthSibling };
+			var parentPage = Models.CreateDocumentationPage(id: 37453);
+			var firstSibling = Models.CreateDocumentationPage(id: 87623, parentPageId: parentPage.Id, order: 0);
+			var secondSibling = Models.CreateDocumentationPage(id: 12387, parentPageId: parentPage.Id, order: 1);
+			var thirdSibling = Models.CreateDocumentationPage(id: 54356, parentPageId: parentPage.Id, order: 2);
+			var targetPage = Models.CreateDocumentationPage(id: 76527, parentPageId: parentPage.Id, order: 3);
+			var fourthSibling = Models.CreateDocumentationPage(id: 33452, parentPageId: parentPage.Id, order: 4);
+			var siblings = new List<DocumentationPage> { firstSibling, secondSibling, thirdSibling, targetPage, fourthSibling };
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.Read(targetPage.Id)).Returns(targetPage);
 			pageRepository.Setup(r => r.ReadByParentId(parentPage.Id)).Returns(siblings);
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == targetPage.Id && p.ParentPageId == parentPage.Id && p.Order == 1)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == secondSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 2)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == thirdSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 3)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == targetPage.Id && p.ParentPageId == parentPage.Id && p.Order == 1)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == secondSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 2)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == thirdSibling.Id && p.ParentPageId == parentPage.Id && p.Order == 3)));
 
 			var serializer = new JavaScriptSerializer();
 			var moveRequest = new MoveTocRequest { PageId = targetPage.Id, NewParentId = parentPage.Id, NewPosition = 1 };
@@ -96,25 +96,25 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_MoveToNewParent()
 		{
 			// Arrange
-			var oldParentPage = Models.CreatePage(id: 46382);
-			var newParentPage = Models.CreatePage(id: 29556);
+			var oldParentPage = Models.CreateDocumentationPage(id: 46382);
+			var newParentPage = Models.CreateDocumentationPage(id: 29556);
 
-			var oldLowerSibling = Models.CreatePage(id: 98732, parentPageId: oldParentPage.Id, order: 0);
-			var targetPage = Models.CreatePage(id: 43900, parentPageId: oldParentPage.Id, order: 1);
-			var oldHigherSibling = Models.CreatePage(id: 43729, parentPageId: oldParentPage.Id, order: 2);
-			var oldSiblings = new List<Page> { oldLowerSibling, targetPage, oldHigherSibling };
+			var oldLowerSibling = Models.CreateDocumentationPage(id: 98732, parentPageId: oldParentPage.Id, order: 0);
+			var targetPage = Models.CreateDocumentationPage(id: 43900, parentPageId: oldParentPage.Id, order: 1);
+			var oldHigherSibling = Models.CreateDocumentationPage(id: 43729, parentPageId: oldParentPage.Id, order: 2);
+			var oldSiblings = new List<DocumentationPage> { oldLowerSibling, targetPage, oldHigherSibling };
 
-			var newLowerSibling = Models.CreatePage(id: 12943, parentPageId: newParentPage.Id, order: 0);
-			var newHigherSibling = Models.CreatePage(id: 84539, parentPageId: newParentPage.Id, order: 1);
-			var newSiblings = new List<Page> { newLowerSibling, newHigherSibling };
+			var newLowerSibling = Models.CreateDocumentationPage(id: 12943, parentPageId: newParentPage.Id, order: 0);
+			var newHigherSibling = Models.CreateDocumentationPage(id: 84539, parentPageId: newParentPage.Id, order: 1);
+			var newSiblings = new List<DocumentationPage> { newLowerSibling, newHigherSibling };
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.Read(targetPage.Id)).Returns(targetPage);
 			pageRepository.Setup(r => r.ReadByParentId(oldParentPage.Id)).Returns(oldSiblings);
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == oldHigherSibling.Id && p.Order == 1)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == oldHigherSibling.Id && p.Order == 1)));
 			pageRepository.Setup(r => r.ReadByParentId(newParentPage.Id)).Returns(newSiblings);
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == targetPage.Id && p.ParentPageId == newParentPage.Id && p.Order == 1)));
-			pageRepository.Setup(r => r.Update(It.Is<Page>(p => p.Id == newHigherSibling.Id && p.Order == 2)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == targetPage.Id && p.ParentPageId == newParentPage.Id && p.Order == 1)));
+			pageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == newHigherSibling.Id && p.Order == 2)));
 
 			var serializer = new JavaScriptSerializer();
 			var moveRequest = new MoveTocRequest { PageId = targetPage.Id, NewParentId = newParentPage.Id, NewPosition = 1 };

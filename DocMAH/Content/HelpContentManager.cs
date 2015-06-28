@@ -19,12 +19,14 @@ namespace DocMAH.Content
 		public HelpContentManager(
 			IBulletRepository bulletRepository,
 			IDataStoreConfiguration dataStoreConfiguration,
-			IPageRepository pageRepository,
+			IDocumentationPageRepository documentationPpageRepository,
+			IFirstTimeHelpRepository firstTimeHelpRepository,
 			IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_bulletRepository = bulletRepository;
 			_dataStoreConfiguration = dataStoreConfiguration;
-			_pageRepository = pageRepository;
+			_documentationPageRepository = documentationPpageRepository;
+			_firstTimeHelpRepository = firstTimeHelpRepository;
 			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
@@ -40,7 +42,8 @@ namespace DocMAH.Content
 
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IDataStoreConfiguration _dataStoreConfiguration;
-		private readonly IPageRepository _pageRepository;
+		private readonly IDocumentationPageRepository _documentationPageRepository;
+		private readonly IFirstTimeHelpRepository _firstTimeHelpRepository;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
@@ -67,11 +70,19 @@ namespace DocMAH.Content
 				xmlWriter.WriteAttributeString(ContentFileConstants.FileSchemaVersionAttribute, contentFileSchemaVersion.ToString());
 				xmlWriter.WriteAttributeString(ContentFileConstants.FileContentVersionAttribute, (_dataStoreConfiguration.HelpContentVersion + 1).ToString());
 
-				xmlWriter.WriteStartElement(ContentFileConstants.PageCollectionElement);
-				var pageSerializer = new XmlSerializer(typeof(Page));
-				foreach (var page in _pageRepository.ReadAll())
+				xmlWriter.WriteStartElement(ContentFileConstants.DocumentationPageCollectionElement);
+				var pageSerializer = new XmlSerializer(typeof(DocumentationPage));
+				foreach (var page in _documentationPageRepository.ReadAll())
 				{
 					pageSerializer.Serialize(xmlWriter, page);
+				}
+				xmlWriter.WriteEndElement();
+
+				xmlWriter.WriteStartElement(ContentFileConstants.FirstTimeHelpCollectionElement);
+				var helpSerializer = new XmlSerializer(typeof(FirstTimeHelp));
+				foreach(var help in _firstTimeHelpRepository.ReadAll())
+				{
+					helpSerializer.Serialize(xmlWriter, help);
 				}
 				xmlWriter.WriteEndElement();
 
@@ -97,6 +108,7 @@ namespace DocMAH.Content
 			{
 				var contentUpToDate = false;
 				var versionsValidated = false;
+				var helpIds = new List<int>();
 				var pageIds = new List<int>();
 				var bulletIds = new List<int>();
 				int fileDataStoreSchemaVersion = -1;
@@ -105,7 +117,8 @@ namespace DocMAH.Content
 
 				using (var xmlReader = new XmlTextReader(fileName))
 				{
-					var pageSerializer = new XmlSerializer(typeof(Page));
+					var helpSerializer = new XmlSerializer(typeof(FirstTimeHelp));
+					var pageSerializer = new XmlSerializer(typeof(DocumentationPage));
 					var bulletSerializer = new XmlSerializer(typeof(Bullet));
 
 					while (xmlReader.Read())
@@ -135,17 +148,26 @@ namespace DocMAH.Content
 
 								versionsValidated = true;
 							}
-							else if (xmlReader.LocalName == "Page")
+							else if (xmlReader.LocalName == typeof(FirstTimeHelp).Name)
+							{
+								if (!versionsValidated)
+									throw new InvalidOperationException("Attempted to import first time help without version validation.");
+
+								var help = (FirstTimeHelp)helpSerializer.Deserialize(xmlReader);
+								_firstTimeHelpRepository.Import(help);
+								helpIds.Add(help.Id);
+							}
+							else if (xmlReader.LocalName == typeof(DocumentationPage).Name)
 							{
 								// Deserialize Page elements and import to data store.
 								if (!versionsValidated)
-									throw new InvalidOperationException("Attempted to import pages without version validation.");
+									throw new InvalidOperationException("Attempted to import documentation pages without version validation.");
 
-								var page = (Page)pageSerializer.Deserialize(xmlReader);
-								_pageRepository.Import(page);
+								var page = (DocumentationPage)pageSerializer.Deserialize(xmlReader);
+								_documentationPageRepository.Import(page);
 								pageIds.Add(page.Id);
 							}
-							else if (xmlReader.LocalName == "Bullet")
+							else if (xmlReader.LocalName == typeof(Bullet).Name)
 							{
 								// Deserialize Bullet elements and import to data store.
 								if (!versionsValidated)
@@ -169,7 +191,8 @@ namespace DocMAH.Content
 
 					_bulletRepository.DeleteExcept(bulletIds);
 					_userPageSettingsRepository.DeleteExcept(pageIds);
-					_pageRepository.DeleteExcept(pageIds);
+					_firstTimeHelpRepository.DeleteExcept(helpIds);
+					_documentationPageRepository.DeleteExcept(pageIds);
 					_dataStoreConfiguration.HelpContentVersion = fileContentVersion;
 				}
 			}

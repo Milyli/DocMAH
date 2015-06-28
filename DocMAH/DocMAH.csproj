@@ -66,6 +66,8 @@
     <Compile Include="Configuration\IDocumentationConfiguration.cs" />
     <Compile Include="Configuration\IEditHelpConfiguration.cs" />
     <Compile Include="Content\ContentFileSchemaVersions.cs" />
+    <Compile Include="Data\IFirstTimeHelpRepository.cs" />
+    <Compile Include="Data\Sql\SqlFirstTimeHelpRepository.cs" />
     <Compile Include="Data\Sql\SqlScripts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,7 +77,7 @@
     <Compile Include="Data\IBulletRepository.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
     <Compile Include="Content\IHelpContentManager.cs" />
-    <Compile Include="Data\IPageRepository.cs" />
+    <Compile Include="Data\IDocumentationPageRepository.cs" />
     <Compile Include="Data\IUserPageSettingsRepository.cs" />
     <Compile Include="Data\Sql\BaseSqlRepository.cs" />
     <Compile Include="Data\Sql\SqlConfigurationRepository.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="Content\HelpContentManager.cs" />
     <Compile Include="Configuration\IDataStoreConfiguration.cs" />
     <Compile Include="Data\DataStoreSchemaVersions.cs" />
-    <Compile Include="Data\Sql\SqlPageRepository.cs" />
+    <Compile Include="Data\Sql\SqlDocumentationPageRepository.cs" />
     <Compile Include="Data\Sql\SqlUserPageSettingsRepository.cs" />
     <Compile Include="Content\ContentFileConstants.cs" />
     <Compile Include="Dependencies\IContainer.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Models\FirstTimeHelp.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,7 +120,7 @@
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\MoveTocRequest.cs" />
-    <Compile Include="Models\Page.cs" />
+    <Compile Include="Models\DocumentationPage.cs" />
     <Compile Include="Models\PageTypes.cs" />
     <Compile Include="Models\PageUrl.cs" />
     <Compile Include="Models\UserPageSettings.cs" />
@@ -136,9 +139,10 @@
     <Compile Include="Web\Requests\Processors\MovePageRequestProcessor.cs" />
     <Compile Include="Web\Requests\Processors\NotFoundRequestProcessor.cs" />
     <Compile Include="Web\Requests\Processors\ReadApplicationSettingsRequestProcessor.cs" />
-    <Compile Include="Web\Requests\Processors\ReadPageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\ReadDocumentationPageRequestProcessor.cs" />
     <Compile Include="Web\Requests\Processors\ReadTableOfContentsRequestProcessor.cs" />
-    <Compile Include="Web\Requests\Processors\SaveHelpRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\SaveDocumentationPageRequestProcessor.cs" />
+    <Compile Include="Web\Requests\Processors\SaveFirstTimeHelpRequestProcessor.cs" />
     <Compile Include="Web\Requests\Processors\SaveUserPageSettingsRequestProcessor.cs" />
     <Compile Include="Web\Requests\Processors\UnauthorizedRequestProcessor.cs" />
     <Compile Include="Web\Requests\RequestProcessorFactory.cs" />
@@ -175,7 +179,14 @@
     <Content Include="Data\Sql\Scripts\Database_Create.sql" />
     <Content Include="Data\Sql\Scripts\Database_Drop.sql" />
     <Content Include="Data\Sql\Scripts\Database_Update_02.sql" />
-    <Content Include="Data\Sql\Scripts\Page_DeleteExcept.sql" />
+    <Content Include="Data\Sql\Scripts\DocumentationPage_DeleteExcept.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_Create.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_Delete.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_DeleteExcept.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_Import.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_ReadAll.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_ReadById.sql" />
+    <Content Include="Data\Sql\Scripts\FirstTimeHelp_Update.sql" />
     <Content Include="Data\Sql\Scripts\UserPageSettings_DeleteByPageId.sql" />
     <Content Include="Data\Sql\Scripts\UserPageSettings_DeleteExcept.sql" />
     <Content Include="Web\Css\Images\closedBook.png" />
@@ -192,8 +203,8 @@
     <Content Include="Web\JavaScript\DocMAHJavaScript.js" />
     <Content Include="Data\Sql\Scripts\Bullet_Import.sql" />
     <Content Include="Data\Sql\Scripts\Bullet_ReadAll.sql" />
-    <Content Include="Data\Sql\Scripts\Page_Import.sql" />
-    <Content Include="Data\Sql\Scripts\Page_ReadAll.sql" />
+    <Content Include="Data\Sql\Scripts\DocumentationPage_Import.sql" />
+    <Content Include="Data\Sql\Scripts\DocumentationPage_ReadAll.sql" />
     <Content Include="Web\Css\Mixins.css">
       <DependentUpon>Mixins.less</DependentUpon>
     </Content>
@@ -212,8 +223,8 @@
     <Content Include="Data\Sql\Scripts\Configuration_Update.sql" />
     <Content Include="Data\Sql\Scripts\PageUrl_DeleteByPageId.sql" />
     <Content Include="Data\Sql\Scripts\PageUrl_ReadByPageId.sql" />
-    <Content Include="Data\Sql\Scripts\Page_Delete.sql" />
-    <Content Include="Data\Sql\Scripts\Page_ReadById.sql" />
+    <Content Include="Data\Sql\Scripts\DocumentationPage_Delete.sql" />
+    <Content Include="Data\Sql\Scripts\DocumentationPage_ReadById.sql" />
     <Content Include="Web\JavaScript\DocMAHJavaScript.min.js">
       <DependentUpon>DocMAHJavaScript.js</DependentUpon>
     </Content>
@@ -222,17 +233,17 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadByParentId.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\DocumentationPage_ReadByParentId.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\PageUrl_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadTableOfContents.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\DocumentationPage_ReadTableOfContents.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_Create.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_Update.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\UserPageSettings_ReadByUserAndPage.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\Bullet_Update.sql" />
-    <EmbeddedResource Include="Data\Sql\Scripts\Page_Update.sql" />
-    <EmbeddedResource Include="Data\Sql\Scripts\Page_ReadByUrl.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\DocumentationPage_Update.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\FirstTimeHelp_ReadByUrl.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\Bullet_Create.sql" />
-    <EmbeddedResource Include="Data\Sql\Scripts\Page_Create.sql" />
+    <EmbeddedResource Include="Data\Sql\Scripts\DocumentationPage_Create.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\Database_Update_01.sql" />
     <EmbeddedResource Include="Data\Sql\Scripts\Configuration_Read.sql" />
     <EmbeddedResource Include="Web\Html\FirstTimeEdit.html" />

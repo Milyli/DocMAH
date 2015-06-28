@@ -27,8 +27,8 @@ namespace DocMAH.UnitTests.Data.Sql
 		[Description("Tests bullet create, read, update and delete methods.")]
 		public void Crud_Success()
 		{
-			var page = Models.CreatePage();
-			PageRepository.Create(page);
+			var page = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(page);
 
 			var newBullet = Models.CreateBullet(pageId: page.Id);
 			Assert.AreEqual(0, newBullet.Id, "The bullet id should not be set until after data layer Bullet_Create method is called.");
@@ -56,10 +56,10 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void CrudByPage_Success()
 		{
 			// Arrange
-			var targetPage = Models.CreatePage();
-			PageRepository.Create(targetPage);
-			var noisePage = Models.CreatePage();
-			PageRepository.Create(noisePage);
+			var targetPage = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(targetPage);
+			var noisePage = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(noisePage);
 
 			var targetBullet1 = Models.CreateBullet(pageId: targetPage.Id);
 			BulletRepository.Create(targetBullet1);
@@ -101,16 +101,16 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void DeleteExcept_Success()
 		{
 			// Arrange
-			var keptPage = Models.CreatePage();
-			PageRepository.Create(keptPage);
-			var keptBullet = Models.CreateBullet(pageId: keptPage.Id);
+			var keptHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(keptHelp);
+			var keptBullet = Models.CreateBullet(pageId: keptHelp.Id);
 			BulletRepository.Create(keptBullet);
 
-			var deletedPage = Models.CreatePage();
-			PageRepository.Create(deletedPage);
-			var deletedBullet = Models.CreateBullet(pageId: deletedPage.Id);
+			var deletedHelp = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(deletedHelp);
+			var deletedBullet = Models.CreateBullet(pageId: deletedHelp.Id);
 			BulletRepository.Create(deletedBullet);
-			var anotherDeletedBullet = Models.CreateBullet(pageId: deletedPage.Id);
+			var anotherDeletedBullet = Models.CreateBullet(pageId: deletedHelp.Id);
 			BulletRepository.Create(anotherDeletedBullet);
 
 			// Act
@@ -127,9 +127,9 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Import_ExistingBullet()
 		{
 			// Arrange
-			var page = Models.CreatePage();
-			PageRepository.Create(page);
-			var bullet = Models.CreateBullet(pageId: page.Id);
+			var help = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(help);
+			var bullet = Models.CreateBullet(pageId: help.Id);
 			BulletRepository.Create(bullet);
 			
 			// Modify the bullet informatio nto verify the values in the data store are overwritten.
@@ -140,7 +140,7 @@ namespace DocMAH.UnitTests.Data.Sql
 
 			// Act
 			BulletRepository.Import(bullet);
-			var results = BulletRepository.ReadByPageId(page.Id);
+			var results = BulletRepository.ReadByPageId(help.Id);
 
 			// Assert
 			Assert.That(results, Is.Not.Null, "The bullet should still exist in the data store.");
@@ -156,14 +156,14 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void Import_NewBullet()
 		{
 			// Arrange
-			var page = Models.CreatePage();
-			PageRepository.Create(page);
-			var bullet = Models.CreateBullet(pageId: page.Id);
+			var help = Models.CreateFirstTimeHelp();
+			FirstTimeHelpRepository.Create(help);
+			var bullet = Models.CreateBullet(pageId: help.Id);
 			bullet.Id = 42098;			
 
 			// Act
 			BulletRepository.Import(bullet);
-			var results = BulletRepository.ReadByPageId(page.Id);
+			var results = BulletRepository.ReadByPageId(help.Id);
 
 			// Assert
 			Assert.That(results, Is.Not.Null, "The bullet should have been added to the data store.");

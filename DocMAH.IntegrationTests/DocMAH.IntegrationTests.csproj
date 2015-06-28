@@ -76,7 +76,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Tests\BaseIntegrationTestFixture.cs" />
-    <Compile Include="Tests\HttpHandlerIntegrationTests.cs" />
     <Compile Include="MockHttpContext.cs" />
     <Compile Include="Tests\ContentDeploymentIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

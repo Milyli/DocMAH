@@ -21,9 +21,10 @@ namespace DocMAH.Web.Html
 			IBulletRepository bulletRepository,
 			IContentConfiguration contentConfiguration,
 			IDocumentationConfiguration documentationConfiguration,
+			IDocumentationPageRepository documentationPageRepository,
 			IEditAuthorizer editAuthorizer,
+			IFirstTimeHelpRepository firstTimeHelpRepository,
 			IMinifier minifier,
-			IPageRepository pageRepository,
 			IUserPageSettingsRepository userPageSettingsRepository)
 		{
 			_httpContext = httpContext;
@@ -31,8 +32,9 @@ namespace DocMAH.Web.Html
 			_contentConfiguration = contentConfiguration;
 			_documentationConfiguration = documentationConfiguration;
 			_editAuthorizer = editAuthorizer;
+			_firstTimeHelpRepository = firstTimeHelpRepository;
 			_minifier = minifier;
-			_pageRepository = pageRepository;
+			_documentationPageRepository = documentationPageRepository;
 			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
@@ -44,9 +46,10 @@ namespace DocMAH.Web.Html
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IContentConfiguration _contentConfiguration;
 		private readonly IDocumentationConfiguration _documentationConfiguration;
+		private readonly IDocumentationPageRepository _documentationPageRepository;
 		private readonly IEditAuthorizer _editAuthorizer;
+		private readonly IFirstTimeHelpRepository _firstTimeHelpRepository;
 		private readonly IMinifier _minifier;
-		private readonly IPageRepository _pageRepository;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
 		#endregion
@@ -112,7 +115,7 @@ namespace DocMAH.Web.Html
 		public string CreateFirstTimeHelpHtml()
 		{
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
-			var page = _pageRepository.ReadByUrl(requestUrl.Replace('*', '%'));
+			var page = _firstTimeHelpRepository.ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
 
 			if (null != page)

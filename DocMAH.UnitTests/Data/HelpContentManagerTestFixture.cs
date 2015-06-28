@@ -82,7 +82,7 @@ namespace DocMAH.UnitTests.Data
 			dataStoreConfiguration.SetupGet(c => c.DataStoreSchemaVersion).Returns((int)lastDataStoreVersion);
 			dataStoreConfiguration.SetupGet(c => c.HelpContentVersion).Returns(1);
 
-			var helpContentManager = new HelpContentManager(null, dataStoreConfiguration.Object, null, null);
+			var helpContentManager = new HelpContentManager(null, dataStoreConfiguration.Object, null, null, null);
 
 			// Act
 			helpContentManager.ImportContent(_contentFileName);
@@ -107,8 +107,11 @@ namespace DocMAH.UnitTests.Data
 			dataStoreConfiguration.SetupGet(c => c.HelpContentVersion).Returns(0);
 			dataStoreConfiguration.SetupSet(c => c.HelpContentVersion = 1);
 
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
 			pageRepository.Setup(r => r.DeleteExcept(It.IsAny<List<int>>()));
+
+			var helpRepository = Mocks.Create<IFirstTimeHelpRepository>();
+			helpRepository.Setup(r => r.DeleteExcept(It.IsAny<List<int>>()));
 
 			var userPageSettingsRepository = Mocks.Create<IUserPageSettingsRepository>();
 			userPageSettingsRepository.Setup(r => r.DeleteExcept(It.IsAny<List<int>>()));
@@ -117,6 +120,7 @@ namespace DocMAH.UnitTests.Data
  				bulletRepository.Object,
 				dataStoreConfiguration.Object,
 				pageRepository.Object,
+				helpRepository.Object,
 				userPageSettingsRepository.Object);
 
 			// Act
@@ -135,13 +139,15 @@ namespace DocMAH.UnitTests.Data
 			// Default behavior strict and the verify all assure this.
 			var bulletRepository = Mocks.Create<IBulletRepository>();
 			var dataStoreConfiguration = Mocks.Create<IDataStoreConfiguration>();
-			var pageRepository = Mocks.Create<IPageRepository>();
+			var pageRepository = Mocks.Create<IDocumentationPageRepository>();
+			var helpRepository = Mocks.Create<IFirstTimeHelpRepository>();
 			var userPageSettingsRepository = Mocks.Create<IUserPageSettingsRepository>();
 			
 			var updater = new HelpContentManager(
 				bulletRepository.Object, 
 				dataStoreConfiguration.Object, 
 				pageRepository.Object,
+				helpRepository.Object,
 				userPageSettingsRepository.Object);
 
 			// Act
