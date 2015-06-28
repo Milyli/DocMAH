@@ -1,17 +1,6 @@
 ﻿/** Namespace **/
 var DMH = DMH || {};
 
-/** Constants and Singletons **/
-DMH.PageTypes = function () {
-
-	//** Public Fields **
-	this.FirstTimePage = 1;
-	this.DocumentationPage = 2;
-
-	// Return singleton.
-	return this;
-}();
-
 DMH.HistoryState = function () {
 	this.Replace = 1;
 	this.Push = 2;
@@ -30,6 +19,7 @@ DMH.Urls = function () {
 	this.ReadApplicationSettings = '/help.axd?m=ReadApplicationSettings';
 	this.ReadPage = '/help.axd?m=ReadPage';
 	this.ReadTableOfContents = '/help.axd?m=ReadTableOfContents';
+	this.SaveDocumentationPage = '/help.axd?m=SaveDocumentationPage';
 	this.SaveFirstTimeHelp = '/help.axd?m=SaveFirstTimeHelp';
 	this.SaveUserPageSettings = '/help.axd?m=SaveUserPageSettings';
 
@@ -48,7 +38,6 @@ DMH.Helpers = function () {
 	return this;
 }();
 
-/** Classes **/
 DMH.AjaxClient = function () {
 
 	// ** Public Methods **
@@ -100,13 +89,24 @@ DMH.AjaxClient = function () {
 		});
 	}
 
-	this.SaveFirstTimeHelp = function (page, successCallback) {
+	this.SaveDocumentationPage = function (page, successCallback) {
+		$.ajax({
+			'type': 'POST',
+			'contentType': 'application/json',
+			'dataType': 'json',
+			'url': DMH.Urls.SaveDocumentationPage,
+			'data': JSON.stringify(page),
+			'success': successCallback,
+		});
+	}
+
+	this.SaveFirstTimeHelp = function (help, successCallback) {
 		$.ajax({
 			type: 'POST',
 			contentType: "application/json",
 			dataType: 'json',
 			url: DMH.Urls.SaveFirstTimeHelp,
-			data: JSON.stringify(page),
+			data: JSON.stringify(help),
 			success: successCallback,
 		});
 	}
@@ -126,7 +126,7 @@ DMH.AnchoredElementLogic = function () {
 	var _elements = new DMH.SharedElements();
 	var self = this;
 
-	// ** Private Methods ** 
+	// ** Public Methods **
 	this.UpdateElementPosition = function (model, $element) {
 		if ($element.length > 0) {
 			var anchorOffset = $('#' + model.OffsetElementId).offset();
@@ -141,8 +141,6 @@ DMH.AnchoredElementLogic = function () {
 		}
 	}
 
-
-	// ** Public Methods **
 	this.UpdateElementPositions = function (pageModel, $form) {
 		if (_elements.$getModalMask().is(':visible')) {
 			$.each(pageModel.Bullets, function (index, bullet) {
@@ -191,10 +189,8 @@ DMH.DocumentationPage = function () {
 	// ** Private Fields **
 	var _applicationSettings = null;
 	var _currentPage = null;
-	var _elements = new DMH.SharedElements();
 	var _newPage = null;		// Temporary new page when tree creates new page and name needs to be saved.
 	var _originalPage = null;	// State of page before editing begins.
-	var _firstTimeView = null;	// First time help viewer in draggable mode to modify documentation position.
 	var _historyId = 1;			// Compared to popstate data to determine if forward or back was pressed.
 
 
@@ -215,9 +211,6 @@ DMH.DocumentationPage = function () {
 	function $getNewPageButton() { return $('#dmhNewPageButton'); }
 	function $getPage() { return $('#dmhPage'); }
 	function $getPageContainer() { return $('#dmhPageContainer'); }
-	function $getFirstTimeImage() { return $('#dmhFirstTimeImage'); }
-	function $getFirstTimeImageUrl() { return $('#dmhFirstTimeImageUrl'); }
-	function $getFirstTimeTools() { return $('#dmhFirstTimeTools'); }
 	function $getSaveButton() { return $('#dmhSaveButton'); }
 	function $getTableOfContents() { return $('#dmhToc'); }
 	function $getTitle() { return $('#dmhDocTitle'); }
@@ -239,7 +232,7 @@ DMH.DocumentationPage = function () {
 			var client = new DMH.AjaxClient();
 			client.ReadPage(id, function (page) {
 
-				// Handle the browser history as needed.
+				// Handle browser history as needed.
 				var url = "help.axd?m=DocumentationPage&id=" + page.Id;
 				if (historyState === DMH.HistoryState.Replace) {
 					page.HistoryId = _historyId;
@@ -261,6 +254,8 @@ DMH.DocumentationPage = function () {
 	}
 
 	function GetPageIdFromElementId(elementId) {
+		if (elementId === '#')
+			return null;
 		return parseInt(elementId.substring("dmhTocEntry-".length));
 	}
 
@@ -278,7 +273,6 @@ DMH.DocumentationPage = function () {
 			$getToolBar().show();
 
 			// Reset all bars.
-			$getFirstTimeTools().hide();
 			$getDocumentationTools().hide();
 			$getEditModeButtonBar().hide();
 			$getEditButton().hide();
@@ -291,15 +285,7 @@ DMH.DocumentationPage = function () {
 					.prop('disabled', true)
 					.prop('checked', _currentPage.IsHidden);
 
-				if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-					$getFirstTimeImageUrl()
-						.prop('disabled', true)
-						.val(_currentPage.DocImageUrl || '');
-
-					$getFirstTimeTools().show();
-				} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
-					$getDocumentationTools().show();
-				}
+				$getDocumentationTools().show();
 			}
 		}
 	}
@@ -308,21 +294,10 @@ DMH.DocumentationPage = function () {
 		if (_currentPage) {
 			var $container = $getPageContainer();
 			var $page = $getPage();
-			var height, width;
 
-			if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-				var $background = $getFirstTimeImage();
-				// clientDimensions get value without scrollbar if present. 
-				// Scrollbar padding is automatically added with height() and width() which is bad.
-				height = Math.max($container.get(0).clientHeight, $background.height());
-				width = Math.max($container.get(0).clientWidth, $background.width());
-				$page.width(width).height(height);
-				_elements.$getModalMask().width(width).height(height);
-			} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
-				height = $container.get(0).clientHeight;
-				width = $container.get(0).clientWidth;
-				$page.width(width).height(height);
-			}
+			var height = $container.get(0).clientHeight;
+			var width = $container.get(0).clientWidth;
+			$page.width(width).height(height);
 		}
 	}
 
@@ -331,16 +306,12 @@ DMH.DocumentationPage = function () {
 	function SavePage() {
 		if (_currentPage) {
 			var client = new DMH.AjaxClient();
-			client.SavePage(_currentPage, function () {
+			client.SaveDocumentationPage(_currentPage, function () {
 
 				var node = $getTableOfContents().jstree('get_node', 'dmhTocEntry-' + _currentPage.Id);
 
 				// Update table of contents UI as needed for each type.
-				if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-					// Do nothing as of yet.
-				} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
-					$getTableOfContents().jstree('rename_node', node, _currentPage.Title);
-				}
+				$getTableOfContents().jstree('rename_node', node, _currentPage.Title);
 
 				// Set UI visibility indicator on current node. 
 				// CSS handles changing style on children.
@@ -373,9 +344,6 @@ DMH.DocumentationPage = function () {
 
 	// Sets up the content area for the current page type.
 	function ShowPage(page) {
-		// Disable dragging for previous page.
-		_firstTimeView.DisableDragging();
-
 		// Save original page values for cancel.
 		_currentPage = page;
 		_originalPage = $.extend(true, {}, page);
@@ -383,22 +351,14 @@ DMH.DocumentationPage = function () {
 		// Hide previous page contents.
 		$getDocumentationView().hide();
 		$getDocumentationEditor().hide();
-		$getFirstTimeImage().hide();
-		_firstTimeView.ClosePage();
 
 		// If there is a current page, show it's contents.
 		if (page) {
-			if (page.PageType === DMH.PageTypes.FirstTimePage) {
-				// Show page image
-				$getFirstTimeImage().attr('src', page.DocImageUrl).show();
-				_firstTimeView.ShowPage(page);
-			} else if (page.PageType === DMH.PageTypes.DocumentationPage) {
-				// Show custom documentation view form.
-				$getDocumentationViewTitle().html(_currentPage.Title);
-				$getDocumentationViewContent().html(_currentPage.Content);
-				$getDocumentationView().show();
-				$getDocumentationEditor().hide();
-			}
+			// Show custom documentation view form.
+			$getDocumentationViewTitle().html(_currentPage.Title);
+			$getDocumentationViewContent().html(_currentPage.Content);
+			$getDocumentationView().show();
+			$getDocumentationEditor().hide();
 		}
 
 		InitializeEditTools();
@@ -424,15 +384,10 @@ DMH.DocumentationPage = function () {
 		$getEditModeButtonBar().show();
 		$getIsHidden().prop('disabled', false);
 
-		if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-			$getFirstTimeImageUrl().prop('disabled', false);
-			_firstTimeView.EnableDragging($getPageContainer());
-		} else if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
-			$getDocumentationEditorTitle().val(_currentPage.Title);
-			$getDocumentationEditorContent().val(_currentPage.Content);
-			$getDocumentationView().hide();
-			$getDocumentationEditor().show();
-		}
+		$getDocumentationEditorTitle().val(_currentPage.Title);
+		$getDocumentationEditorContent().val(_currentPage.Content);
+		$getDocumentationView().hide();
+		$getDocumentationEditor().show();
 	}
 
 	function GenerateInstallScriptButton_Click() {
@@ -444,11 +399,6 @@ DMH.DocumentationPage = function () {
 		tree.create_node('#', { text: 'New Page' }, 'last', function (new_node) {
 			setTimeout(function () { tree.edit(new_node); }, 0);
 		});
-	}
-
-	function FirstTimeImageUrl_Change() {
-		$getFirstTimeImage().attr('src', $(this).val());
-		ResizeDocumentPage();
 	}
 
 	function ReadTableOfContents_Success(tableOfContents) {
@@ -475,20 +425,6 @@ DMH.DocumentationPage = function () {
 					'icons': false,
 				}
 			},
-			// TODO: Implement types plugin to handle display state of hidden page in TOC
-			/*
-							'types': {
-								'valid_children': "all",
-								'types': {
-									'visible': {
-			
-									},
-									'hidden': {
-			
-									},
-								},
-							},
-			*/
 			'plugins': plugins,
 		};
 
@@ -558,12 +494,8 @@ DMH.DocumentationPage = function () {
 	// Copy form values to page model and attempt to save page.
 	function SaveButton_Click() {
 		_currentPage.IsHidden = $getIsHidden().prop('checked');
-		if (_currentPage.PageType === DMH.PageTypes.DocumentationPage) {
-			_currentPage.Title = $getDocumentationEditorTitle().val();
-			_currentPage.Content = $getDocumentationEditorContent().val();
-		} else if (_currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-			_currentPage.DocImageUrl = $getFirstTimeImageUrl().val();
-		}
+		_currentPage.Title = $getDocumentationEditorTitle().val();
+		_currentPage.Content = $getDocumentationEditorContent().val();
 		SavePage();
 	}
 
@@ -578,14 +510,13 @@ DMH.DocumentationPage = function () {
 
 		var newPage = {
 			ParentPageId: GetPageIdFromElementId(data.parent),
-			PageType: DMH.PageTypes.DocumentationPage,  // All pages created here are Documentation Pages
 			Order: data.position,
 			Title: 'New Page',
 			Content: '',
 		};
 
 		var client = new DMH.AjaxClient();
-		client.SavePage(newPage, function (page) {
+		client.SaveDocumentationPage(newPage, function (page) {
 			data.instance.set_id(data.node, 'dmhTocEntry-' + page.Id);
 			_newPage = page;
 		});
@@ -643,7 +574,7 @@ DMH.DocumentationPage = function () {
 		if (_newPage) {
 			_newPage.Title = data.text;
 			var client = new DMH.AjaxClient();
-			client.SavePage(_newPage);
+			client.SaveDocumentationPage(_newPage);
 			_newPage = null;
 		}
 	}
@@ -704,23 +635,13 @@ DMH.DocumentationPage = function () {
 
 	// Create dependencies and attach event handlers.
 	this.Initialize = function () {
-		var options = {
-			documentationContainer: $getPageContainer(),	// set to id of documentation container if on documentation page.
-			anchoredMode: false,							// true: position elements relative to anchor elements. false: absolute positioning.
-			showButtonBar: false,							// set to false to hide bottom button bar.
-			showDocumentLink: false,						// set to false to hide title bar documentation link.
-		};
-		_firstTimeView = new DMH.FirstTimeView(options);
-
 		var client = new DMH.AjaxClient();
 		client.ReadApplicationSettings(function (applicationSettings) {
 			_applicationSettings = applicationSettings;
-			_firstTimeView.Initialize(applicationSettings);
 			InitializeEditTools();
 		});
 		client.ReadTableOfContents(ReadTableOfContents_Success);
 
-		$getFirstTimeImageUrl().change(FirstTimeImageUrl_Change);
 		$getSaveButton().click(SaveButton_Click);
 		$getCancelButton().click(CancelButton_Click);
 		$getEditButton().click(EditButton_Click);
@@ -960,7 +881,6 @@ DMH.FirstTimeEdit = function () {
 		var sourceUrl = href.substring(href.indexOf(host) + host.length, href.length);
 
 		_currentPage.Id = _currentPage.Id || 0;
-		_currentPage.PageType = _currentPage.PageType || DMH.PageTypes.FirstTimePage;
 		_currentPage.Title = $getfirstTimeEditTitle().val();
 		_currentPage.MatchUrls = $getfirstTimeEditMatchUrls().val();
 		_currentPage.SourceUrl = sourceUrl;
@@ -1113,23 +1033,11 @@ DMH.FirstTimeEdit = function () {
 	// pageUpdate.dmh
 }
 
-DMH.FirstTimeView = function (options) {
-
-	/** Default Options **/
-	var _options = {
-		documentationContainer: null,	// set to id of documentation container if on documentation page.
-		anchoredMode: true,				// true: position elements relative to anchor elements. false: absolute positioning.
-		showButtonBar: true,			// set to false to hide bottom button bar.
-		showDocumentLink: true,			// set to false to hide title bar documentation link.
-	};
-	if (options) { $.extend(_options, options); }
-
-
+DMH.FirstTimeView = function () {
 	// ** Private Fields **
 	var _anchoredElementLogic = new DMH.AnchoredElementLogic();
 	var _applicationSettings = null;
 	var _currentPage = null;
-	var _dragablesInitialized = false;
 	var _elements = new DMH.SharedElements();
 	var _self = this;
 	var _userPageSettings = null;
@@ -1137,14 +1045,14 @@ DMH.FirstTimeView = function (options) {
 
 
 	/** HTML Elements **/
-	function $getBulletNumber(context) { return $('.dmhBulletNumber', context); }
+	function $getBulletNumber(bulletElement) { return $('.dmhBulletNumber', bulletElement); }
 	function $getBulletViewTemplate() { return $('#dmhBulletViewTemplate'); }
-	function $getBulletViewText(context) { return $('.dmhBulletViewText', context); }
+	function $getBulletViewText(bulletElement) { return $('.dmhBulletViewText', bulletElement); }
 	function $getButtonBar() { return $('#dmhFirstTimeView .dmhButtonBar'); }
 	function $getCloseHelpButton() { return $('#dmhCloseHelpButton'); }
 	function $getDialogTitle() { return $('.dmhDialogTitle'); }
 	function $getHideHelpButton() { return $('#dmhHideHelpButton'); }
-	function $getPlacedBulletNumber(context) { return $('.dmhPlacedBulletNumber', context); }
+	function $getPlacedBulletNumber(bulletElement) { return $('.dmhPlacedBulletNumber', bulletElement); }
 	function $getPlacedBullets(context) { return $('>.dmhPlacedBullet', context); }
 	function $getfirstTimeView() { return $('#dmhFirstTimeView'); }
 	function $getfirstTimeViewBullets() { return $('#dmhFirstTimeViewBullets'); }
@@ -1167,45 +1075,11 @@ DMH.FirstTimeView = function (options) {
 		client.SaveUserPageSettings(_userPageSettings);
 	}
 
-	function InitializeDraggables() {
-		if (_options.documentationContainer
-			&& _applicationSettings
-			&& _applicationSettings.CanEdit
-			&& _currentPage
-			&& _currentPage.PageType === DMH.PageTypes.FirstTimePage) {
-
-			$getDialogTitle().css({ cursor: 'move' });
-			$getfirstTimeView().draggable({
-				handle: $getDialogTitle(),
-				containment: _options.documentationContainer,
-				stop: firstTimeView_DraggableStop,
-			});
-			$getPlacedBullets(_options.documentationContainer).each(function (index, bullet) {
-				$(bullet).css({ cursor: 'move' })
-					.draggable({
-						containment: _options.documentationContainer,
-						stop: Bullet_DraggableStop,
-					});
-			});
-
-			_dragablesInitialized = true;
-		}
-	}
-
 	function PlaceBullet(bullet) {
-		var $container, top, left;
-		if (_options.anchoredMode) {
-			$container = $('body');
-			var anchorOffset = $('#' + bullet.OffsetElementId).offset();
-			top = anchorOffset ? anchorOffset.top + bullet.VerticalOffset : 0;
-			left = anchorOffset ? anchorOffset.left + bullet.HorizontalOffset : _nextBulletOffset;
-		} else {
-			$container = _options.documentationContainer;
-			top = bullet.DocVerticalOffset || 0;
-			left = bullet.DocHorizontalOffset || _nextBulletOffset;
-
-			_nextBulletOffset += 40;
-		}
+		var $container = $('body');
+		var anchorOffset = $('#' + bullet.OffsetElementId).offset();
+		var top = anchorOffset ? anchorOffset.top + bullet.VerticalOffset : 0;
+		var left = anchorOffset ? anchorOffset.left + bullet.HorizontalOffset : _nextBulletOffset;
 
 		var $newBullet = $getBulletViewTemplate()
 			.clone(true, true)
@@ -1224,24 +1098,11 @@ DMH.FirstTimeView = function (options) {
 	}
 
 	function RemoveBullets() {
-		var $container = _options.documentationContainer || $('body');
-		$getPlacedBullets($container).remove();
+		$getPlacedBullets($('body')).remove();
 	}
 
 
 	// ** Event Handlers **
-	function Bullet_DraggableStop() {
-		var bullets = _currentPage.Bullets;
-		var $bullet = $(this);
-		var number = parseInt($getPlacedBulletNumber($bullet).html());
-		$.each(bullets, function (index, bullet) {
-			if (bullet.Number === number) {
-				bullet.DocVerticalOffset = Math.round($bullet.css('top').replace('px', ''));
-				bullet.DocHorizontalOffset = Math.round($bullet.css('left').replace('px', ''));
-			}
-		});
-	}
-
 	function CloseHelpButtons_Click(e) {
 		e.data.model.ClosePage();
 		var cookies = new DMH.Cookies();
@@ -1249,25 +1110,11 @@ DMH.FirstTimeView = function (options) {
 		AjaxSaveUserPageSettings(e.data.hide);
 	}
 
-	function firstTimeView_DraggableStop() {
-		_currentPage.DocVerticalOffset = Math.round($(this).css('top').replace('px', ''));
-		_currentPage.DocHorizontalOffset = Math.round($(this).css('left').replace('px', ''));
-	}
-
-	function ViewHelpButton_Click() {
-		// TODO: move documentation button logic out of firstTimeView.
-		// will need to tease apart new page creation events... maybe.
-		// firstTimeView defined in firstTimeViewInjectedScripts.html
-		firstTimeView.ShowPage();
-	}
-
 	function Window_Resize() {
-		if (_options.anchoredMode) {
-			_anchoredElementLogic.UpdateElementPositions(_currentPage, $getfirstTimeView());
-			_elements.$getModalMask()
-				.height($(document).height())
-				.width($(document).width());
-		}
+		_anchoredElementLogic.UpdateElementPositions(_currentPage, $getfirstTimeView());
+		_elements.$getModalMask()
+			.height($(document).height())
+			.width($(document).width());
 	}
 
 
@@ -1279,40 +1126,15 @@ DMH.FirstTimeView = function (options) {
 		_elements.$getModalMask().hide();
 	}
 
-	this.DisableDragging = function () {
-		if (_dragablesInitialized) {
-			$getDialogTitle().css({ cursor: 'auto' });
-			// Must destroy draggables because the next page shown may have a different number of elements.
-			$getfirstTimeView().draggable('destroy');
-			$getPlacedBullets(_options.documentationContainer).each(function (index, bullet) {
-				$(bullet).css({ cursor: 'auto' })
-					.draggable('destroy');
-			});
-			_dragablesInitialized = false;
-		}
-	}
-
-	this.EnableDragging = function () {
-		InitializeDraggables();
-	}
-
 	this.Initialize = function (applicationSettings, firstTimeEdit, helpButton) {
 		_applicationSettings = applicationSettings;
 
-		if (_options.showButtonBar) {
-			$getCloseHelpButton().click({ model: this, hide: false }, CloseHelpButtons_Click);
-			$getHideHelpButton().click({ model: this, hide: true }, CloseHelpButtons_Click);
-		} else {
-			$getButtonBar().hide();
-		}
+		$getCloseHelpButton().click({ model: this, hide: false }, CloseHelpButtons_Click);
+		$getHideHelpButton().click({ model: this, hide: true }, CloseHelpButtons_Click);
 
-		if (_options.showDocumentLink) {
-			$getShowDocumentationButton()
-				.show()
-				.click(function () { window.open(DMH.Urls.NavigateDocumentation, '_blank'); });
-		} else {
-			$getShowDocumentationButton().hide();
-		}
+		$getShowDocumentationButton()
+			.show()
+			.click(function () { window.open(DMH.Urls.NavigateDocumentation, '_blank'); });
 
 		$(window).resize(Window_Resize);
 
@@ -1338,16 +1160,10 @@ DMH.FirstTimeView = function (options) {
 			$getDialogTitle().html(_currentPage.Title);
 
 			var view = $getfirstTimeView();
-			if (_options.anchoredMode) {
-				_anchoredElementLogic.UpdateElementPosition(_currentPage, view);
-				_elements.$getModalMask()
-					.height($(document).height())
-					.width($(document).width());
-			} else {
-				var formTop = page.DocVerticalOffset || 40;
-				var formLeft = page.DocHorizontalOffset || 0;
-				view.show().css({ top: formTop + 'px', left: formLeft + 'px' });
-			}
+			_anchoredElementLogic.UpdateElementPosition(_currentPage, view);
+			_elements.$getModalMask()
+				.height($(document).height())
+				.width($(document).width());
 
 			_nextBulletOffset = 0;
 			$getfirstTimeViewBullets().empty();

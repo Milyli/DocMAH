@@ -64,11 +64,11 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void DeleteExcept_Success()
 		{
 			// Arrange
-			var keptPage = Models.CreateDocumentationPage(matchUrls: "/Pages/KeptPage1 /Pages/KeptPage2");
+			var keptPage = Models.CreateDocumentationPage();
 			DocumentationPageRepository.Create(keptPage);
-			var deletedPage = Models.CreateDocumentationPage(matchUrls: "/Pages/DeletedPage1 /Pages/DeletedPage2");
+			var deletedPage = Models.CreateDocumentationPage();
 			DocumentationPageRepository.Create(deletedPage);
-			var anotherDeletedPage = Models.CreateDocumentationPage(matchUrls: "/Pages/AnotherDeletedPage1 /Pages/AnotherDeletedPage2");
+			var anotherDeletedPage = Models.CreateDocumentationPage();
 			DocumentationPageRepository.Create(anotherDeletedPage);
 
 			// Act

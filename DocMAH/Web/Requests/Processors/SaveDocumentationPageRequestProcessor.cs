@@ -50,6 +50,9 @@ namespace DocMAH.Web.Requests.Processors
 					siblings[i].Order++;
 					_documentationPageRepository.Update(siblings[i]);
 				}
+
+				// Create after siblings have been read so that the new page doesn't have its order increased.
+				_documentationPageRepository.Create(clientPage);
 			}
 
 			var pageJson = serializer.Serialize(clientPage);

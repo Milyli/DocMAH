@@ -94,6 +94,7 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			var result = processor.Process(requestData);
 
 			// Assert
+			Mocks.VerifyAll();
 			Assert.That(result, Is.Not.Null, "Response state instance expected.");
 			Assert.That(result.ContentType, Is.EqualTo(ContentTypes.Json), "JSON result expected.");
 			Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Valid response code expected.");

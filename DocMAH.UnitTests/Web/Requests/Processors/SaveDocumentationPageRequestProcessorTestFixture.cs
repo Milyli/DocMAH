@@ -108,17 +108,17 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		{
 			// Arrange
 			var parentPage = Models.CreateDocumentationPage(id: 74362);
-			var lowerSiblingPage = Models.CreateDocumentationPage(id: 63254, parentPageId: parentPage.Id, order: 1);
-			var higherSiblingPage = Models.CreateDocumentationPage(id: 1342, parentPageId: parentPage.Id, order: 2);
-			var highestSiblingPage = Models.CreateDocumentationPage(id: 8724, parentPageId: parentPage.Id, order: 3);
+			var lowerSiblingPage = Models.CreateDocumentationPage(id: 63254, parentPageId: parentPage.Id, order: 0);
+			var higherSiblingPage = Models.CreateDocumentationPage(id: 1342, parentPageId: parentPage.Id, order: 1);
+			var highestSiblingPage = Models.CreateDocumentationPage(id: 8724, parentPageId: parentPage.Id, order: 2);
 			var siblingPages = new List<DocumentationPage> { lowerSiblingPage, higherSiblingPage, highestSiblingPage };
 
-			var clientPage = Models.CreateDocumentationPage(parentPageId: parentPage.Id, order: 2);
-
+			var clientPage = Models.CreateDocumentationPage(parentPageId: parentPage.Id, order: 1);
+			
 			var documentationPageRepository = Mocks.Create<IDocumentationPageRepository>();
 			documentationPageRepository.Setup(r => r.ReadByParentId(clientPage.ParentPageId)).Returns(siblingPages);
-			documentationPageRepository.Setup(r => r.Update(higherSiblingPage));
-			documentationPageRepository.Setup(r => r.Update(highestSiblingPage));
+			documentationPageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == higherSiblingPage.Id && p.Order == 2)));
+			documentationPageRepository.Setup(r => r.Update(It.Is<DocumentationPage>(p => p.Id == highestSiblingPage.Id && p.Order == 3)));
 			documentationPageRepository.Setup(r => r.Create(It.Is<DocumentationPage>(p => p.Title == clientPage.Title)));
 
 			var serializer = new JavaScriptSerializer();
@@ -129,6 +129,7 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			var result = processor.Process(requestData);
 
 			// Assert
+			Mocks.VerifyAll();
 			Assert.That(result, Is.Not.Null, "Response state instance expected.");
 			Assert.That(result.ContentType, Is.EqualTo(ContentTypes.Json), "JSON result expected.");
 			Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Valid response code expected.");

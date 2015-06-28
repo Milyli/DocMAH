@@ -34,17 +34,19 @@ namespace DocMAH.UnitTests
 		public DocumentationPage CreateDocumentationPage(
 			int id = 0,
 			int? parentPageId = null,
-			string matchUrls = null,
+			string title = null,
 			int order = 1,
 			bool isHidden = false)
 		{
+			title = title ?? string.Format("Unit Test Help {0}", _documentationPageCount.ToString("00#"));
+
 			var result = new DocumentationPage
 			{
 				Id = id,
 				Content = "Test content for documentation page.",
 				Order = order,
 				ParentPageId = parentPageId,
-				Title = string.Format("Unit Test Help {0}", _documentationPageCount.ToString("00#")),
+				Title = title,
 				IsHidden = isHidden,
 			};
 
