@@ -197,24 +197,23 @@ DMH.DocumentationPage = function () {
 	/** HTML Elements **/
 	function $getCancelButton() { return $('#dmhCancelButton'); }
 	function $getContentPanel() { return $('#dmhDocContentPanel'); }
+	function $getDeleteButton() { return $('#dmhDeletePageButton'); }
 	function $getDocumentationEditor() { return $('#dmhDocumentationEditor'); }
 	function $getDocumentationEditorContent() { return $('#dmhDocumentationEditorContent'); }
 	function $getDocumentationEditorTitle() { return $('#dmhDocumentationEditorTitle'); }
-	function $getDocumentationTools() { return $('#dmhDocumentationTools'); }
 	function $getDocumentationView() { return $('#dmhDocumentationView'); }
 	function $getDocumentationViewContent() { return $('#dmhDocumentationViewContent'); }
 	function $getDocumentationViewTitle() { return $('#dmhDocumentationViewTitle'); }
-	function $getEditButton() { return $('#dmhEditButton'); }
+	function $getEditButton() { return $('#dmhEditPageButton'); }
 	function $getEditModeButtonBar() { return $('#dmhEditModeButtonBar'); }
+	function $getEditToolBar() { return $('#dmhEditToolBar'); }
 	function $getGenerateInstallScriptButton() { return $('#dmhGenerateInstallScriptButton'); }
 	function $getIsHidden() { return $('#dmhIsHidden'); }
 	function $getNewPageButton() { return $('#dmhNewPageButton'); }
-	function $getPage() { return $('#dmhPage'); }
 	function $getPageContainer() { return $('#dmhPageContainer'); }
 	function $getSaveButton() { return $('#dmhSaveButton'); }
 	function $getTableOfContents() { return $('#dmhToc'); }
 	function $getTitle() { return $('#dmhDocTitle'); }
-	function $getToolBar() { return $('#dmhDocToolBar'); }
 	function $getViewModeButtonBar() { return $('#dmhViewModeButtonBar'); }
 
 
@@ -264,40 +263,23 @@ DMH.DocumentationPage = function () {
 		if (_applicationSettings &&
 			_applicationSettings.CanEdit) {
 
-			// Make space for the edit tool bar.
-			var left = $getToolBar().outerWidth(true);
-			$getContentPanel().css({ left: left + 'px', });
-			$getTitle().css({ left: left + 'px', });
-
-			// Show the edit tool bar.
-			$getToolBar().show();
-
 			// Reset all bars.
-			$getDocumentationTools().hide();
+			$getDeleteButton().hide();
+			$getEditToolBar().hide();
 			$getEditModeButtonBar().hide();
 			$getEditButton().hide();
 			$getViewModeButtonBar().show();
 
 			// If there is a current page, show the editor for the current page type.
 			if (_currentPage) {
+				$getDeleteButton().show();
 				$getEditButton().show();
 				$getIsHidden()
 					.prop('disabled', true)
 					.prop('checked', _currentPage.IsHidden);
-
-				$getDocumentationTools().show();
 			}
-		}
-	}
 
-	function ResizeDocumentPage() {
-		if (_currentPage) {
-			var $container = $getPageContainer();
-			var $page = $getPage();
-
-			var height = $container.get(0).clientHeight;
-			var width = $container.get(0).clientWidth;
-			$page.width(width).height(height);
+			$getEditToolBar().show();
 		}
 	}
 
@@ -323,14 +305,8 @@ DMH.DocumentationPage = function () {
 					$(('#' + node.id)).removeClass('tocHidden');
 				}
 
+				ShowMessage('Page saved.', 'success');
 				ShowPage(_currentPage);
-
-				$('#dmhStatusMessage')
-					.html('Page saved.')
-					.css('background-color', '#2d9639')
-					.show()
-					.delay(1000)
-					.fadeOut('slow');
 			});
 		}
 	}
@@ -340,6 +316,20 @@ DMH.DocumentationPage = function () {
 		var clearNodes = tree.get_selected(true);
 		tree.deselect_node(clearNodes);
 		tree.select_node(node);
+	}
+
+	function ShowMessage(message, type) {
+		var style = 'dmhStatusWarning';
+
+		if (type === 'success')
+			style = 'dmhStatusSuccess';
+
+		var $message = $('#dmhStatusMessage');
+		$message.html(message)
+			.addClass(style)
+			.show()
+			.delay(2000)
+			.fadeOut('slow', function () { $message.removeClass(style); });
 	}
 
 	// Sets up the content area for the current page type.
@@ -362,7 +352,6 @@ DMH.DocumentationPage = function () {
 		}
 
 		InitializeEditTools();
-		ResizeDocumentPage();
 	}
 
 
@@ -370,13 +359,29 @@ DMH.DocumentationPage = function () {
 
 	// Resets page to original, unedited page.
 	function CancelButton_Click() {
-		$('#dmhStatusMessage')
-			.html('Changes canceled.')
-			.css('background-color', '#3c454f')
-			.show()
-			.delay(1000)
-			.fadeOut('slow');
+		ShowMessage('Changes canceled.', 'warning');
 		ShowPage(_originalPage);
+	}
+
+	function DeleteButton_Click() {
+		if (_currentPage) {
+			var pageId = _currentPage.Id;
+
+			var tree = $getTableOfContents().jstree();
+			var node = tree.get_node('dmhTocEntry-' + pageId);
+
+			// Move children to parent.
+			// Move event handler updates server.
+			$.each(node.children, function (index, child) {
+				tree.move_node(child, node.parent, 'last');
+			});
+
+			// Delete the node.
+			tree.delete_node(node);
+
+			var client = new DMH.AjaxClient();
+			client.DeletePage(pageId, function () { ShowMessage('Page deleted.', 'success'); });
+		}
 	}
 
 	function EditButton_Click() {
@@ -397,6 +402,8 @@ DMH.DocumentationPage = function () {
 	function NewPageButton_Click() {
 		var tree = $getTableOfContents().jstree();
 		tree.create_node('#', { text: 'New Page' }, 'last', function (new_node) {
+			ShowMessage('Page created.', 'success');
+
 			setTimeout(function () { tree.edit(new_node); }, 0);
 		});
 	}
@@ -430,49 +437,7 @@ DMH.DocumentationPage = function () {
 
 		// Add edit plugins and their options.
 		if (_applicationSettings.CanEdit) {
-			plugins.push('contextmenu');
 			plugins.push('dnd');
-
-			options.contextmenu = {	// default jstree context menu modified as needed.
-				'items': {
-					"create": {
-						"separator_before": false,
-						"separator_after": true,
-						"_disabled": false,
-						"label": "New Page",
-						"action": function (data) {
-							var inst = $.jstree.reference(data.reference),
-								obj = inst.get_node(data.reference);
-							inst.create_node(obj, { text: 'New Page' }, "last", function (new_node) {
-								setTimeout(function () { inst.edit(new_node); }, 0);
-							});
-						}
-					},
-					"remove": {
-						"separator_before": false,
-						"icon": false,
-						"separator_after": false,
-						"_disabled": false,
-						"label": "Delete Page",
-						"action": function (data) {
-							var inst = $.jstree.reference(data.reference),
-								node = inst.get_node(data.reference);
-
-							// Move children to parent.
-							// Move event handler updates server.
-							$.each(node.children, function (index, child) {
-								inst.move_node(child, node.parent, 'last');
-							});
-
-							// Delete the node in question.
-							inst.delete_node(node);
-							var pageId = GetPageIdFromElementId(node.id);
-							var client = new DMH.AjaxClient();
-							client.DeletePage(pageId);
-						},
-					},
-				},
-			};
 		}
 
 		// Initialize read only toc tree.
@@ -574,7 +539,7 @@ DMH.DocumentationPage = function () {
 		if (_newPage) {
 			_newPage.Title = data.text;
 			var client = new DMH.AjaxClient();
-			client.SaveDocumentationPage(_newPage);
+			client.SaveDocumentationPage(_newPage, function () { ShowMessage('Page renamed.', 'success'); });
 			_newPage = null;
 		}
 	}
@@ -642,14 +607,13 @@ DMH.DocumentationPage = function () {
 		});
 		client.ReadTableOfContents(ReadTableOfContents_Success);
 
-		$getSaveButton().click(SaveButton_Click);
 		$getCancelButton().click(CancelButton_Click);
+		$getDeleteButton().click(DeleteButton_Click);
 		$getEditButton().click(EditButton_Click);
 		$getGenerateInstallScriptButton().click(GenerateInstallScriptButton_Click);
 		$getNewPageButton().click(NewPageButton_Click);
-		$(window).resize(ResizeDocumentPage);
+		$getSaveButton().click(SaveButton_Click);
 		window.onpopstate = Window_PopState;
-		ResizeDocumentPage();
 	}
 }
 

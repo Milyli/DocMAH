@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DocMAH.Configuration
 {
-	public class DocmahConfigurationSection : ConfigurationSection, IContentConfiguration
+	public class DocmahConfigurationSection : ConfigurationSection, IDocmahConfiguration
 	{
 		#region Public Properties
 

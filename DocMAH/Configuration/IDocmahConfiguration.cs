@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DocMAH.Configuration
 {
-	public interface IContentConfiguration
+	public interface IDocmahConfiguration
 	{
 		string ConnectionStringName { get; set; }
 		string JsUrl { get; set; }

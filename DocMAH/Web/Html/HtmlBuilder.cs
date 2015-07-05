@@ -19,7 +19,7 @@ namespace DocMAH.Web.Html
 		internal HtmlBuilder(
 			HttpContextBase httpContext,
 			IBulletRepository bulletRepository,
-			IContentConfiguration contentConfiguration,
+			IDocmahConfiguration docmahConfiguration,
 			IDocumentationConfiguration documentationConfiguration,
 			IDocumentationPageRepository documentationPageRepository,
 			IEditAuthorizer editAuthorizer,
@@ -29,7 +29,7 @@ namespace DocMAH.Web.Html
 		{
 			_httpContext = httpContext;
 			_bulletRepository = bulletRepository;
-			_contentConfiguration = contentConfiguration;
+			_docmahConfiguration = docmahConfiguration;
 			_documentationConfiguration = documentationConfiguration;
 			_editAuthorizer = editAuthorizer;
 			_firstTimeHelpRepository = firstTimeHelpRepository;
@@ -44,7 +44,7 @@ namespace DocMAH.Web.Html
 
 		private readonly HttpContextBase _httpContext;
 		private readonly IBulletRepository _bulletRepository;
-		private readonly IContentConfiguration _contentConfiguration;
+		private readonly IDocmahConfiguration _docmahConfiguration;
 		private readonly IDocumentationConfiguration _documentationConfiguration;
 		private readonly IDocumentationPageRepository _documentationPageRepository;
 		private readonly IEditAuthorizer _editAuthorizer;
@@ -65,7 +65,7 @@ namespace DocMAH.Web.Html
 		/// <returns></returns>
 		private string CreateBundledOrDefaultScriptLink(string cdnUrl)
 		{
-			if (string.IsNullOrEmpty(_contentConfiguration.JsUrl))
+			if (string.IsNullOrEmpty(_docmahConfiguration.JsUrl))
 				return string.Format(LinkFormats.JavaScript, cdnUrl);
 			else
 				return string.Empty;
@@ -85,7 +85,7 @@ namespace DocMAH.Web.Html
 			var returnLink = new UriBuilder(request.Url.Scheme, request.Url.Host, request.Url.Port, request.ApplicationPath);
 			result = result.Replace("[RETURNLINK]", returnLink.ToString());
 
-			var cssUrl = _contentConfiguration.CssUrl;
+			var cssUrl = _docmahConfiguration.CssUrl;
 			if (string.IsNullOrEmpty(cssUrl))
 				cssUrl = CdnUrls.cssJsTree;
 			result = result.Replace("[JSTREECSS]", string.Format(LinkFormats.Css, cssUrl));
@@ -96,7 +96,7 @@ namespace DocMAH.Web.Html
 				customCssLink = string.Format(LinkFormats.Css, customCssUrl);
 			result = result.Replace("[CUSTOMCSS]", customCssLink);
 
-			var jQueryUrl = _contentConfiguration.JsUrl;
+			var jQueryUrl = _docmahConfiguration.JsUrl;
 			if (string.IsNullOrEmpty(jQueryUrl))
 				jQueryUrl = CdnUrls.jsJQuery;
 			result = result.Replace("[JQUERYURL]", string.Format(LinkFormats.JavaScript, jQueryUrl));
@@ -104,10 +104,6 @@ namespace DocMAH.Web.Html
 			result = result.Replace("[JQUERYUIURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJQueryUi));
 
 			result = result.Replace("[JSTREEURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJsTree));
-
-			result = result.Replace("[firstTimeViewHTML]",
-				_minifier.Minify(HtmlContent.FirstTimeView, HtmlContent.FirstTimeView_min)
-			);
 
 			return result;
 		}
@@ -137,7 +133,7 @@ namespace DocMAH.Web.Html
 			// TODO: Iron out javascript reference injection for first time help in base site pages.
 			// Attach jQueryUi CDN locations if not configured.
 			// Leaving out jQuery for the time being as it's likely included.
-			var javaScriptDependencies = _contentConfiguration.JsUrl;
+			var javaScriptDependencies = _docmahConfiguration.JsUrl;
 			if (string.IsNullOrEmpty(javaScriptDependencies))
 			{
 				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);

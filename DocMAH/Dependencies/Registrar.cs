@@ -145,7 +145,7 @@ namespace DocMAH.Dependencies
 							c.Resolve<IUserPageSettingsRepository>()));
 
 					// Configuration registration.
-					_container.Register<IContentConfiguration>(
+					_container.Register<IDocmahConfiguration>(
 						c => DocmahConfigurationSection.Current);
 
 					_container.Register<IDataStoreConfiguration>(
@@ -161,7 +161,7 @@ namespace DocMAH.Dependencies
 					// SqlDataStore registration.
 					_container.Register<ISqlConnectionFactory>(
 						c => new SqlConnectionFactory(
-							c.Resolve<IContentConfiguration>()));
+							c.Resolve<IDocmahConfiguration>()));
 
 					// Authorization registration.
 					_container.Register<IEditAuthorizer>(c => new EditAuthorizer(
@@ -176,7 +176,7 @@ namespace DocMAH.Dependencies
 						c => new HtmlBuilder(
 							c.Resolve<HttpContextBase>(), 
 							c.Resolve<IBulletRepository>(), 
-							c.Resolve<IContentConfiguration>(), 
+							c.Resolve<IDocmahConfiguration>(), 
 							c.Resolve<IDocumentationConfiguration>(),
 							c.Resolve<IDocumentationPageRepository>(),
 							c.Resolve<IEditAuthorizer>(), 

@@ -62,7 +62,7 @@
     <Compile Include="Configuration\DocumentationElement.cs" />
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
-    <Compile Include="Configuration\IContentConfiguration.cs" />
+    <Compile Include="Configuration\IDocmahConfiguration.cs" />
     <Compile Include="Configuration\IDocumentationConfiguration.cs" />
     <Compile Include="Configuration\IEditHelpConfiguration.cs" />
     <Compile Include="Content\ContentFileSchemaVersions.cs" />

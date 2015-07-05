@@ -12,16 +12,16 @@ namespace DocMAH.Data.Sql
 	{
 		#region Constructors
 
-		public SqlConnectionFactory(IContentConfiguration contentConfiguration)
+		public SqlConnectionFactory(IDocmahConfiguration docmahConfiguration)
 		{
-			_contentConfiguration = contentConfiguration;
+			_docmahConfiguration = docmahConfiguration;
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private readonly IContentConfiguration _contentConfiguration;
+		private readonly IDocmahConfiguration _docmahConfiguration;
 
 		#endregion
 
@@ -32,7 +32,7 @@ namespace DocMAH.Data.Sql
 			string connectionString = Configurator.ConnectionString;
 			if (string.IsNullOrEmpty(connectionString))
 			{
-				string connectionStringName = _contentConfiguration.ConnectionStringName;
+				string connectionStringName = _docmahConfiguration.ConnectionStringName;
 				try
 				{
 					connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;

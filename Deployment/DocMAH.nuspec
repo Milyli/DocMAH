@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-
 		<id>DocMAH</id>
+		<title>Documentation Module and Handler</title>
 		<version>0.0.0</version>
 		<authors>Scintillic</authors>
 		<owners>Milyli</owners>
@@ -14,7 +14,7 @@
 			DocMAH - an ASP.NET and MVC help and documentation library that makes help easy to setup, create and deploy.
 		</summary>
 		<description>
-			Documentation Module and Handler, DocMAH, is a full-service, integrated documentation system for .NET web applications. DocMAH provides ease of setup, content generation, customization and deployment that does not exist in any other single documentation tool.
+			DocMAH, is a full-service, integrated documentation system for .NET web applications. DocMAH provides ease of setup, content generation, customization and deployment that does not exist in any other single documentation tool.
 			Help is provided in two forms: 1) First time help popups when a user first lands on a page. 2) CHM-like documentation pages.
 		</description>
 		<copyright>Copyright © 2015 Milyli</copyright>
