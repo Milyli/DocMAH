@@ -209,8 +209,10 @@ DMH.DocumentationPage = function () {
 	function $getEditToolBar() { return $('#dmhEditToolBar'); }
 	function $getGenerateInstallScriptButton() { return $('#dmhGenerateInstallScriptButton'); }
 	function $getIsHidden() { return $('#dmhIsHidden'); }
+	function $getLeftContainer() { return $('#dmhLeftContainer'); }
 	function $getNewPageButton() { return $('#dmhNewPageButton'); }
 	function $getPageContainer() { return $('#dmhPageContainer'); }
+	function $getRightContainer() { return $('#dmhRightContainer'); }
 	function $getSaveButton() { return $('#dmhSaveButton'); }
 	function $getTableOfContents() { return $('#dmhToc'); }
 	function $getTitle() { return $('#dmhDocTitle'); }
@@ -280,6 +282,9 @@ DMH.DocumentationPage = function () {
 			}
 
 			$getEditToolBar().show();
+			var editToolBarHeight = $getEditToolBar().innerHeight() + 'px';
+			$getLeftContainer().css('bottom', editToolBarHeight);
+			$getRightContainer().css('bottom', editToolBarHeight);
 		}
 	}
 

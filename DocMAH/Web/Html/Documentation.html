@@ -7,50 +7,45 @@
 	[CUSTOMCSS]
 </head>
 <body>
-	<div id="dmhDocContentPanel">
-
-		<div id="dmhLeftContainer">
-			<div id="dmhDocTitleBar">
-				<span id="dmhDocTitle">[TITLE]</span>
-			</div>
-			<div id="dmhTocContainer">
-				<div id="dmhToc">
-					<ul></ul>
-				</div>
+	<div id="dmhLeftContainer">
+		<div id="dmhDocTitleBar">
+			<div id="dmhDocTitle">[TITLE]</div>
+		</div>
+		<div id="dmhTocContainer">
+			<div id="dmhToc">
+				<ul></ul>
 			</div>
 		</div>
-
-		<div id="dmhRightContainer">
-			<div id="dmhPageContainer">
-				<div id="dmhPage">
-					<div id="dmhDocumentationView">
-						<a id="dmhDocCloseLink" href="#" onclick="window.close();">Close</a>
-						<h2 id="dmhDocumentationViewTitle"></h2>
-						<div id="dmhDocumentationViewContent"></div>
-					</div>
-
-					<div id="dmhDocumentationEditor">
-						<div class="dmhFormRow">
-							<label for="dmhDocumentationEditorTitle">Title</label>
-							<input type="text" id="dmhDocumentationEditorTitle" />
-							<div class="dmhFieldHelp">Required</div>
-						</div>
-						<div class="dmhFormRow">
-							<label for="dmhIsHidden">Hide Page</label>
-							<input id="dmhIsHidden" type="checkbox" disabled />
-							<div class="dmhFieldHelp">Hide Page From Users</div>
-						</div>
-						<div class="dmhFormRow">
-							<label for="dmhDocumentationEditorContent">Content</label>
-							<textarea id="dmhDocumentationEditorContent"></textarea>
-							<div class="dmhFieldHelp">HTML</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>
+
+	<div id="dmhRightContainer">
+		<div id="dmhDocumentationView">
+			<a id="dmhDocCloseLink" href="#" onclick="window.close();">Close</a>
+			<div id="dmhPage">
+				<h2 id="dmhDocumentationViewTitle"></h2>
+				<div id="dmhDocumentationViewContent"></div>
+			</div>
+		</div>
+
+		<div id="dmhDocumentationEditor">
+			<div class="dmhFormRow">
+				<label for="dmhDocumentationEditorTitle">Title</label>
+				<input type="text" id="dmhDocumentationEditorTitle" />
+				<div class="dmhFieldHelp">Required</div>
+			</div>
+			<div class="dmhFormRow">
+				<label for="dmhIsHidden">Hide Page</label>
+				<input id="dmhIsHidden" type="checkbox" disabled />
+				<div class="dmhFieldHelp">Hide Page From Users</div>
+			</div>
+			<div class="dmhFormRow">
+				<label for="dmhDocumentationEditorContent">Content</label>
+				<textarea id="dmhDocumentationEditorContent"></textarea>
+				<div class="dmhFieldHelp">HTML</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="dmhEditToolBar">
 		<div id="dmhStatusBar">
 			<div id="dmhStatusMessage"></div>

@@ -21,6 +21,7 @@
 @bullet-number-color: @inverse-text-color;
 
 @corner: 5px;
+@title-bar-height: 40px;
 @left-column-width: 300px;
 
 @import "Mixins.less";
@@ -72,48 +73,48 @@ li.jstree-node.tocHidden a {
 	font-family: 'Open Sans', sans-serif;
 }
 
-html.dmh- {
-	height: 100%;
-}
-
 .dmh- body {
 	margin: 0;
 	color: @text-color;
-	height: 100%;
+	overflow: hidden;
 }
 
 /****** Documentation Page Styles ******/
-#dmhDocContentPanel {
-	height: 100%;
-}
-
-
 #dmhLeftContainer {
-	float: left;
-	height: 100%;
-	background-color: @toc-background-color;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
 	width: @left-column-width;
+	background-color: @toc-background-color;
 }
 
 #dmhDocTitleBar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: @title-bar-height;
+	width: @left-column-width;
 	background-color: @inverse-background-color;
-	padding: 15px;
 }
 
 #dmhDocTitle {
 	font-size: 18px;
 	color: @inverse-text-color;	
 	white-space: nowrap;
+	padding: 5px 0 0 10px;
 }
 
 #dmhTocContainer {
+	position: absolute;
+	top: @title-bar-height;
+	left: 0;
+	bottom: 0;
+	width: @left-column-width;
 	background-color: @toc-background-color;
 	color: @inverse-text-color;
 	padding-top: 10px;
-}
-
-#dmhToc{
-	overflow-x: hidden;
+	overflow: auto;
 }
 
 #dmhToc .jstree-wholerow-clicked {
@@ -126,13 +127,20 @@ html.dmh- {
 
 
 #dmhRightContainer {
-	margin-left: @left-column-width;
-	padding: 35px 15px 15px 15px;
+	position: absolute;
+	top: 0;
+	left: @left-column-width;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+	margin-top: @title-bar-height;
+	padding: 0 15px 15px 15px;
 }
 
 #dmhDocCloseLink {
-	float: right;
-	margin-top: -20px;
+	position: fixed;
+	top: 10px;
+	right: 30px;
 	text-decoration: none;
 }
 
@@ -157,10 +165,11 @@ html.dmh- {
 
 #dmhEditToolBar {
 	background: @mid-background-color;
-	position: fixed;
+	position: absolute;
 	bottom: 0;
+	left: 0;
+	right: 0;
 	z-index: 1;
-	width: 100%;
 	display: none;
 	padding-top: 5px;
 }

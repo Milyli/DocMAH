@@ -3,6 +3,9 @@ DocMAH Release Notes
 
 *Unless otherwise noted, the release notes for each release contain links to the [GitHub issues][1] addressed.*
 
+## 0.9.6.0 Look and Feel Update
+1. I30 - [Improve Design and Usability of Documentation Page][16]
+
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs deleted on page reorder.][10]
 1. B40 - [Install script generation does not require edit permission.][11]
@@ -55,3 +58,4 @@ High level feature sets include:
 [13]: https://github.com/Milyli/DocMAH/issues/45
 [14]: https://github.com/Milyli/DocMAH/issues/43
 [15]: https://github.com/Milyli/DocMAH/issues/37
+[16]: https://github.com/Milyli/DocMAH/issues/30

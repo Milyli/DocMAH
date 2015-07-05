@@ -44,40 +44,44 @@ li.jstree-node.tocHidden a {
   line-height: 1.4285;
   font-family: 'Open Sans', sans-serif;
 }
-html.dmh- {
-  height: 100%;
-}
 .dmh- body {
   margin: 0;
   color: #3c454f;
-  height: 100%;
+  overflow: hidden;
 }
 /****** Documentation Page Styles ******/
-#dmhDocContentPanel {
-  height: 100%;
-}
 #dmhLeftContainer {
-  float: left;
-  height: 100%;
-  background-color: #505560;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: 300px;
+  background-color: #505560;
 }
 #dmhDocTitleBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 300px;
   background-color: #3c454f;
-  padding: 15px;
 }
 #dmhDocTitle {
   font-size: 18px;
   color: #ffffff;
   white-space: nowrap;
+  padding: 5px 0 0 10px;
 }
 #dmhTocContainer {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  bottom: 0;
+  width: 300px;
   background-color: #505560;
   color: #ffffff;
   padding-top: 10px;
-}
-#dmhToc {
-  overflow-x: hidden;
+  overflow: auto;
 }
 #dmhToc .jstree-wholerow-clicked {
   background: #49804f;
@@ -86,12 +90,19 @@ html.dmh- {
   background: #69936d;
 }
 #dmhRightContainer {
-  margin-left: 300px;
-  padding: 35px 15px 15px 15px;
+  position: absolute;
+  top: 0;
+  left: 300px;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  margin-top: 40px;
+  padding: 0 15px 15px 15px;
 }
 #dmhDocCloseLink {
-  float: right;
-  margin-top: -20px;
+  position: fixed;
+  top: 10px;
+  right: 30px;
   text-decoration: none;
 }
 #dmhDocumentationViewTitle {
@@ -109,10 +120,11 @@ html.dmh- {
 }
 #dmhEditToolBar {
   background: #797f8b;
-  position: fixed;
+  position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
-  width: 100%;
   display: none;
   padding-top: 5px;
 }
