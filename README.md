@@ -1,37 +1,26 @@
 # DocMAH - Documentation Module and Handler
-DocMAH is a library that easily integrates with any .NET web 
-application to provide a full service help and documentation system.
+DocMAH is a simple, open source documentation tool that easily integrates with any .NET web application to provide a full-service help and documentation system.
 
-_More information available at http://docmah.net... eventually._
+For more information on DocMAH, visit http://docmah.com.
 
-## Goals
-In the spirit of <a href="https://code.google.com/p/elmah/">ELMAH</a>, though not affiliated in any way that we know of, 
-we set out to create a library easy to integrate with any .NET web application that provides a full service 
-help and documentation system.
 
 ## Get DocMAH
-DocMAH is available via <a href="https://www.nuget.org/packages/DocMAH" >NuGet</a>.
-Or if you like, download or fork us here on GitHub.
+DocMAH is available via <a href="https://www.nuget.org/packages/DocMAH" >NuGet</a>. Drop the DocMAH library in your bin, set your connection string, and start using DocMAH. You can also download or fork us here on GitHub.
+
 
 ## Features
-* Deploy via NuGet.
-* Drop the library in your bin, set your connection string, and start using.
-* Automatic help database schema setup and versioning.
-* First time help popups with user controls to hide and disable.
-* Full documentation pages with table of contents.
-* Editing tools baked into your application that require local access by default, and may optionally require authentication or be completely disabled for production environments.
-* Generate a deployment script for help content with a button press. Deploy the file with your site to automatically update your help.
-* Override the CSS and JavaScript to create your own look and feel.
+* Drag-and-drop bullets to call out features of your interface referenced by documentation
+* Page-level help popups users can hide or disable
+* Documentation pages with TOCs, linked directly to your interface
+* Easy editing tools within your app
+* Automatic DocMAH database schema setup and versioning
+* Script generation that DocMAH can se to automatically install and update help content in your app
+* Customizable CSS and JavaScript to create your own look-and-feel
 
-## Recent Updates
-* Overhaul of codebase to make it easier to test.
-* Better tested code in order to safely make upcoming usability changes.
 
-## On the Way
-* On the heels of the code refactor and testing, we're going to be making some big usability improvements.
-* <a href="http://docmah.com/">DocMAH.com</a> on the way courtesy of some of the folks at <a href="http://milyli.com">Milyli</a>.
+## Coming Soon
+We're continuing to add features that will DocMAH documentation easier to use and integrate as smoothly as possible with your application's interface. If you have any questions in the meantime, go ahead and add an issue on this GitHub page or vote up an existing one.
 
-* More of everything! MOAR!!!!!
-* ... except bugs. Not more of those. Fewer bugs! FUEUER!!!!! (hopefully)
 
-###### sponsored by <a href="http://milyli.com">milyli</a>
+## A Milyli Project
+DocMAH was developed by Milyli, Inc., a Chicago-based software company specializing in product development and customizations for kCura's Relativity platform and Microsoft SharePoint. Learn more about us at http://milyli.com. 
