@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{0E6E05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocMAH.IntegrationTests", "..\DocMAH.IntegrationTests\DocMAH.IntegrationTests.csproj", "{B54A4631-1AD2-455A-852E-0986F0BEA792}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0264DECC-7609-4659-B986-E292E077DFBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BuildAll|Any CPU = BuildAll|Any CPU
@@ -104,5 +106,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1833FB9B-12F7-44DF-B16D-D20DF7B3C885} = {0264DECC-7609-4659-B986-E292E077DFBF}
+		{B54A4631-1AD2-455A-852E-0986F0BEA792} = {0264DECC-7609-4659-B986-E292E077DFBF}
 	EndGlobalSection
 EndGlobal
