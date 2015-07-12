@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -21,9 +22,9 @@ namespace DocMAH.Web.Html
 			IBulletRepository bulletRepository,
 			IDocmahConfiguration docmahConfiguration,
 			IDocumentationConfiguration documentationConfiguration,
-			IDocumentationPageRepository documentationPageRepository,
 			IEditAuthorizer editAuthorizer,
 			IFirstTimeHelpRepository firstTimeHelpRepository,
+			ObjectCache memoryCache,
 			IMinifier minifier,
 			IUserPageSettingsRepository userPageSettingsRepository)
 		{
@@ -33,8 +34,8 @@ namespace DocMAH.Web.Html
 			_documentationConfiguration = documentationConfiguration;
 			_editAuthorizer = editAuthorizer;
 			_firstTimeHelpRepository = firstTimeHelpRepository;
+			_memoryCache = memoryCache;
 			_minifier = minifier;
-			_documentationPageRepository = documentationPageRepository;
 			_userPageSettingsRepository = userPageSettingsRepository;
 		}
 
@@ -42,13 +43,16 @@ namespace DocMAH.Web.Html
 
 		#region Private Fields
 
+		internal const string _documentationHtmlCacheKey = "Documentation HTML";
+		internal const string _firstTimeHelpHtmlCacheKey = "First Time Help HTML";
+
 		private readonly HttpContextBase _httpContext;
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IDocmahConfiguration _docmahConfiguration;
 		private readonly IDocumentationConfiguration _documentationConfiguration;
-		private readonly IDocumentationPageRepository _documentationPageRepository;
 		private readonly IEditAuthorizer _editAuthorizer;
 		private readonly IFirstTimeHelpRepository _firstTimeHelpRepository;
+		private readonly ObjectCache _memoryCache;
 		private readonly IMinifier _minifier;
 		private readonly IUserPageSettingsRepository _userPageSettingsRepository;
 
@@ -75,41 +79,82 @@ namespace DocMAH.Web.Html
 
 		#region Public Methods
 
-		public string CreateDocumentationPageHtml(){
-			var result = _minifier.Minify(HtmlContent.Documentation, HtmlContent.Documentation_min);
+		public string CreateDocumentationPageHtml()
+		{
+			var result = string.Empty;
 
-			result = result.Replace("[TITLE]", _documentationConfiguration.PageTitle);
+			if (_memoryCache.Contains(_documentationHtmlCacheKey))
+			{
+				result = (string)_memoryCache.Get(_documentationHtmlCacheKey);
+			}
+			else
+			{
+				// Get base HTML.
+				result = _minifier.Minify(HtmlContent.Documentation, HtmlContent.Documentation_min);
 
-			// TODO: This will be removed when the return link is changed to a close link.
-			var request = _httpContext.Request;
-			var returnLink = new UriBuilder(request.Url.Scheme, request.Url.Host, request.Url.Port, request.ApplicationPath);
-			result = result.Replace("[RETURNLINK]", returnLink.ToString());
+				// Replace the page title with the configured title.
+				result = result.Replace("[TITLE]", _documentationConfiguration.PageTitle);
 
-			var cssUrl = _docmahConfiguration.CssUrl;
-			if (string.IsNullOrEmpty(cssUrl))
-				cssUrl = CdnUrls.cssJsTree;
-			result = result.Replace("[JSTREECSS]", string.Format(LinkFormats.Css, cssUrl));
+				// Replace the JSTree CDN URL with a configured local URL that contains the CSS.
+				var cssUrl = _docmahConfiguration.CssUrl;
+				if (string.IsNullOrEmpty(cssUrl))
+					cssUrl = CdnUrls.cssJsTree;
+				result = result.Replace("[JSTREECSS]", string.Format(LinkFormats.Css, cssUrl));
 
-			var customCssLink = string.Empty;
-			var customCssUrl = _documentationConfiguration.CustomCss;
-			if (!string.IsNullOrEmpty(customCssUrl))
-				customCssLink = string.Format(LinkFormats.Css, customCssUrl);
-			result = result.Replace("[CUSTOMCSS]", customCssLink);
+				// Custom CSS token will be replaced with empty string if it is not configured.
+				var customCssLink = string.Empty;
+				var customCssUrl = _documentationConfiguration.CustomCss;
+				if (!string.IsNullOrEmpty(customCssUrl))
+					customCssLink = string.Format(LinkFormats.Css, customCssUrl);
+				result = result.Replace("[CUSTOMCSS]", customCssLink);
 
-			var jQueryUrl = _docmahConfiguration.JsUrl;
-			if (string.IsNullOrEmpty(jQueryUrl))
-				jQueryUrl = CdnUrls.jsJQuery;
-			result = result.Replace("[JQUERYURL]", string.Format(LinkFormats.JavaScript, jQueryUrl));
+				// Replace JS tokens with configured value or CDN defaults.
+				var jQueryUrl = _docmahConfiguration.JsUrl;
+				if (string.IsNullOrEmpty(jQueryUrl))
+					jQueryUrl = CdnUrls.jsJQuery;
+				result = result.Replace("[JQUERYURL]", string.Format(LinkFormats.JavaScript, jQueryUrl));
 
-			result = result.Replace("[JQUERYUIURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJQueryUi));
+				result = result.Replace("[JQUERYUIURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJQueryUi));
 
-			result = result.Replace("[JSTREEURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJsTree));
+				result = result.Replace("[JSTREEURL]", CreateBundledOrDefaultScriptLink(CdnUrls.jsJsTree));
+
+				_memoryCache.Set(_documentationHtmlCacheKey, result, new CacheItemPolicy());
+			}
 
 			return result;
 		}
 
 		public string CreateFirstTimeHelpHtml()
 		{
+			var result = string.Empty;
+
+			if (_memoryCache.Contains(_firstTimeHelpHtmlCacheKey))
+				result = (string)_memoryCache.Get(_firstTimeHelpHtmlCacheKey);
+			else
+			{
+				// When injecting into other requests, the initialization scripts must be included.
+				result += _minifier.Minify(HtmlContent.FirstTimeView, HtmlContent.FirstTimeView_min);
+
+				// TODO: Iron out javascript reference injection for first time help in base site pages.
+				// Attach jQueryUi CDN locations if not configured.
+				var javaScriptDependencies = _docmahConfiguration.JsUrl;
+				if (string.IsNullOrEmpty(javaScriptDependencies))
+				{
+					result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);
+					result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
+				}
+
+				result += _minifier.Minify(HtmlContent.FirstTimeViewInjectedScripts, HtmlContent.FirstTimeViewInjectedScripts_min);
+
+				_memoryCache.Set(_firstTimeHelpHtmlCacheKey, result, new CacheItemPolicy());
+			}
+
+			// Begin reading request specific values.
+			if (_editAuthorizer.Authorize())
+			{
+				result += _minifier.Minify(HtmlContent.FirstTimeEdit, HtmlContent.FirstTimeEdit_min);
+			}
+
 			var requestUrl = HttpContext.Current.Request.Url.AbsolutePath;
 			var page = _firstTimeHelpRepository.ReadByUrl(requestUrl.Replace('*', '%'));
 			UserPageSettings userPageSettings = null;
@@ -123,31 +168,6 @@ namespace DocMAH.Web.Html
 					userPageSettings = _userPageSettingsRepository.Read(userName, page.Id);
 				}
 			}
-
-			var result = string.Empty;
-
-			// The HTML is reused on the documentation page.
-			// When injecting into other requests, the initialization scripts must be included.
-			result += _minifier.Minify(HtmlContent.FirstTimeView, HtmlContent.FirstTimeView_min);
-
-			// TODO: Iron out javascript reference injection for first time help in base site pages.
-			// Attach jQueryUi CDN locations if not configured.
-			// Leaving out jQuery for the time being as it's likely included.
-			var javaScriptDependencies = _docmahConfiguration.JsUrl;
-			if (string.IsNullOrEmpty(javaScriptDependencies))
-			{
-				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQuery);
-				result += string.Format("<script src='{0}' type='application/javascript'></script>", CdnUrls.jsJQueryUi);
-			}
-
-			result += _minifier.Minify(HtmlContent.FirstTimeViewInjectedScripts, HtmlContent.FirstTimeViewInjectedScripts_min);
-			
-			if (_editAuthorizer.Authorize())
-			{
-				result += _minifier.Minify(HtmlContent.FirstTimeEdit, HtmlContent.FirstTimeEdit_min);
-			}
-
-			// TODO: Cache the non-dynamic portion of the first time HTML for faster loading.
 
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);

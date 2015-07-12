@@ -10,6 +10,7 @@ DocMAH Release Notes
 1. I47 - [Make all tests use LocalDB][19]
 1. I49 - [Turn off Documentation Ppage][20]
 1. I54 - [Remove JavaScript minification mapping.][21]
+1. I46 - [Cache Documentation Page and First Time Help Content][22]
 
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs deleted on page reorder.][10]
@@ -69,3 +70,4 @@ High level feature sets include:
 [19]: https://github.com/Milyli/DocMAH/issues/47
 [20]: https://github.com/Milyli/DocMAH/issues/49
 [21]: https://github.com/Milyli/DocMAH/issues/54
+[22]: https://github.com/Milyli/DocMAH/issues/46
