@@ -9,6 +9,7 @@ DocMAH Release Notes
 1. B52 - [Popups and bullets are placed off document][18]
 1. I47 - [Make all tests use LocalDB][19]
 1. I49 - [Turn off Documentation Ppage][20]
+1. I54 - [Remove JavaScript minification mapping.][21]
 
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs deleted on page reorder.][10]
@@ -67,3 +68,4 @@ High level feature sets include:
 [18]: https://github.com/Milyli/DocMAH/issues/52
 [19]: https://github.com/Milyli/DocMAH/issues/47
 [20]: https://github.com/Milyli/DocMAH/issues/49
+[21]: https://github.com/Milyli/DocMAH/issues/54

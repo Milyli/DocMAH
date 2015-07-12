@@ -22,9 +22,10 @@ Set-Content $assemblyInfoPath
 
 "Remove link to JavaScript mapping data from minified JavaScript."
 $removeText = "//# sourceMappingURL=DocMAHJavaScript.min.js.map"
-Get-Content $minifiedJavascriptPath | ForEach-Object { $_ -replace $removeText, "" } | Set-Content ($minifiedJavascriptPath+".tmp")
+$tempFile = $minifiedJavascriptPath+".bak"
+Get-Content $minifiedJavascriptPath | ForEach-Object { $_ -replace $removeText, "" } | Set-Content $tempFile
 Remove-Item $minifiedJavascriptPath
-Rename-Item ($minifiedJavascriptPath+".tmp") $file
+Rename-Item $tempFile ([System.IO.Path]::GetFileName($minifiedJavascriptPath))
 
 # Build solution.
 Invoke-Expression "msbuild $($projectPath) /target:Rebuild"
