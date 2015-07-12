@@ -37,48 +37,39 @@ namespace DocMAH.UnitTests
 
 		#region Public Methods
 
-		public void DeleteInstallFile()
+		public void CreateDataStore()
 		{
-			// Ensure clean environment.
-			var installFile = Path.Combine(TestContext.CurrentContext.TestDirectory, ContentFileConstants.ContentFileName);
-			if (File.Exists(installFile))
-			{
-				File.Delete(installFile);
-			}
-		}
-
-		public void TestFixtureDataStoreSetUp(bool updateContent = true)
-		{
-			// Fake the HttpContext to indicate the database needs to be updated.
-			var context = new Mock<HttpContextBase>();
-			context.SetupGet(c => c.Application[HelpContentManager.DocmahInitializedKey]).Returns(false);
-			context.Setup(c => c.Server.MapPath("~")).Returns(NUnit.Framework.TestContext.CurrentContext.TestDirectory);
-
-			// Create custom container to use mock http context.
-			_container.Register<HttpContextBase>(c => context.Object);
-
 			// Create data store for unit tests.
 			var dataStore = _container.Resolve<IDataStore>();
 			dataStore.Create();
 			dataStore.Update();
+		}
 
-			// Bring the data store schema up to date.
-			// This serves as the test for this routine as none of the
-			//	other tests will work if this doesn't.
-			if (updateContent)
+		public void DeleteDataStore()
+		{
+			var dataStore = _container.Resolve<IDataStore>();
+			dataStore.Delete();
+		}
+
+		public void DeleteInstallFile(string fileName)
+		{
+			if (File.Exists(fileName))
 			{
-				var fileName = Path.Combine(TestContext.CurrentContext.TestDirectory, ContentFileConstants.ContentFileName);
-				var helpContentManager = _container.Resolve<IHelpContentManager>();
-				helpContentManager.ImportContent(fileName);
+				File.Delete(fileName);
 			}
 		}
 
-		public void TestFixtureDataStoreTearDown()
+		public void ExportContent(string fileName)
 		{
-			// Clean up the data store when tests are done.
-			var dataStore = _container.Resolve<IDataStore>();
-			dataStore.Delete();
-		}		
+			var helpContentManager = _container.Resolve<IHelpContentManager>();
+			helpContentManager.ExportContent(fileName);
+		}
+
+		public void ImportContent(string fileName)
+		{
+			var helpContentManager = _container.Resolve<IHelpContentManager>();
+			helpContentManager.ImportContent(fileName);
+		}
 
 		#endregion
 	}

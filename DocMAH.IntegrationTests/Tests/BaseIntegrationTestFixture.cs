@@ -37,15 +37,13 @@ namespace DocMAH.IntegrationTests.Tests
 			Container = Registrar.Initialize();
 
 			DataStoreManager = new TestFixtureDataStoreManager();
-			DataStoreManager.DeleteInstallFile();
-			DataStoreManager.TestFixtureDataStoreSetUp();
+			DataStoreManager.CreateDataStore();
 		}
 
 		[TestFixtureTearDown]
 		public void BaseIntegrationTestFixtureTearDown()
 		{
-			DataStoreManager.DeleteInstallFile();
-			DataStoreManager.TestFixtureDataStoreTearDown();
+			DataStoreManager.DeleteDataStore();
 		}
 
 		#endregion

@@ -25,29 +25,39 @@ namespace DocMAH.IntegrationTests.Tests
 	[TestFixture]
 	public class ContentDeploymentIntegrationTests : BaseIntegrationTestFixture
 	{
+		#region Private Fields
+
+		private IDocumentationPageRepository _documentationPageRepository;
+		private IFirstTimeHelpRepository _firstTimeHelpRepository;
+
+		#endregion
+
+		#region SetUp/TearDown
+
+		[SetUp]
+		public void SetUp()
+		{
+
+			_documentationPageRepository = Container.Resolve<IDocumentationPageRepository>();
+			_firstTimeHelpRepository = Container.Resolve<IFirstTimeHelpRepository>();
+		}
+		
+		#endregion
 
 		#region Tests
 
 		[Test]
-		[Description("Verify that Page ids remain consistent across content updates spanning missing updates.")]
-		public void PageIdConsistencyAcrossSchemaUpdates()
+		[Description("Verify that page data is consistent when content file upgrades are skipped.")]
+		public void InstallFromSkippedFile()
 		{
-			// Create installation file.
-			HttpContext.AddApplicationState(HelpContentManager.DocmahInitializedKey, false);
-			HttpContext.SetRequestParameter("m", RequestTypes.GenerateInstallScript);
-			Container.Register<HttpContextBase>(c => HttpContext.Object);
-
-			var path = Mocks.Create<IPath>();
-			path.Setup(p => p.MapPath("~")).Returns(TestContext.CurrentContext.TestDirectory);
-			Container.Register<IPath>(c => path.Object);
-
-			var pageRepository = Container.Resolve<IDocumentationPageRepository>();
-			var handler = new HttpHandler(Container);
+			var dataStoreManager = new TestFixtureDataStoreManager();
 
 			var firstPage = Models.CreateDocumentationPage();
-			pageRepository.Create(firstPage);
+			_documentationPageRepository.Create(firstPage);
 
-			handler.ProcessRequestInternal(HttpContext.Object);
+			// Generate content file.
+			var contentFileName = Path.GetTempFileName();
+			dataStoreManager.ExportContent(contentFileName);
 
 
 			// Change content and recreate installation file.
@@ -55,30 +65,28 @@ namespace DocMAH.IntegrationTests.Tests
 			var recreatedPage = Models.CreateDocumentationPage();
 			var lastPage = Models.CreateDocumentationPage();
 
-			pageRepository.Create(deletedPage);
-			pageRepository.Create(recreatedPage);
-			pageRepository.Create(lastPage);
-			pageRepository.Delete(recreatedPage.Id);
-			pageRepository.Create(recreatedPage);
-			pageRepository.Delete(deletedPage.Id);
+			_documentationPageRepository.Create(deletedPage);
+			_documentationPageRepository.Create(recreatedPage);
+			_documentationPageRepository.Create(lastPage);
+			_documentationPageRepository.Delete(recreatedPage.Id);
+			_documentationPageRepository.Create(recreatedPage);
+			_documentationPageRepository.Delete(deletedPage.Id);
 
-			HttpContext.SetRequestContent(string.Empty); // Resets stream for next read.
-			handler.ProcessRequestInternal(HttpContext.Object);
-
+			// Regenerate content file.
+			dataStoreManager.ExportContent(contentFileName);
 
 			// Reset data store and exercise startup file.
-			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreTearDown();
-			dataStoreManager.TestFixtureDataStoreSetUp();
-
+			dataStoreManager.DeleteDataStore();
+			dataStoreManager.CreateDataStore();
+			dataStoreManager.ImportContent(contentFileName);
 
 			// Validate model ids.
-			var newFirstPage = pageRepository.Read(firstPage.Id);
-			var deletedPageResult= pageRepository.Read(deletedPage.Id);
+			var newFirstPage = _documentationPageRepository.Read(firstPage.Id);
+			var deletedPageResult = _documentationPageRepository.Read(deletedPage.Id);
 			Assert.That(deletedPageResult, Is.Null, "The data layer should return null for non-existant pages.");
 
-			var newRecreatedPage = pageRepository.Read(recreatedPage.Id);
-			var newLastPage = pageRepository.Read(lastPage.Id);
+			var newRecreatedPage = _documentationPageRepository.Read(recreatedPage.Id);
+			var newLastPage = _documentationPageRepository.Read(lastPage.Id);
 
 			Assert.That(newFirstPage, Is.Not.Null, "First page should still exist.");
 			Assert.That(newFirstPage.Title, Is.EqualTo(firstPage.Title), "Old first page title should match new page with its id.");
@@ -86,7 +94,58 @@ namespace DocMAH.IntegrationTests.Tests
 			Assert.That(newRecreatedPage.Title, Is.EqualTo(recreatedPage.Title), "Old recreated page title should match new recreated page title.");
 			Assert.That(newLastPage, Is.Not.Null, "Last page should still exist.");
 			Assert.That(newLastPage.Title, Is.EqualTo(lastPage.Title), "Old last page title should match new last page title.");
-		} 
+		}
+
+		[Test]
+		[Description("Verify that help URLs that are reused on different help entries upgrade correctly.")]
+		public void UpgradeReusedHelpUrls()
+		{
+			var dataStoreManager = new TestFixtureDataStoreManager();
+			var reusedUrl = "/Duplicate/URL";
+
+			// Create starting content data.
+			var firstHelp = Models.CreateFirstTimeHelp(matchUrls: "/ /Home /Home/*");
+			_firstTimeHelpRepository.Create(firstHelp);
+			var originalUrlHelp = Models.CreateFirstTimeHelp(matchUrls: reusedUrl);
+			_firstTimeHelpRepository.Create(originalUrlHelp);
+
+			// Generate starting content file.
+			var startingContentFileName = Path.GetTempFileName();
+			dataStoreManager.ExportContent(startingContentFileName);
+
+			// Create upgrade content data.
+			var noiseHelp = Models.CreateFirstTimeHelp();	// Need to bump table id so reusedUrlPage receives a different id.
+			_firstTimeHelpRepository.Create(noiseHelp);
+			_firstTimeHelpRepository.Delete(originalUrlHelp.Id);
+			var reusedUrlHelp = Models.CreateFirstTimeHelp(matchUrls: reusedUrl);
+			_firstTimeHelpRepository.Create(reusedUrlHelp);
+
+			// Generate upgrade content file.
+			var upgradeContentFileName = Path.GetTempFileName();
+			dataStoreManager.ExportContent(upgradeContentFileName);
+
+			// Reset the data store to the starting data.
+			dataStoreManager.DeleteDataStore();
+			dataStoreManager.CreateDataStore();
+			dataStoreManager.ImportContent(startingContentFileName);
+
+			// Try upgrading content using upgrade script.
+			dataStoreManager.ImportContent(upgradeContentFileName);
+
+			// Read data from updated data store.
+			var newFirstHelp = _firstTimeHelpRepository.Read(firstHelp.Id);
+			var newOriginalUrlHelp = _firstTimeHelpRepository.Read(originalUrlHelp.Id);
+			var newNoiseHelp = _firstTimeHelpRepository.Read(noiseHelp.Id);
+			var newReusedUrlHelp = _firstTimeHelpRepository.Read(reusedUrlHelp.Id);
+
+			// Validate data.
+			Assert.That(originalUrlHelp.Id, Is.LessThan(reusedUrlHelp.Id), "The second help must have a higher id.");
+			Assert.That(newFirstHelp, Is.Not.Null);
+			Assert.That(newNoiseHelp, Is.Not.Null);
+			Assert.That(newReusedUrlHelp, Is.Not.Null);
+			Assert.That(newOriginalUrlHelp, Is.Null);
+
+		}
 
 		#endregion
 	}

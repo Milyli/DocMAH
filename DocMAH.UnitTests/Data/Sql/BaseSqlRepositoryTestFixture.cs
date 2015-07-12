@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,14 +38,14 @@ namespace DocMAH.UnitTests.Data.Sql
 		public void BaseSqlRepositoryTestFixtureSetUp()
 		{
 			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreSetUp(false);
+			dataStoreManager.CreateDataStore();
 		}
 
 		[TestFixtureTearDown]
 		public void BaseSqlRepositoryTestFixtureTearDown()
 		{
 			var dataStoreManager = new TestFixtureDataStoreManager();
-			dataStoreManager.TestFixtureDataStoreTearDown();
+			dataStoreManager.DeleteDataStore();
 		}
 
 		[SetUp]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml;
@@ -61,6 +62,7 @@ namespace DocMAH.Content
 			};
 
 			var contentFileSchemaVersion = (int)EnumExtensions.GetMaxValue<ContentFileSchemaVersions>();
+			var contentFileContentVersion = _dataStoreConfiguration.HelpContentVersion + 1;
 
 			using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
 			using (var xmlWriter = XmlWriter.Create(stream, settings))
@@ -68,7 +70,7 @@ namespace DocMAH.Content
 				xmlWriter.WriteStartElement(ContentFileConstants.RootNode);
 				xmlWriter.WriteAttributeString(ContentFileConstants.DataStoreSchemaVersionAttribute, _dataStoreConfiguration.DataStoreSchemaVersion.ToString());
 				xmlWriter.WriteAttributeString(ContentFileConstants.FileSchemaVersionAttribute, contentFileSchemaVersion.ToString());
-				xmlWriter.WriteAttributeString(ContentFileConstants.FileContentVersionAttribute, (_dataStoreConfiguration.HelpContentVersion + 1).ToString());
+				xmlWriter.WriteAttributeString(ContentFileConstants.FileContentVersionAttribute, contentFileContentVersion.ToString());
 
 				xmlWriter.WriteStartElement(ContentFileConstants.DocumentationPageCollectionElement);
 				var pageSerializer = new XmlSerializer(typeof(DocumentationPage));
@@ -100,6 +102,8 @@ namespace DocMAH.Content
 				xmlWriter.Close();
 				stream.Close();
 			}
+
+			_dataStoreConfiguration.HelpContentVersion = contentFileContentVersion;
 		}
 
 		public void ImportContent(string fileName)
@@ -108,9 +112,9 @@ namespace DocMAH.Content
 			{
 				var contentUpToDate = false;
 				var versionsValidated = false;
-				var helpIds = new List<int>();
-				var pageIds = new List<int>();
-				var bulletIds = new List<int>();
+				var helps = new List<FirstTimeHelp>();
+				var pages = new List<DocumentationPage>();
+				var bullets = new List<Bullet>();
 				int fileDataStoreSchemaVersion = -1;
 				int fileSchemaVersion = -1;
 				int fileContentVersion = -1;
@@ -154,8 +158,7 @@ namespace DocMAH.Content
 									throw new InvalidOperationException("Attempted to import first time help without version validation.");
 
 								var help = (FirstTimeHelp)helpSerializer.Deserialize(xmlReader);
-								_firstTimeHelpRepository.Import(help);
-								helpIds.Add(help.Id);
+								helps.Add(help);
 							}
 							else if (xmlReader.LocalName == typeof(DocumentationPage).Name)
 							{
@@ -164,8 +167,7 @@ namespace DocMAH.Content
 									throw new InvalidOperationException("Attempted to import documentation pages without version validation.");
 
 								var page = (DocumentationPage)pageSerializer.Deserialize(xmlReader);
-								_documentationPageRepository.Import(page);
-								pageIds.Add(page.Id);
+								pages.Add(page);
 							}
 							else if (xmlReader.LocalName == typeof(Bullet).Name)
 							{
@@ -174,8 +176,7 @@ namespace DocMAH.Content
 									throw new InvalidOperationException("Attempted to import bullets without version validation.");
 
 								var bullet = (Bullet)bulletSerializer.Deserialize(xmlReader);
-								_bulletRepository.Import(bullet);
-								bulletIds.Add(bullet.Id);
+								bullets.Add(bullet);
 							}
 						}
 					}
@@ -189,10 +190,19 @@ namespace DocMAH.Content
 					if (!versionsValidated)
 						throw new InvalidOperationException("Attempted to delete old data without version validation.");
 
+					var bulletIds = bullets.Select(b => b.Id).ToList();
+					var helpIds = helps.Select(h => h.Id).ToList();
+					var pageIds = pages.Select(p => p.Id).ToList();
+
 					_bulletRepository.DeleteExcept(bulletIds);
 					_userPageSettingsRepository.DeleteExcept(pageIds);
 					_firstTimeHelpRepository.DeleteExcept(helpIds);
 					_documentationPageRepository.DeleteExcept(pageIds);
+
+					helps.ForEach(h => _firstTimeHelpRepository.Import(h)); // Pages must be imported after deleting old ones so that page URLs do not conflict.
+					bullets.ForEach(b => _bulletRepository.Import(b));
+					pages.ForEach(p => _documentationPageRepository.Import(p)); 
+
 					_dataStoreConfiguration.HelpContentVersion = fileContentVersion;
 				}
 			}

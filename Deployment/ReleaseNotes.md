@@ -5,6 +5,7 @@ DocMAH Release Notes
 
 ## 0.9.6.0 Look and Feel Update
 1. I30 - [Improve Design and Usability of Documentation Page][16]
+1. B51 - [Error on content install when reusing URLs][17]
 
 ## 0.9.5.0 Maintenance Release
 1. B36 - [Page URLs deleted on page reorder.][10]
@@ -59,3 +60,4 @@ High level feature sets include:
 [14]: https://github.com/Milyli/DocMAH/issues/43
 [15]: https://github.com/Milyli/DocMAH/issues/37
 [16]: https://github.com/Milyli/DocMAH/issues/30
+[17]: https://github.com/Milyli/DocMAH/issues/51
