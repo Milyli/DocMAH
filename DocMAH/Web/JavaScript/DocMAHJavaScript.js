@@ -132,10 +132,20 @@ DMH.AnchoredElementLogic = function () {
 			var anchorOffset = $('#' + model.OffsetElementId).offset();
 			var top = anchorOffset ? anchorOffset.top + model.VerticalOffset : 0;
 			var left = anchorOffset ? anchorOffset.left + model.HorizontalOffset : 0;
+
+			// Check the right first, then always enforce the left even if it pushes off the right again.
+			// I'd. rather see the left than the right.
+			if (left + $element.width() > $(document).width())
+				left = $(document).width() - $element.width();
 			if (left < 0)
 				left = 0;
-			else if (left + $element.width() > $(document).width())
-				left = $(document).width() - $element.width();
+
+			// Check the bottom first, then always enforce the top even if it pushes off the bottom again.
+			// I'd. rather see the top than the bottom.
+			if (top + $element.height() > $(document).height())
+				top = $(document).height() - $element.height();
+			if (top < 0)
+				top = 0;
 
 			$element.css({ top: top, left: left, });
 		}

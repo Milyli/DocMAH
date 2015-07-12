@@ -10,6 +10,7 @@ $projectDirectoryPath = $deploymentDirectoryPath + "\..\DocMAH"
 $projectPath = $projectDirectoryPath + "\DocMAH.csproj"
 $assemblyInfoPath = $projectDirectoryPath + "\Properties\AssemblyInfo.cs"
 $versionFilePath = $deploymentDirectoryPath + "\_version.txt"
+$minifiedJavascriptPath = $projectDirectoryPath + "\Web\JavaScript\DocMAHJavaScript.min.js"
 
 # Get next build number.
 $version = Get-Content $versionFilePath
@@ -18,6 +19,12 @@ $version = Get-Content $versionFilePath
 (Get-Content $assemblyInfoPath) |
 ForEach-Object { $_ -replace '\("(\d+\.\d+\.\d+\.\d+)"\)', ('("' + $version + '")') } |
 Set-Content $assemblyInfoPath
+
+"Remove link to JavaScript mapping data from minified JavaScript."
+$removeText = "//# sourceMappingURL=DocMAHJavaScript.min.js.map"
+Get-Content $minifiedJavascriptPath | ForEach-Object { $_ -replace $removeText, "" } | Set-Content ($minifiedJavascriptPath+".tmp")
+Remove-Item $minifiedJavascriptPath
+Rename-Item ($minifiedJavascriptPath+".tmp") $file
 
 # Build solution.
 Invoke-Expression "msbuild $($projectPath) /target:Rebuild"
