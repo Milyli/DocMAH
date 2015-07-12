@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using DocMAH.Configuration;
 using DocMAH.Models;
 using DocMAH.Web.Authorization;
 using DocMAH.Web.Requests;
@@ -25,10 +26,13 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			// Arrange
 			var isAuthorized = true;
 
+			var documentationConfiguration = Mocks.Create<IDocumentationConfiguration>();
+			documentationConfiguration.Setup(c => c.Disabled).Returns(true);
+
 			var editAuthorizer = Mocks.Create<IEditAuthorizer>();
 			editAuthorizer.Setup(a => a.Authorize()).Returns(isAuthorized);
 
-			var processor = new ReadApplicationSettingsRequestProcessor(editAuthorizer.Object);
+			var processor = new ReadApplicationSettingsRequestProcessor(documentationConfiguration.Object, editAuthorizer.Object);
 
 			// Act
 			var result = processor.Process(null);
@@ -41,6 +45,9 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			var serializer = new JavaScriptSerializer();
 			var settings = serializer.Deserialize<ApplicationSettings>(result.Content);
 			Assert.That(settings.CanEdit, Is.EqualTo(isAuthorized), "The JSON result should contain the edit authorization result.");
+			Assert.That(settings.DisableDocumentation, Is.True, "Documentation should be disabled in the JSON result.");
+
+			Mocks.VerifyAll();
 		}
 
 		#endregion

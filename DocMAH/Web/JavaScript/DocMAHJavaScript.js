@@ -1111,9 +1111,13 @@ DMH.FirstTimeView = function () {
 		$getCloseHelpButton().click({ model: this, hide: false }, CloseHelpButtons_Click);
 		$getHideHelpButton().click({ model: this, hide: true }, CloseHelpButtons_Click);
 
-		$getShowDocumentationButton()
-			.show()
-			.click(function () { window.open(DMH.Urls.NavigateDocumentation, '_blank'); });
+		if (!_applicationSettings.DisableDocumentation) {
+			$getShowDocumentationButton()
+				.show()
+				.click(function () { window.open(DMH.Urls.NavigateDocumentation, '_blank'); });
+		} else {
+			$getShowDocumentationButton().hide();
+		}
 
 		$(window).resize(Window_Resize);
 

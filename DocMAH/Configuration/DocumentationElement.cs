@@ -22,5 +22,12 @@ namespace DocMAH.Configuration
 			get { return (string)this["customCss"]; }
 			set { this["customCss"] = value; }
 		}
+
+		[ConfigurationProperty("disabled", DefaultValue = false)]
+		public bool Disabled
+		{
+			get { return (bool)this["disabled"]; }
+			set { this["disabled"] = value; }
+		}
 	}
 }

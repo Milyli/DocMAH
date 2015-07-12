@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
+using DocMAH.Configuration;
 using DocMAH.Models;
 using DocMAH.Web.Authorization;
 
@@ -13,8 +14,9 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public ReadApplicationSettingsRequestProcessor(IEditAuthorizer editAuthorizer)
+		public ReadApplicationSettingsRequestProcessor(IDocumentationConfiguration documentationConfiguration, IEditAuthorizer editAuthorizer)
 		{
+			_documentationConfiguration = documentationConfiguration;
 			_editAuthorizer = editAuthorizer;
 		}
 
@@ -22,6 +24,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		#region Private Fields
 
+		private readonly IDocumentationConfiguration _documentationConfiguration;
 		private readonly IEditAuthorizer _editAuthorizer;
 
 		#endregion
@@ -33,6 +36,7 @@ namespace DocMAH.Web.Requests.Processors
 			var applicationSettings = new ApplicationSettings
 			{
 				CanEdit = _editAuthorizer.Authorize(),
+				DisableDocumentation = _documentationConfiguration.Disabled,
 			};
 
 			var serializer = new JavaScriptSerializer();

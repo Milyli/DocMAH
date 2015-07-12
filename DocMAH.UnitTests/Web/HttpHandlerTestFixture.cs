@@ -11,7 +11,7 @@ using DocMAH.Web.Authorization;
 using DocMAH.Web.Requests;
 using Moq;
 using NUnit.Framework;
-
+using System.Net;
 namespace DocMAH.UnitTests.Web
 {
 	[TestFixture]
@@ -59,8 +59,31 @@ namespace DocMAH.UnitTests.Web
 		}
 
 		#endregion
-		
+
 		#region Tests
+
+		[Test]
+		[Description("Request processor cannot find content.")]
+		public void ProcessRequestInternal_ContentNotFound()
+		{
+			// Arrange
+			var requestProcessor = Mocks.Create<IRequestProcessor>();
+			requestProcessor.Setup(p => p.Process(ItemId)).Returns(new ResponseState { StatusCode = HttpStatusCode.NotFound });
+
+			var notFoundProcessor = Mocks.Create<IRequestProcessor>();
+			notFoundProcessor.Setup(p => p.Process(null)).Returns(new ResponseState { StatusCode = HttpStatusCode.NotFound, Content = "404" });
+
+			RequestProcessorFactory.Setup(f => f.Create(MethodName)).Returns(requestProcessor.Object);
+			RequestProcessorFactory.Setup(f => f.Create(RequestTypes.NotFound)).Returns(notFoundProcessor.Object);
+
+			var handler = new HttpHandler(Container.Object);
+
+			// Act
+			handler.ProcessRequestInternal(HttpContext.Object);
+
+			// Assert
+			Mocks.VerifyAll();
+		}
 
 		[Test]
 		[Description("Authorization fails on required edit authorization.")]
@@ -76,6 +99,26 @@ namespace DocMAH.UnitTests.Web
 			RequestProcessorFactory.Setup(c => c.Create(RequestTypes.Unauthorized)).Returns(unauthorizedProcessor.Object);
 
 			EditAuthorizer.Setup(a => a.Authorize()).Returns(false);
+
+			var handler = new HttpHandler(Container.Object);
+
+			// Act
+			handler.ProcessRequestInternal(HttpContext.Object);
+
+			// Assert
+			Mocks.VerifyAll();
+		}
+
+		[Test]
+		[Description("Handles invalid request types.")]
+		public void ProcessRequestInternal_InvalidRequestType()
+		{
+			// Arrange
+			var requestProcessor = Mocks.Create<IRequestProcessor>();
+			requestProcessor.Setup(p => p.Process(ItemId)).Returns(new ResponseState());
+
+			RequestProcessorFactory.Setup(f => f.Create(MethodName)).Throws(new InvalidOperationException("Dependency creator not registered"));
+			RequestProcessorFactory.Setup(f => f.Create(RequestTypes.NotFound)).Returns(requestProcessor.Object);
 
 			var handler = new HttpHandler(Container.Object);
 
@@ -117,7 +160,7 @@ namespace DocMAH.UnitTests.Web
 				return new ResponseState()
 				{
 					Content = "Success",
-					ContentType = ContentTypes.Html,					 
+					ContentType = ContentTypes.Html,
 				};
 			}
 

@@ -61,6 +61,7 @@ namespace DocMAH.Dependencies
 
 					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage, 
 						c => new DocumentationPageRequestProcessor(
+							c.Resolve<IDocumentationConfiguration>(),
 							c.Resolve<IHtmlBuilder>()));
 
 					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript, 
@@ -81,6 +82,7 @@ namespace DocMAH.Dependencies
 
 					_container.Register<IRequestProcessor>(RequestTypes.ReadApplicationSettings, 
 						c => new ReadApplicationSettingsRequestProcessor(
+							c.Resolve<IDocumentationConfiguration>(),
 							c.Resolve<IEditAuthorizer>()));
 
 					_container.Register<IRequestProcessor>(RequestTypes.ReadPage, 

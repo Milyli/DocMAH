@@ -156,7 +156,8 @@ namespace DocMAH.Web.Html
 			var userPageSettingsJson = serializer.Serialize(userPageSettings);
 			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
-			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize() };
+			// TODO: Refactor application settings creation into factory. Replace here and application settings request processor.
+			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize(), DisableDocumentation = _documentationConfiguration.Disabled };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
 			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
 

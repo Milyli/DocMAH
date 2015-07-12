@@ -44,7 +44,7 @@ Just in case, here's the relevant configuration that's added.
 		</handlers>
 	<system.webServer>
 	<docmah connectionStringName="DefaultConnection" jsUrl="" cssUrl="">
-		<documentation pageTitle="Documentation Pages" customCss=""/>
+		<documentation disabled="false" pageTitle="Documentation Pages" customCss=""/>
 		<editHelp disabled="false" requireAuthentication="true" requireLocalConnection="true"/>
 	</docmah>
 </configuration>
@@ -111,10 +111,11 @@ The following are some notes about all of the configuration values.
 <!-- jsUrl attribute [Optional - Default: renders individual links to MS CDN and cdnjs javascript libraries] Can override to a single URL (bundle) that contains jQuery, jQueryUi and jsTree script files. -->
 <!-- cssUrl attribute [Optional - Default: renders individual link to cdnjs CDN css library] Can override to a single URL (bundle) that contains jsTree css default files. -->
 <docmah connectionStringName="DefaultConnection" jsUrl="" cssUrl="">
-	  
-	<!-- documentation element - [Optional] Settings particular to the documentation page. -->
-	<!-- pageTitle attribute [Optional - Default: Documentation] Provide a custom title for documentation page. -->
-	<documentation pageTitle="Documentation Pages" customCss=""/>
+	
+    <!-- documentation element - [Optional] Settings particular to the documentation page. -->
+	<!-- disabled [Optional - Default: false] Set to true to disable the documentation page. -->
+    <!-- pageTitle attribute [Optional - Default: Documentation] Provide a custom title for documentation page. -->
+    <documentation disabled="true" pageTitle="DocMAH Self Documentation" customCss=""/>
 	  
 	<!-- editHelp element - [Optional] Controls the availability of edit mode for first time help and documentation. -->
 	<!-- disabled attribute [Optional - Default: false] Disable all help editing for the application. Recommended for production environments. Overrides requireAuthentication and requireLocalConnection.-->

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web.Script.Serialization;
 using DocMAH.Data;
@@ -32,6 +33,9 @@ namespace DocMAH.Web.Requests.Processors
 			var id = int.Parse(data);
 
 			var page = _documentationPageRepository.Read(id);
+
+			if (null == page)
+				return new ResponseState { StatusCode = HttpStatusCode.NotFound };
 
 			var serializer = new JavaScriptSerializer();
 			var pageJson = serializer.Serialize(page);

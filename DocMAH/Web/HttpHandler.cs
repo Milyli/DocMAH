@@ -99,18 +99,38 @@ namespace DocMAH.Web
 
 			// Get the processor for the request and check authorization.
 			var method = context.Request["m"];
-			var requestProcessor = _requestProcessorFactory.Create(method);
+			IRequestProcessor requestProcessor;
+			try
+			{
+				requestProcessor = _requestProcessorFactory.Create(method);
+			}
+			catch (InvalidOperationException ex)
+			{
+				// Handle requests for invalid request types.
+				if (!ex.Message.Contains("Dependency creator not registered")) throw;
+				requestProcessor = _requestProcessorFactory.Create(RequestTypes.NotFound);
+			}
+
 			if (!IsAuthorized(requestProcessor))
 			{
 				// If authorization fails, replace the processor with the unauthorized processor.
 				requestProcessor = _requestProcessorFactory.Create(RequestTypes.Unauthorized);
 			}
 
-			// Process the request and return the response.
+			// Process the request
 			var response = requestProcessor.Process(data);
+
+			// Create not found response when processor can not find it's data.
+			if (response.StatusCode == HttpStatusCode.NotFound)
+			{
+				requestProcessor = _requestProcessorFactory.Create(RequestTypes.NotFound);
+				response = requestProcessor.Process(null);
+			}
+
+			// Return the response to the user.
 			WriteResponse(context, response);
 		}
-		
+
 		#endregion
 
 		#region IHttpHandler Members
