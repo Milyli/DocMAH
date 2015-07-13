@@ -3,12 +3,17 @@ DocMAH Release Notes
 
 *Unless otherwise noted, the release notes for each release contain links to the [GitHub issues][1] addressed.*
 
+## 0.9.7.0 Maintenance Release
+1. B55 - [Stop Replacing Connection String Name on Package Upgrade][23]
+		 **Note -** Due to NuGet behavior, this will first take effect on the next release.
+		 However, it was fixed here, so here the note goes.
+
 ## 0.9.6.0 Look and Feel Update
 1. I30 - [Improve Design and Usability of Documentation Page][16]
 1. B51 - [Error on content install when reusing URLs][17]
 1. B52 - [Popups and bullets are placed off document][18]
 1. I47 - [Make all tests use LocalDB][19]
-1. I49 - [Turn off Documentation Ppage][20]
+1. I49 - [Turn off Documentation Page][20]
 1. I54 - [Remove JavaScript minification mapping.][21]
 1. I46 - [Cache Documentation Page and First Time Help Content][22]
 
@@ -71,3 +76,4 @@ High level feature sets include:
 [20]: https://github.com/Milyli/DocMAH/issues/49
 [21]: https://github.com/Milyli/DocMAH/issues/54
 [22]: https://github.com/Milyli/DocMAH/issues/46
+[23]: https://github.com/Milyli/DocMAH/issues/55

@@ -36,7 +36,7 @@ Copy-Item ($projectOutputDirectoryPath + "\*") $net40DirectoryPath
 Copy-Item ($deploymentDirectoryPath + "\DocMAH.nuspec") $packageDirectoryPath
 Copy-Item ($deploymentDirectoryPath + "\readme.txt") $packageDirectoryPath
 Copy-Item ($deploymentDirectoryPath + "\web.config.install.xdt") $contentDirectoryPath
-Copy-Item ($deploymentDirectoryPath + "\web.config.uninstall.xdt") $contentDirectoryPath
+# Copy-Item ($deploymentDirectoryPath + "\web.config.uninstall.xdt") $contentDirectoryPath
 
 Invoke-Expression "$($nugetExePath) pack $($packageDirectoryPath + "\DocMAH.nuspec") -version $($version) -OutputDirectory $($deploymentDirectoryPath)"
 
