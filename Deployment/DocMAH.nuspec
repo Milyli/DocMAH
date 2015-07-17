@@ -8,7 +8,7 @@
 		<owners>Milyli</owners>
 		<iconUrl>https://raw.githubusercontent.com/Milyli/DocMAH/master/icon.png</iconUrl>
 		<licenseUrl>https://raw.githubusercontent.com/Milyli/DocMAH/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/Milyli/DocMAH</projectUrl>
+		<projectUrl>https://www.docmah.net</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>
 			DocMAH - an ASP.NET and MVC help and documentation library that makes help easy to setup, create and deploy.

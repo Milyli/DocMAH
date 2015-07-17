@@ -33,7 +33,7 @@
 	background-repeat: no-repeat;
 	height: 20px;
 	width: 20px;
-	margin: 2px 0 0 4px;
+	margin: 6px 0 0 4px;
 }
 
 .jstree-default .jstree-node.jstree-open > i.jstree-icon {
@@ -42,7 +42,7 @@
 	background-repeat: no-repeat;
 	height: 20px;
 	width: 20px;
-	margin-left: 5px;
+	margin: 4px 0 0 5px;
 }
 
 .jstree-default .jstree-node.jstree-leaf > i.jstree-icon {
@@ -51,19 +51,33 @@
 	background-repeat: no-repeat;
 	height: 20px;
 	width: 20px;
-	margin: 2px 0 0 4px;
+	margin: 6px 0 0 4px;
 }
 
-.jstree-anchor {
+#dmhToc .jstree-anchor {
 	font-size: 15px;
+	padding-top: 4px;
 	padding-left: 5px;
-	font-weight: 600;
+	font-weight: 400;
 	margin-bottom: 4px;
 }
 
-li.jstree-node.tocHidden a {
+#dmhToc .jstree-wholerow{
+	height: 34px;
+}
+
+#dmhToc li.jstree-node.tocHidden a {
 	color: @hidden-text-color;
 }
+
+#dmhToc .jstree-wholerow-clicked {
+	background: @inverse-background-clicked-color;
+}
+
+#dmhToc .jstree-wholerow-hovered {
+	background: @inverse-background-hover-color;
+}
+
 
 /****** Top CSS Marker Class ******/
 // All elements beneath acquire library's font
@@ -78,6 +92,55 @@ li.jstree-node.tocHidden a {
 	color: @text-color;
 	overflow: hidden;
 }
+
+
+/****** Button Styles ******/
+.dmhButtonBar {
+	clear: both;
+	margin-top: 15px;
+	text-align: center;
+}
+
+.dmhButton {
+	.border-radius(@corner);
+	border: 0;
+	padding: 2px 10px;
+	color: @inverse-text-color;
+	background-color: @inverse-background-color;
+	display: inline-block;
+}
+
+.dmhButton + .dmhButton {
+	margin-left: 25px;
+}
+
+.dmhButton:hover {
+	cursor: pointer;
+	background-color: @inverse-background-hover-color;
+}
+
+.dmhButtonSmall {
+	font-size: x-small;
+}
+
+.dmhButtonInverse {
+	background-color: @inverse-button-color;
+	color: @text-color;
+}
+
+.dmhButtonInverse:hover {
+	color: @inverse-text-color;
+	background-color: @inverse-background-hover-color;
+}
+
+.dmhButtonCancel {
+	background-color: @error-color;
+}
+
+.dmhButtonCancel:hover {
+	background-color: @error-hover-color;
+}
+
 
 /****** Documentation Page Styles ******/
 #dmhLeftContainer {
@@ -96,13 +159,15 @@ li.jstree-node.tocHidden a {
 	height: @title-bar-height;
 	width: @left-column-width;
 	background-color: @inverse-background-color;
+	font-weight: 400;
+	border-right: solid 1px #000;
 }
 
 #dmhDocTitle {
 	font-size: 18px;
-	color: @inverse-text-color;	
+	color: @inverse-text-color;
 	white-space: nowrap;
-	padding: 5px 0 0 10px;
+	padding: 6px 0 0 10px;
 }
 
 #dmhTocContainer {
@@ -113,18 +178,9 @@ li.jstree-node.tocHidden a {
 	width: @left-column-width;
 	background-color: @toc-background-color;
 	color: @inverse-text-color;
-	padding-top: 10px;
 	overflow: auto;
+	border-right: solid 1px #000;
 }
-
-#dmhToc .jstree-wholerow-clicked {
-	background: @inverse-background-clicked-color;
-}
-
-#dmhToc .jstree-wholerow-hovered {
-	background: @inverse-background-hover-color;
-}
-
 
 #dmhRightContainer {
 	position: absolute;
@@ -134,7 +190,7 @@ li.jstree-node.tocHidden a {
 	bottom: 0;
 	overflow: auto;
 	margin-top: @title-bar-height;
-	padding: 0 15px 15px 15px;
+	padding: 0 40px 15px 40px;
 }
 
 #dmhDocCloseLink {
@@ -147,7 +203,6 @@ li.jstree-node.tocHidden a {
 #dmhDocumentationViewTitle {
 	margin: 0;
 }
-
 
 #dmhDocumentationEditor {
 	padding: 20px;
@@ -162,7 +217,6 @@ li.jstree-node.tocHidden a {
 	height: 300px;
 }
 
-
 #dmhEditToolBar {
 	background: @mid-background-color;
 	position: absolute;
@@ -171,7 +225,15 @@ li.jstree-node.tocHidden a {
 	right: 0;
 	z-index: 1;
 	display: none;
-	padding-top: 5px;
+	padding: 5px 0 24px 0;
+}
+
+#dmhEditToolBar .dmhButton {
+	.border-radius(7px);
+	font-weight: 100;
+	font-size: 15px;
+	padding: 7px 15px;
+	border: solid 1px;
 }
 
 #dmhStatusBar {
@@ -198,7 +260,6 @@ li.jstree-node.tocHidden a {
 
 #dmhViewModeButtonBar, #dmhEditModeButtonBar {
 	margin-top: 0;
-	margin-bottom: 15px;
 }
 
 
@@ -307,54 +368,6 @@ li.jstree-node.tocHidden a {
 
 .dmhFieldHelp {
 	font-size: x-small;
-}
-
-
-/****** Button Styles ******/
-.dmhButtonBar {
-	clear: both;
-	margin-top: 15px;
-	text-align: center;
-}
-
-.dmhButton {
-	.border-radius(@corner);
-	border: 0;
-	padding: 2px 10px;
-	color: @inverse-text-color;
-	background-color: @inverse-background-color;
-	display: inline-block;
-}
-
-.dmhButton + .dmhButton {
-	margin-left: 25px;
-}
-
-.dmhButton:hover {
-	cursor: pointer;
-	background-color: @inverse-background-hover-color;
-}
-
-.dmhButtonSmall {
-	font-size: x-small;
-}
-
-.dmhButtonInverse {
-	background-color: @inverse-button-color;
-	color: @text-color;
-}
-
-.dmhButtonInverse:hover {
-	color: @inverse-text-color;
-	background-color: @inverse-background-hover-color;
-}
-
-.dmhButtonCancel {
-	background-color: @error-color;
-}
-
-.dmhButtonCancel:hover {
-	background-color: @error-hover-color;
 }
 
 
