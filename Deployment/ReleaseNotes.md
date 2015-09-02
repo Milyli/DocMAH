@@ -3,6 +3,10 @@ DocMAH Release Notes
 
 *Unless otherwise noted, the release notes for each release contain links to the [GitHub issues][1] addressed.*
 
+## 0.9.8.0 Maintenance Release
+1. B59 - [NuGet package does not install if modules element not present][25]
+1. B60 - [jQuery interferes with existing jQuery libraries.][26]
+
 ## 0.9.7.0 Maintenance Release
 1. B55 - [Stop Replacing Connection String Name on Package Upgrade][23]
 		 **Note -** Due to NuGet behavior, this will first take effect on the next release.
@@ -79,3 +83,5 @@ High level feature sets include:
 [22]: https://github.com/Milyli/DocMAH/issues/46
 [23]: https://github.com/Milyli/DocMAH/issues/55
 [24]: https://github.com/Milyli/DocMAH/issues/56
+[25]: https://github.com/Milyli/DocMAH/issues/59
+[26]: https://github.com/Milyli/DocMAH/issues/60

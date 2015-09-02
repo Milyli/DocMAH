@@ -1,5 +1,6 @@
 ﻿/** Namespace **/
 var DMH = DMH || {};
+var docmahJQuery = $.noConflict(true);
 
 DMH.HistoryState = function () {
 	this.Replace = 1;
@@ -39,6 +40,7 @@ DMH.Helpers = function () {
 }();
 
 DMH.AjaxClient = function () {
+	var $ = docmahJQuery;
 
 	// ** Public Methods **
 	this.DeletePage = function (pageId, successCallback) {
@@ -123,8 +125,9 @@ DMH.AjaxClient = function () {
 }
 
 DMH.AnchoredElementLogic = function () {
-	var _elements = new DMH.SharedElements();
 	var self = this;
+	var _elements = new DMH.SharedElements();
+	var $ = docmahJQuery;
 
 	// ** Public Methods **
 	this.UpdateElementPosition = function (model, $element) {
@@ -202,6 +205,7 @@ DMH.DocumentationPage = function () {
 	var _newPage = null;		// Temporary new page when tree creates new page and name needs to be saved.
 	var _originalPage = null;	// State of page before editing begins.
 	var _historyId = 1;			// Compared to popstate data to determine if forward or back was pressed.
+	var $ = docmahJQuery;
 
 
 	/** HTML Elements **/
@@ -639,7 +643,7 @@ DMH.HelpButton = function () {
 	/** Private Fields **/
 	var _button = this;
 	var _currentPage = null;
-
+	var $ = docmahJQuery;
 
 	/** HTML Elements **/
 	function $getHelpButton() { return $('.dmhHelpButton'); }
@@ -691,6 +695,7 @@ DMH.FirstTimeEdit = function () {
 	var _leafElements = null;
 	var _originalPage = null;
 	var _self = this;
+	var $ = docmahJQuery;
 
 
 	/** HTML Elements **/
@@ -1021,6 +1026,7 @@ DMH.FirstTimeView = function () {
 	var _self = this;
 	var _userPageSettings = null;
 	var _nextBulletOffset = 0;		// Tracks left offset for unset bullets on documentation page.
+	var $ = docmahJQuery;
 
 
 	/** HTML Elements **/
@@ -1174,6 +1180,8 @@ DMH.FirstTimeView = function () {
 }
 
 DMH.SharedElements = function () {
+	var $ = docmahJQuery;
+
 	/** HTML Elements **/
 	this.$getModalMask = function () { return $('#dmhModalMask'); }
 }
