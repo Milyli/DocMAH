@@ -7,7 +7,7 @@
 	<configSections xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)" />	
 
 	<system.webServer xdt:Transform="InsertIfMissing">
-		<modules xdt:Tansform="InsertIfMissing">
+		<modules xdt:Transform="InsertIfMissing">
 			<add name="DocMAH" type="DocMAH.Web.HttpModule, DocMAH" preCondition="integratedMode" xdt:Locator="Match(name)" xdt:Transform="InsertIfMissing" />
 		</modules>
 		<handlers xdt:Transform="InsertIfMissing">
