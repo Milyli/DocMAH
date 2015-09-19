@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using DocMAH.Configuration;
 using DocMAH.Web.Authorization;
+using Moq;
 using NUnit.Framework;
 
 namespace DocMAH.UnitTests.Web.Authorization
@@ -25,10 +26,9 @@ namespace DocMAH.UnitTests.Web.Authorization
 			var httpContext = Mocks.Create<HttpContextBase>();
 			httpContext.Setup(c => c.Request).Returns(httpRequest.Object);
 
-			var editHelpConfiguration = Mocks.Create<IEditHelpConfiguration>();
-			editHelpConfiguration.Setup(c => c.IsDisabled).Returns(true);
+			Configuration.EditHelpConfiguration.Setup(c => c.IsDisabled).Returns(true);
 
-			var authorizer = new EditAuthorizer(httpContext.Object, editHelpConfiguration.Object);
+			var authorizer = new EditAuthorizer(httpContext.Object, Configuration.Object);
 
 			// Act
 			var result = authorizer.Authorize();
@@ -49,11 +49,10 @@ namespace DocMAH.UnitTests.Web.Authorization
 			var httpContext = Mocks.Create<HttpContextBase>();
 			httpContext.Setup(c => c.Request).Returns(httpRequest.Object);
 
-			var editHelpConfiguration = Mocks.Create<IEditHelpConfiguration>();
-			editHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
-			editHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(true);
+			Configuration.EditHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(true);
 
-			var authorizer = new EditAuthorizer(httpContext.Object, editHelpConfiguration.Object);
+			var authorizer = new EditAuthorizer(httpContext.Object, Configuration.Object);
 
 			// Act
 			var result = authorizer.Authorize();
@@ -74,12 +73,11 @@ namespace DocMAH.UnitTests.Web.Authorization
 			var httpContext = Mocks.Create<HttpContextBase>();
 			httpContext.Setup(c => c.Request).Returns(httpRequest.Object);
 
-			var editHelpConfiguration = Mocks.Create<IEditHelpConfiguration>();
-			editHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
-			editHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(false);
-			editHelpConfiguration.Setup(c => c.RequireLocalConnection).Returns(true);
+			Configuration.EditHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.RequireLocalConnection).Returns(true);
 
-			var authorizer = new EditAuthorizer(httpContext.Object, editHelpConfiguration.Object);
+			var authorizer = new EditAuthorizer(httpContext.Object, Configuration.Object);
 
 			// Act
 			var result = authorizer.Authorize();
@@ -99,12 +97,11 @@ namespace DocMAH.UnitTests.Web.Authorization
 			var httpContext = Mocks.Create<HttpContextBase>();
 			httpContext.Setup(c => c.Request).Returns(httpRequest.Object);
 
-			var editHelpConfiguration = Mocks.Create<IEditHelpConfiguration>();
-			editHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
-			editHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(false);
-			editHelpConfiguration.Setup(c => c.RequireLocalConnection).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.IsDisabled).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.RequireAuthentication).Returns(false);
+			Configuration.EditHelpConfiguration.Setup(c => c.RequireLocalConnection).Returns(false);
 
-			var authorizer = new EditAuthorizer(httpContext.Object, editHelpConfiguration.Object);
+			var authorizer = new EditAuthorizer(httpContext.Object, Configuration.Object);
 
 			// Act
 			var result = authorizer.Authorize();

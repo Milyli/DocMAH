@@ -26,13 +26,12 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			// Arrange
 			var isAuthorized = true;
 
-			var documentationConfiguration = Mocks.Create<IDocumentationConfiguration>();
-			documentationConfiguration.Setup(c => c.Disabled).Returns(true);
+			Configuration.DocumentationConfiguration.Setup(c => c.Disabled).Returns(true);
 
 			var editAuthorizer = Mocks.Create<IEditAuthorizer>();
 			editAuthorizer.Setup(a => a.Authorize()).Returns(isAuthorized);
 
-			var processor = new ReadApplicationSettingsRequestProcessor(documentationConfiguration.Object, editAuthorizer.Object);
+			var processor = new ReadApplicationSettingsRequestProcessor(Configuration.Object, editAuthorizer.Object);
 
 			// Act
 			var result = processor.Process(null);

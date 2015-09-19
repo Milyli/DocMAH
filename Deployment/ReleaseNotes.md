@@ -3,6 +3,10 @@ DocMAH Release Notes
 
 *Unless otherwise noted, the release notes for each release contain links to the [GitHub issues][1] addressed.*
 
+## 0.9.9.0 Popup Button Configuration
+1. I24 - [Hide Got It or Remind Me Later buttons.][27]
+1. I23 - [Set labels for Got It / Remind Me Later buttons][28]
+
 ## 0.9.8.0 Maintenance Release
 1. B59 - [NuGet package does not install if modules element not present][25]
 1. B60 - [jQuery interferes with existing jQuery libraries.][26]
@@ -85,3 +89,5 @@ High level feature sets include:
 [24]: https://github.com/Milyli/DocMAH/issues/56
 [25]: https://github.com/Milyli/DocMAH/issues/59
 [26]: https://github.com/Milyli/DocMAH/issues/60
+[27]: https://github.com/Milyli/DocMAH/issues/24
+[28]: https://github.com/Milyli/DocMAH/issues/23

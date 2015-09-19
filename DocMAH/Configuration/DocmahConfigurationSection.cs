@@ -40,18 +40,43 @@ namespace DocMAH.Configuration
 			set { this["cssUrl"] = value; }
 		}
 
+		public IDocumentationConfiguration DocumentationConfiguration
+		{
+			get { return DocumentationElement; }
+			set { DocumentationElement = (DocumentationElement)value; }
+		}
+
 		[ConfigurationProperty("documentation")]
-		public DocumentationElement DocumentationConfiguration
+		public DocumentationElement DocumentationElement
 		{
 			get { return (DocumentationElement)this["documentation"]; }
 			set { this["documentation"] = value; }
 		}
 
+		public IEditHelpConfiguration EditHelpConfiguration
+		{
+			get { return EditHelpElement; }
+			set { EditHelpElement = (EditHelpElement) value; }
+		}
+
 		[ConfigurationProperty("editHelp")]
-		public EditHelpElement EditHelpConfiguration
+		public EditHelpElement EditHelpElement
 		{
 			get { return (EditHelpElement)this["editHelp"]; }
 			set { this["editHelp"] = value; }
+		}
+
+		public IPopupViewerConfiguration PopupViewerConfiguration
+		{
+			get { return PopupViewerElement; }
+			set { PopupViewerElement = (PopupViewerElement)value; }
+		}
+
+		[ConfigurationProperty("popupViewer")]
+		public PopupViewerElement PopupViewerElement
+		{
+			get { return (PopupViewerElement)this["popupViewer"]; }
+			set { this["popupViewer"] = value; }
 		}
 
 		#endregion

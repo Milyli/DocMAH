@@ -21,7 +21,6 @@ namespace DocMAH.Web.Html
 			HttpContextBase httpContext,
 			IBulletRepository bulletRepository,
 			IDocmahConfiguration docmahConfiguration,
-			IDocumentationConfiguration documentationConfiguration,
 			IEditAuthorizer editAuthorizer,
 			IFirstTimeHelpRepository firstTimeHelpRepository,
 			ObjectCache memoryCache,
@@ -31,7 +30,6 @@ namespace DocMAH.Web.Html
 			_httpContext = httpContext;
 			_bulletRepository = bulletRepository;
 			_docmahConfiguration = docmahConfiguration;
-			_documentationConfiguration = documentationConfiguration;
 			_editAuthorizer = editAuthorizer;
 			_firstTimeHelpRepository = firstTimeHelpRepository;
 			_memoryCache = memoryCache;
@@ -49,7 +47,6 @@ namespace DocMAH.Web.Html
 		private readonly HttpContextBase _httpContext;
 		private readonly IBulletRepository _bulletRepository;
 		private readonly IDocmahConfiguration _docmahConfiguration;
-		private readonly IDocumentationConfiguration _documentationConfiguration;
 		private readonly IEditAuthorizer _editAuthorizer;
 		private readonly IFirstTimeHelpRepository _firstTimeHelpRepository;
 		private readonly ObjectCache _memoryCache;
@@ -79,6 +76,18 @@ namespace DocMAH.Web.Html
 
 		#region Public Methods
 
+		public string CreateButtonHelp(bool isHidden, string buttonHtml, string text, string description)
+		{
+			var result = string.Empty;
+
+			if (!isHidden)
+			{
+				result = buttonHtml.Replace("[TEXT]", text).Replace("[DESCRIPTION]", description);
+			}
+
+			return result;
+		}
+
 		public string CreateDocumentationPageHtml()
 		{
 			var result = string.Empty;
@@ -93,7 +102,7 @@ namespace DocMAH.Web.Html
 				result = _minifier.Minify(HtmlContent.Documentation, HtmlContent.Documentation_min);
 
 				// Replace the page title with the configured title.
-				result = result.Replace("[TITLE]", _documentationConfiguration.PageTitle);
+				result = result.Replace("[TITLE]", _docmahConfiguration.DocumentationConfiguration.PageTitle);
 
 				// Replace the JSTree CDN URL with a configured local URL that contains the CSS.
 				var cssUrl = _docmahConfiguration.CssUrl;
@@ -103,7 +112,7 @@ namespace DocMAH.Web.Html
 
 				// Custom CSS token will be replaced with empty string if it is not configured.
 				var customCssLink = string.Empty;
-				var customCssUrl = _documentationConfiguration.CustomCss;
+				var customCssUrl = _docmahConfiguration.DocumentationConfiguration.CustomCss;
 				if (!string.IsNullOrEmpty(customCssUrl))
 					customCssLink = string.Format(LinkFormats.Css, customCssUrl);
 				result = result.Replace("[CUSTOMCSS]", customCssLink);
@@ -132,10 +141,18 @@ namespace DocMAH.Web.Html
 				result = (string)_memoryCache.Get(_firstTimeHelpHtmlCacheKey);
 			else
 			{
-				// When injecting into other requests, the initialization scripts must be included.
-				result += _minifier.Minify(HtmlContent.FirstTimeView, HtmlContent.FirstTimeView_min);
+				// Determine if content should be minified.
+				var popupViewContent = _minifier.Minify(HtmlContent.FirstTimeView, HtmlContent.FirstTimeView_min);
 
-				// TODO: Iron out javascript reference injection for first time help in base site pages.
+				// Modify buttons per configuration settings.
+				var hideHelpConfiguration = _docmahConfiguration.PopupViewerConfiguration.HidePopupButtonConfiguration;
+				popupViewContent = popupViewContent.Replace("[HIDEHELPBUTTON]", CreateButtonHelp(hideHelpConfiguration.IsHidden, HtmlContent.HideHelpButton, hideHelpConfiguration.Text, hideHelpConfiguration.Description));
+				var closeHelpConfiguration = _docmahConfiguration.PopupViewerConfiguration.ClosePopupButtonConfiguration;
+				popupViewContent = popupViewContent.Replace("[CLOSEHELPBUTTON]", CreateButtonHelp(closeHelpConfiguration.IsHidden, HtmlContent.CloseHelpButton, closeHelpConfiguration.Text, closeHelpConfiguration.Description));
+
+				// When injecting into other requests, the initialization scripts must be included.
+				result += popupViewContent;
+
 				// Attach jQueryUi CDN locations if not configured.
 				var javaScriptDependencies = _docmahConfiguration.JsUrl;
 				if (string.IsNullOrEmpty(javaScriptDependencies))
@@ -177,7 +194,7 @@ namespace DocMAH.Web.Html
 			result = result.Replace("[USERPAGESETTINGSJSON]", userPageSettingsJson);
 
 			// TODO: Refactor application settings creation into factory. Replace here and application settings request processor.
-			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize(), DisableDocumentation = _documentationConfiguration.Disabled };
+			var applicationSettings = new ApplicationSettings { CanEdit = _editAuthorizer.Authorize(), DisableDocumentation = _docmahConfiguration.DocumentationConfiguration.Disabled };
 			var applicationSettingsJson = serializer.Serialize(applicationSettings);
 			result = result.Replace("[APPLICATIONSETTINGSJSON]", applicationSettingsJson);
 

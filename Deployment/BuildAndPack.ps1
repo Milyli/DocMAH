@@ -9,7 +9,10 @@
 #      It's not that we don't trust all y'all with the keys to
 #      the DocMAH NuGet kingdom; we just don't trust everyone else.
 
-param([String] $BuildType)
+param(
+    [ValidateSet("Major", "Feature", "Bug", "Revision")]
+    [String] $BuildType
+)
 
 
 # Errors should all be handled. If they're not, we want to see them.

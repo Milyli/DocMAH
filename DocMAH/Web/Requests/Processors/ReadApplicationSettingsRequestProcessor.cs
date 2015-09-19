@@ -14,9 +14,9 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 
-		public ReadApplicationSettingsRequestProcessor(IDocumentationConfiguration documentationConfiguration, IEditAuthorizer editAuthorizer)
+		public ReadApplicationSettingsRequestProcessor(IDocmahConfiguration docmahConfiguration, IEditAuthorizer editAuthorizer)
 		{
-			_documentationConfiguration = documentationConfiguration;
+			_docmahConfiguration = docmahConfiguration;
 			_editAuthorizer = editAuthorizer;
 		}
 
@@ -24,7 +24,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		#region Private Fields
 
-		private readonly IDocumentationConfiguration _documentationConfiguration;
+		private readonly IDocmahConfiguration _docmahConfiguration;
 		private readonly IEditAuthorizer _editAuthorizer;
 
 		#endregion
@@ -36,7 +36,7 @@ namespace DocMAH.Web.Requests.Processors
 			var applicationSettings = new ApplicationSettings
 			{
 				CanEdit = _editAuthorizer.Authorize(),
-				DisableDocumentation = _documentationConfiguration.Disabled,
+				DisableDocumentation = _docmahConfiguration.DocumentationConfiguration.Disabled,
 			};
 
 			var serializer = new JavaScriptSerializer();

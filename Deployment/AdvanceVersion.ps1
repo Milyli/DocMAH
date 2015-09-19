@@ -1,7 +1,10 @@
 # Called from master build script BuildAndPack.ps1
 # Advances the version number in _version.txt based on the type of build being made.
 
-param([String] $BuildType)
+param(
+    [ValidateSet("Major", "Feature", "Bug", "Revision")]
+    [String] $BuildType
+)
 
 # Set script file paths.
 $deploymentDirectoryPath = $PSScriptRoot

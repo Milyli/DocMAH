@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CloseHelpButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>closehelpbutton.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CssLink" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>csslink.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -144,5 +147,8 @@
   </data>
   <data name="FirstTimeView_min" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>firsttimeview.min.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="HideHelpButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>hidehelpbutton.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -122,6 +122,23 @@ The following are some notes about all of the configuration values.
 	<!-- requireAuthentication attribute [Optional - Default: true] Require authentication to edit help content. -->
 	<!-- requireLocalConnection attribute [Optional - Default: true] Require a local connection to the server to edit help content. -->
 	<editHelp disabled="false" requireAuthentication="true" requireLocalConnection="true"/>
+	  
+	<!-- popupViewer element - [Optional] Popup viewer settings. -->
+	<popupViewer>
+		
+		<!-- hidePopupButton element - [Optional] Settings controlling the button that permanently hides a help popup. -->
+		<!-- isHidden attribute - [Optional - Default: false] Set to true to hide the hide popup button. -->
+		<!-- text attribute - [Optional - Default: Got it] Change the text of the hide popup button. -->
+		<!-- description attribute - [Optional - Default: Do not show this help next time] Change the tool tip of the hide popup button. -->
+		<hidePopupButton isHidden="false" text="Close" description="Click 'Help' to see this again."/>
+		
+		<!-- closePopupButton element - [Optional] Settings controlling the button that closes this instance of a help popup. -->
+		<!-- isHidden attribute - [Optional - Default: false] Set to true to hide the close popup button. -->
+		<!-- text attribute - [Optional - Default: Remind me later] Change the text of the close popup button. -->
+		<!-- description attribute - [Optional - Default: Show this help when I come back to the page] Change the tool tip of the close popup button. -->
+		<closePopupButton isHidden="true" text="Remind me again" description="Show this help when I come back"/>
+	
+	</popupViewer>  
   
 </docmah>
 

@@ -10,21 +10,21 @@ namespace DocMAH.Configuration
 	public class DocumentationElement : ConfigurationElement, IDocumentationConfiguration
 	{
 		[ConfigurationProperty("pageTitle", DefaultValue = "Documentation")]
-		public string PageTitle
+		public virtual string PageTitle
 		{
 			get { return (string)this["pageTitle"]; }
 			set { this["pageTitle"] = value; }
 		}
 
 		[ConfigurationProperty("customCss", DefaultValue = null)]
-		public string CustomCss
+		public virtual string CustomCss
 		{
 			get { return (string)this["customCss"]; }
 			set { this["customCss"] = value; }
 		}
 
 		[ConfigurationProperty("disabled", DefaultValue = false)]
-		public bool Disabled
+		public virtual bool Disabled
 		{
 			get { return (bool)this["disabled"]; }
 			set { this["disabled"] = value; }

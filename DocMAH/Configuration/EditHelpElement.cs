@@ -10,21 +10,21 @@ namespace DocMAH.Configuration
 	public class EditHelpElement : ConfigurationElement, IEditHelpConfiguration
 	{
 		[ConfigurationProperty("requireAuthentication", DefaultValue = true)]
-		public bool RequireAuthentication
+		public virtual bool RequireAuthentication
 		{
 			get { return (bool)this["requireAuthentication"]; }
 			set { this["requireAuthentication"] = value; }
 		}
 
 		[ConfigurationProperty("requireLocalConnection", DefaultValue = true)]
-		public bool RequireLocalConnection
+		public virtual bool RequireLocalConnection
 		{
 			get { return (bool)this["requireLocalConnection"]; }
 			set { this["requireLocalConnection"] = value; }
 		}
 
 		[ConfigurationProperty("disabled", DefaultValue = false)]
-		public bool IsDisabled
+		public virtual bool IsDisabled
 		{
 			get { return (bool)this["disabled"]; }
 			set { this["disabled"] = value; }

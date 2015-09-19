@@ -119,6 +119,11 @@ namespace DocMAH.Content
 				int fileSchemaVersion = -1;
 				int fileContentVersion = -1;
 
+				// TODO: Break down HelpContentManager.ImportContent into at least three stages to improve memory usage.
+				// Stage 1) Validate versions
+				// Stage 2) Load ids and delete old content (maybe one stage per type)
+				// Stage 3) Update new content one entry at a time.
+
 				using (var xmlReader = new XmlTextReader(fileName))
 				{
 					var helpSerializer = new XmlSerializer(typeof(FirstTimeHelp));

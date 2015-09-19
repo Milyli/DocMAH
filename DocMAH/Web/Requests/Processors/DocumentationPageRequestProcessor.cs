@@ -14,9 +14,9 @@ namespace DocMAH.Web.Requests.Processors
 	{
 		#region Constructors
 		
-		internal DocumentationPageRequestProcessor(IDocumentationConfiguration documentationConfiguration, IHtmlBuilder htmlBuilder)
+		internal DocumentationPageRequestProcessor(IDocmahConfiguration docmahConfiguration, IHtmlBuilder htmlBuilder)
 		{
-			_documentationConfiguration = documentationConfiguration;
+			_docmahConfiguration = docmahConfiguration;
 			_htmlBuilder = htmlBuilder;
 		}
 
@@ -24,7 +24,7 @@ namespace DocMAH.Web.Requests.Processors
 
 		#region Private Fields
 
-		private readonly IDocumentationConfiguration _documentationConfiguration;
+		private readonly IDocmahConfiguration _docmahConfiguration;
 		private readonly IHtmlBuilder _htmlBuilder;
 
 		#endregion
@@ -38,7 +38,7 @@ namespace DocMAH.Web.Requests.Processors
 		public ResponseState Process(string data)
 		{
 			// Return not found result if the documentation page is disabled.
-			if (_documentationConfiguration.Disabled)
+			if (_docmahConfiguration.DocumentationConfiguration.Disabled)
 				return new ResponseState { StatusCode = HttpStatusCode.NotFound };
 
 			// Set return values.

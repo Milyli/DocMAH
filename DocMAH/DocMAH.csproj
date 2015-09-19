@@ -59,13 +59,19 @@
     <Compile Include="Adapters\IDebugger.cs" />
     <Compile Include="Adapters\IPath.cs" />
     <Compile Include="Configuration\CdnUrls.cs" />
+    <Compile Include="Configuration\ClosePopupButtonElement.cs" />
     <Compile Include="Configuration\Configurator.cs" />
     <Compile Include="Configuration\DocumentationElement.cs" />
     <Compile Include="Configuration\EditHelpElement.cs" />
     <Compile Include="Configuration\DocmahConfigurationSection.cs" />
+    <Compile Include="Configuration\HidePopupButtonElement.cs" />
+    <Compile Include="Configuration\IClosePopupButtonConfiguration.cs" />
     <Compile Include="Configuration\IDocmahConfiguration.cs" />
     <Compile Include="Configuration\IDocumentationConfiguration.cs" />
     <Compile Include="Configuration\IEditHelpConfiguration.cs" />
+    <Compile Include="Configuration\IHidePopupButtonConfiguration.cs" />
+    <Compile Include="Configuration\IPopupViewerConfiguration.cs" />
+    <Compile Include="Configuration\PopupViewerElement.cs" />
     <Compile Include="Content\ContentFileSchemaVersions.cs" />
     <Compile Include="Data\IFirstTimeHelpRepository.cs" />
     <Compile Include="Data\Sql\SqlFirstTimeHelpRepository.cs" />
@@ -196,11 +202,13 @@
     <Content Include="Web\Css\Images\document.svg" />
     <Content Include="Web\Css\Images\openBook.png" />
     <Content Include="Web\Css\Images\openBook.svg" />
+    <Content Include="Web\Html\CloseHelpButton.html" />
     <Content Include="Web\Html\CssLink.html" />
     <Content Include="Web\Html\FirstTimeViewInjectedScripts.html" />
     <Content Include="Web\Html\FirstTimeViewInjectedScripts.min.html">
       <DependentUpon>FirstTimeViewInjectedScripts.html</DependentUpon>
     </Content>
+    <Content Include="Web\Html\HideHelpButton.html" />
     <Content Include="Web\JavaScript\DocMAHJavaScript.js" />
     <Content Include="Data\Sql\Scripts\Bullet_Import.sql" />
     <Content Include="Data\Sql\Scripts\Bullet_ReadAll.sql" />

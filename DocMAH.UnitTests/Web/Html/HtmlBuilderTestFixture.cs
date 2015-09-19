@@ -18,6 +18,46 @@ namespace DocMAH.UnitTests.Web.Html
 		#region Tests
 
 		[Test]
+		[Description("Returns empty content if button is hidden.")]
+		public void CreateButtonHelp_Hidden()
+		{
+			// Arrange
+			var isHidden = true;
+			var buttonHtml = "<span>[TEXT]</span><span>[DESCRIPTION]</span>";
+			var text = "Button Text";
+			var description = "Button Description";
+
+			var htmlBuilder = new HtmlBuilder(null, null, null, null, null, null, null, null);
+
+			// Act
+			var result = htmlBuilder.CreateButtonHelp(isHidden, buttonHtml, text, description);
+
+			// Assert
+			Assert.That(result, Is.EqualTo(string.Empty), "The button content should be hidden.");
+		}
+
+		[Test]
+		[Description("Returns formatted button content.")]
+		public void CreateHelpButton_Visible()
+		{
+			// Arrange
+			var isHidden = false;
+			var buttonFormat = "<span>{0}</span><span>{1}</span>";
+			var buttonHtml = string.Format(buttonFormat, "[TEXT]", "[DESCRIPTION]");
+			var text = "Button Text";
+			var description = "Button Description";
+
+			var htmlBuilder = new HtmlBuilder(null, null, null, null, null, null, null, null);
+
+			// Act
+			var result = htmlBuilder.CreateButtonHelp(isHidden, buttonHtml, text, description);
+
+			// Assert
+			var expected = string.Format(buttonFormat, text, description);
+			Assert.That(result, Is.EqualTo(expected), "The button content should be visible and formatted.");
+		}
+
+		[Test]
 		[Description("Pull cached results for documentation page HTML.")]
 		public void CreateDocumentationPageHtml_CachedResponse()
 		{
@@ -28,7 +68,7 @@ namespace DocMAH.UnitTests.Web.Html
 			memoryCache.Setup(c => c.Contains(HtmlBuilder._documentationHtmlCacheKey, null as string)).Returns(true);
 			memoryCache.Setup(c => c.Get(HtmlBuilder._documentationHtmlCacheKey, null as string)).Returns(html);
 
-			var builder = new HtmlBuilder(null, null, null, null, null, null, memoryCache.Object, null, null);
+			var builder = new HtmlBuilder(null, null, null, null, null, memoryCache.Object, null, null);
 
 			// Act
 			var result = builder.CreateDocumentationPageHtml();
@@ -59,19 +99,16 @@ namespace DocMAH.UnitTests.Web.Html
 			var minifier = Mocks.Create<IMinifier>();
 			minifier.Setup(m => m.Minify(HtmlContent.Documentation, HtmlContent.Documentation_min)).Returns(html);
 
-			var documentationConfiguration = Mocks.Create<IDocumentationConfiguration>();
-			documentationConfiguration.Setup(c => c.PageTitle).Returns(title);
-			documentationConfiguration.Setup(c => c.CustomCss).Returns(customCss);
-
-			var docmahConfiguration = Mocks.Create<IDocmahConfiguration>();
-			docmahConfiguration.Setup(c => c.CssUrl).Returns(jsTreeCss);
-			docmahConfiguration.Setup(c => c.JsUrl).Returns(jQueryUrl);
+			Configuration.DocumentationConfiguration.Setup(c => c.PageTitle).Returns(title);
+			Configuration.DocumentationConfiguration.Setup(c => c.CustomCss).Returns(customCss);
+			Configuration.DocmahConfiguration.Setup(c => c.CssUrl).Returns(jsTreeCss);
+			Configuration.DocmahConfiguration.Setup(c => c.JsUrl).Returns(jQueryUrl);
 
 			var memoryCache = Mocks.Create<ObjectCache>();
 			memoryCache.Setup(c => c.Contains(HtmlBuilder._documentationHtmlCacheKey, null as string)).Returns(false);
 			memoryCache.Setup(c => c.Set(HtmlBuilder._documentationHtmlCacheKey, It.IsAny<string>(), It.IsAny<CacheItemPolicy>(), null as string));
 
-			var htmlBuilder = new HtmlBuilder(null, null, docmahConfiguration.Object, documentationConfiguration.Object, null, null, memoryCache.Object, minifier.Object, null);
+			var htmlBuilder = new HtmlBuilder(null, null, Configuration.Object, null, null, memoryCache.Object, minifier.Object, null);
 
 			// Act
 			var result = htmlBuilder.CreateDocumentationPageHtml();

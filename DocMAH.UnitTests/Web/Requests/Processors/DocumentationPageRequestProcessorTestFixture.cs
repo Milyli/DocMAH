@@ -22,14 +22,12 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 		public void Process_Disabled()
 		{
 			// Arrange
-			var documentationConfiguration = Mocks.Create<IDocumentationConfiguration>();
-			documentationConfiguration.Setup(c => c.Disabled).Returns(true);
-
-			var processor = new DocumentationPageRequestProcessor(documentationConfiguration.Object, null);
+			Configuration.DocumentationConfiguration.Setup(c => c.Disabled).Returns(true);
+			
+			var processor = new DocumentationPageRequestProcessor(Configuration.Object, null);
 
 			// Act
 			var result = processor.Process(null);
-
 
 			// Assert
 			Assert.That(result, Is.Not.Null, "A valid ResponseState should be returned.");
@@ -43,13 +41,12 @@ namespace DocMAH.UnitTests.Web.Requests.Processors
 			// Arrange
 			var testDocumentationContent = "Test documentation content.";
 
-			var documentationConfiguration = Mocks.Create<IDocumentationConfiguration>();
-			documentationConfiguration.Setup(c => c.Disabled).Returns(false);
+			Configuration.DocumentationConfiguration.Setup(c => c.Disabled).Returns(false);
 
 			var htmlBuilder = Mocks.Create<IHtmlBuilder>();
 			htmlBuilder.Setup(b => b.CreateDocumentationPageHtml()).Returns(testDocumentationContent);
 
-			var processor = new DocumentationPageRequestProcessor(documentationConfiguration.Object, htmlBuilder.Object);
+			var processor = new DocumentationPageRequestProcessor(Configuration.Object, htmlBuilder.Object);
 
 			// Act
 			var result = processor.Process(null);

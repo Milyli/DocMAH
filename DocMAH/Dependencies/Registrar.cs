@@ -62,7 +62,7 @@ namespace DocMAH.Dependencies
 
 					_container.Register<IRequestProcessor>(RequestTypes.DocumentationPage,
 						c => new DocumentationPageRequestProcessor(
-							c.Resolve<IDocumentationConfiguration>(),
+							c.Resolve<IDocmahConfiguration>(),
 							c.Resolve<IHtmlBuilder>()));
 
 					_container.Register<IRequestProcessor>(RequestTypes.GenerateInstallScript,
@@ -83,7 +83,7 @@ namespace DocMAH.Dependencies
 
 					_container.Register<IRequestProcessor>(RequestTypes.ReadApplicationSettings,
 						c => new ReadApplicationSettingsRequestProcessor(
-							c.Resolve<IDocumentationConfiguration>(),
+							c.Resolve<IDocmahConfiguration>(),
 							c.Resolve<IEditAuthorizer>()));
 
 					_container.Register<IRequestProcessor>(RequestTypes.ReadPage,
@@ -129,12 +129,6 @@ namespace DocMAH.Dependencies
 						c => new DataStoreConfiguration(
 							c.Resolve<IConfigurationRepository>()));
 
-					_container.Register<IDocumentationConfiguration>(
-						c => DocmahConfigurationSection.Current.DocumentationConfiguration);
-
-					_container.Register<IEditHelpConfiguration>(
-						c => DocmahConfigurationSection.Current.EditHelpConfiguration);
-
 					// SqlDataStore registration.
 					_container.Register<ISqlConnectionFactory>(
 						c => new SqlConnectionFactory(
@@ -168,7 +162,7 @@ namespace DocMAH.Dependencies
 					// Authorization registration.
 					_container.Register<IEditAuthorizer>(c => new EditAuthorizer(
 						c.Resolve<HttpContextBase>(),
-						c.Resolve<IEditHelpConfiguration>()));
+						c.Resolve<IDocmahConfiguration>()));
 
 					// Other registrations.
 					_container.Register<HttpContextBase>(
@@ -179,7 +173,6 @@ namespace DocMAH.Dependencies
 							c.Resolve<HttpContextBase>(),
 							c.Resolve<IBulletRepository>(),
 							c.Resolve<IDocmahConfiguration>(),
-							c.Resolve<IDocumentationConfiguration>(),
 							c.Resolve<IEditAuthorizer>(),
 							c.Resolve<IFirstTimeHelpRepository>(),
 							c.Resolve<ObjectCache>(),
